@@ -10,9 +10,9 @@ public class Puzzle0004 : Puzzle
     {
         var palindromes = new List<int>();
         
-        for (var left = 999; left > 100; left--)
+        for (var left = 999; left > 900; left--)
         {
-            for (var right = 999; right > 100; right--)
+            for (var right = 999; right > 900; right--)
             {
                 var product = left * right;
 
