@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace ProjectEuler.Solutions;
+namespace ProjectEuler.Libraries;
 
 public class Maths
 {

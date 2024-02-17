@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
+using ProjectEuler.Libraries;
 
 namespace ProjectEuler.Solutions;
 
