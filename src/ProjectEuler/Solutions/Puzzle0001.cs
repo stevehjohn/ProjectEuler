@@ -18,6 +18,6 @@ public class Puzzle0001 : Puzzle
             }
         }
 
-        return sum.ToString();
+        return sum.ToString("N0");
     }
 }

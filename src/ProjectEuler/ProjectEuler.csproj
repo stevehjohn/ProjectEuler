@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+      <PackageReference Include="Ocp.Security" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

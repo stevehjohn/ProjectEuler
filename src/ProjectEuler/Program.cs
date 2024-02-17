@@ -14,22 +14,28 @@ public static class Program
             .OrderBy(t => t.Name);
 
         Console.WriteLine();
+
+        var elapsed = 0d;
         
         foreach (var puzzle in puzzles)
         {
-            ExecutePuzzle(puzzle);
+            elapsed += ExecutePuzzle(puzzle);
         }
+        
+        Console.WriteLine($"{new string(' ', 30)}--------------");
+        
+        Console.WriteLine($"{$"{elapsed:N0}",42}μs");
 
         Console.WriteLine();
     }
 
-    private static void ExecutePuzzle(Type puzzle)
+    private static double ExecutePuzzle(Type puzzle)
     {
         var instance = Activator.CreateInstance(puzzle) as Puzzle;
 
         if (instance == null)
         {
-            return;
+            return 0;
         }
 
         instance.GetAnswer();
@@ -43,5 +49,7 @@ public static class Program
         var number = int.Parse(puzzle.Name[6..]);
         
         Console.WriteLine($"  {number,4}: {answer,-20}  {$"{stopwatch.Elapsed.TotalMicroseconds:N0}",12}μs");
+
+        return stopwatch.Elapsed.TotalMicroseconds;
     }
 }
