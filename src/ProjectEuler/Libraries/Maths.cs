@@ -1,11 +1,27 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace ProjectEuler.Libraries;
 
-public class Maths
+public static class Maths
 {
-    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    public static bool IsPrime(long number)
+    {
+        if (number == 2)
+        {
+            return true;
+        }
+
+        for (var i = 3; i < number; i += 2)
+        {
+            if (number % i == 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
     public static long LowestCommonMultiple(List<long> input)
     {
         var queue = new Queue<long>(input.Count * 2);
@@ -40,7 +56,6 @@ public class Maths
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private static long GreatestCommonFactor(long left, long right)
     {
         var gcdExponentOnTwo = BitOperations.TrailingZeroCount(left | right);
