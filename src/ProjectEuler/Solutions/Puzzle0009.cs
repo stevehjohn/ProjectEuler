@@ -8,27 +8,19 @@ public class Puzzle0009 : Puzzle
 {
     public override string GetAnswer()
     {
-        var a = 1L;
-
-        var b = 1L;
-        
-        while (true)
+        for (var a = 1; a < 1_000; a++)
         {
-            var c = a * a + b * b;
-
-            if (a + b + c == 1_000)
+            for (var b = a + 1; b < 1_000; b++)
             {
-                return (a * b * c).ToString("N0");
-            }
+                var c = 1_000 - a - b;
 
-            b++;
-
-            if (b > 1000)
-            {
-                a++;
-
-                b = a + 1;
+                if (a * a + b * b == c * c)
+                {
+                    return (a * b * c).ToString("N0");
+                }
             }
         }
+
+        return "?";
     }
 }
