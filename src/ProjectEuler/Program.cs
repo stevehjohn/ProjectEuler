@@ -24,7 +24,7 @@ public static class Program
         
         Console.WriteLine($"{new string(' ', 30)}--------------");
         
-        Console.WriteLine($"{$"{elapsed:N0}",42}μs");
+        Console.WriteLine($"{$"{elapsed / 1_000:N0}",42}ms");
 
         Console.WriteLine();
     }
