@@ -14,22 +14,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Answers.clear">
+      <None Update="Answers.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Inputs\0022.clear">
+      <None Update="Inputs\0022.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Inputs\0008.clear">
+      <None Update="Inputs\0008.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Inputs\0011.clear">
+      <None Update="Inputs\0011.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Inputs\0013.clear">
+      <None Update="Inputs\0013.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Inputs\0018.clear">
+      <None Update="Inputs\0018.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

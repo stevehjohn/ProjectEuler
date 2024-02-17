@@ -19,7 +19,7 @@ public static class Program
 
         var elapsed = 0d;
 
-        _answers = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}/Answers.clear");
+        _answers = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}/Answers.txt");
         
         foreach (var puzzle in puzzles)
         {
