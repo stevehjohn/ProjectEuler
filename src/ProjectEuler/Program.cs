@@ -6,16 +6,20 @@ namespace ProjectEuler;
 
 public static class Program
 {
+    private static string[] _answers;
+    
     public static void Main()
     {
         var puzzles = Assembly.GetExecutingAssembly()
             .GetTypes()
-            .Where(t => t.IsSubclassOf(typeof(Puzzle)) && !t.IsAbstract)
+            .Where(t => t.IsSubclassOf(typeof(Puzzle)) && ! t.IsAbstract)
             .OrderBy(t => t.Name);
 
         Console.WriteLine();
 
         var elapsed = 0d;
+
+        _answers = File.ReadAllLines("Answers.clear");
         
         foreach (var puzzle in puzzles)
         {
@@ -47,8 +51,17 @@ public static class Program
         stopwatch.Stop();
 
         var number = int.Parse(puzzle.Name[6..]);
+
+        var colour = Console.ForegroundColor;
         
+        if (answer != _answers[number])
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+        }
+
         Console.WriteLine($"  {number,4}: {answer,-20}  {$"{stopwatch.Elapsed.TotalMicroseconds:N0}",12}μs");
+
+        Console.ForegroundColor = colour;
 
         return stopwatch.Elapsed.TotalMicroseconds;
     }
