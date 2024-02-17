@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
 
 namespace ProjectEuler.Solutions;
@@ -16,7 +17,7 @@ public class Puzzle0004 : Puzzle
             {
                 var product = left * right;
 
-                if (IsPalindrome(product))
+                if (product.IsPalindrome())
                 {
                     palindromes.Add(product);
                 }
@@ -24,20 +25,5 @@ public class Puzzle0004 : Puzzle
         }
 
         return palindromes.Max().ToString("N0");
-    }
-
-    private static bool IsPalindrome(int number)
-    {
-        var text = number.ToString();
-
-        for (var i = 0; i < text.Length / 2; i++)
-        {
-            if (text[i] != text[^(i + 1)])
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
