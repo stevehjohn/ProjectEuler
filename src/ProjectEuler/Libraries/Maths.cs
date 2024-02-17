@@ -7,43 +7,37 @@ public static class Maths
     public static List<long> GetPrimes(long max)
     {
         var primes = new List<long>();
-        
+
         if (max < 2)
         {
             return primes;
         }
+
+        var sieveSize = (max - 1) / 2;
+
+        var sieve = new bool[sieveSize];
+
+        var crossLimit = (Math.Sqrt(max) - 1) / 2;
+
+        for (var i = 1; i <= crossLimit; i++)
+        {
+            if (! sieve[i])
+            {
+                for (var j = 2 * i * (i + 1); j < sieveSize; j += 2 * i + 1)
+                {
+                    sieve[j] = true;
+                }
+            }
+        }
         
         primes.Add(2);
 
-        for (var i = 3; i < max; i += 2)
+        for (var i = 1; i < sieveSize; i++)
         {
-            primes.Add(i);
-        }
-
-        var index = 0;
-
-        while (index < primes.Count)
-        {
-            Console.WriteLine($"{primes[index]}, {primes.Count}");
-            
-            var value = primes[index];
-            
-            if (! IsPrime(value))
+            if (! sieve[i])
             {
-                primes.RemoveAt(index);
-                
-                continue;
+                primes.Add(2 * i + 1);
             }
-
-            for (var i = index + 1; i < primes.Count; i++)
-            {
-                if (primes[i] % value == 0)
-                {
-                    primes.RemoveAt(i);
-                }
-            }
-
-            index++;
         }
 
         return primes;
