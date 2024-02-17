@@ -45,8 +45,6 @@ public class Puzzle0059 : Puzzle
                 }
             }
         }
-
-        throw new NotImplementedException();
     }
 
     private char[] Decrypt(string key)
