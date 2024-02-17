@@ -6,14 +6,6 @@ public static class IntegerExtensions
     {
         var text = number.ToString();
 
-        for (var i = 0; i < text.Length / 2; i++)
-        {
-            if (text[i] != text[^(i + 1)])
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return text.IsPalindrome();
     }
 }
