@@ -10,6 +10,6 @@ public class Puzzle0018 : Puzzle
     {
         LoadInput();
 
-        throw new NotImplementedException();
+        return "?";
     }
 }
