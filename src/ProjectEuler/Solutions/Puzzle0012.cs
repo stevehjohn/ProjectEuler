@@ -22,7 +22,7 @@ public class Puzzle0012 : Puzzle
             
             if (divisors > 500)
             {
-                return divisors.ToString("N0");
+                return number.ToString("N0");
             }
         }
     }
@@ -31,11 +31,18 @@ public class Puzzle0012 : Puzzle
     {
         var count = 0;
         
-        for (var i = 1; i < number / 2; i++)
+        for (var i = 1; i < Math.Sqrt(number); i++)
         {
             if (number % i == 0)
             {
-                count++;
+                if (number / i == i)
+                {
+                    count++;
+                }
+                else
+                {
+                    count += 2;
+                }
             }
         }
 
