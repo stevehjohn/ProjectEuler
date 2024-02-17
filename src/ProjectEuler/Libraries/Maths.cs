@@ -4,6 +4,51 @@ namespace ProjectEuler.Libraries;
 
 public static class Maths
 {
+    public static List<long> GetPrimes(long max)
+    {
+        var primes = new List<long>();
+        
+        if (max < 2)
+        {
+            return primes;
+        }
+        
+        primes.Add(2);
+
+        for (var i = 3; i < max; i += 2)
+        {
+            primes.Add(i);
+        }
+
+        var index = 0;
+
+        while (index < primes.Count)
+        {
+            Console.WriteLine($"{primes[index]}, {primes.Count}");
+            
+            var value = primes[index];
+            
+            if (! IsPrime(value))
+            {
+                primes.RemoveAt(index);
+                
+                continue;
+            }
+
+            for (var i = index + 1; i < primes.Count; i++)
+            {
+                if (primes[i] % value == 0)
+                {
+                    primes.RemoveAt(i);
+                }
+            }
+
+            index++;
+        }
+
+        return primes;
+    }
+
     public static bool IsPrime(long number)
     {
         if (number == 2)

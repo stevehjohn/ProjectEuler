@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
+using ProjectEuler.Libraries;
 
 namespace ProjectEuler.Solutions;
 
@@ -14,7 +15,7 @@ public class Puzzle0007 : Puzzle
         
         while (true)
         {
-            if (IsPrime(number))
+            if (Maths.IsPrime(number))
             {
                 count++;
 
@@ -28,18 +29,5 @@ public class Puzzle0007 : Puzzle
         }
 
         return number.ToString("N0");
-    }
-
-    private static bool IsPrime(long number)
-    {
-        for (var i = 3; i < number; i += 2)
-        {
-            if (number % i == 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
