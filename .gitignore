@@ -300,3 +300,4 @@ lambdas/.serverless/
 *.orig
 AoC.Games.*.zip
 Thumbs.db
+.DS_Store
