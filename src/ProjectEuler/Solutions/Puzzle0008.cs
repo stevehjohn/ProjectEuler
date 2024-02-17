@@ -33,7 +33,7 @@ public class Puzzle0008 : Puzzle
 
         for (var i = 0; i < 988; i++)
         {
-            var product = 1;
+            var product = 1L;
             
             for (var d = 0; d < 13; d++)
             {
