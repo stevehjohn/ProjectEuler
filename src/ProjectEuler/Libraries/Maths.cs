@@ -45,17 +45,48 @@ public static class Maths
 
     public static bool IsPrime(long number)
     {
-        if (number == 2)
+        if (number == 1)
+        {
+            return false;
+        }
+
+        if (number < 4)
         {
             return true;
         }
 
-        for (var i = 3; i < number; i += 2)
+        if (number % 2 == 0)
         {
-            if (number % i == 0)
+            return false;
+        }
+
+        if (number < 9)
+        {
+            return true;
+        }
+
+        if (number % 3 == 0)
+        {
+            return false;
+        }
+
+        var r = (int) Math.Sqrt(number);
+        
+        var f = 5;
+
+        while (f <= r)
+        {
+            if (number % f == 0)
             {
                 return false;
             }
+
+            if (number % (f + 2) == 0)
+            {
+                return false;
+            }
+
+            f += 6;
         }
 
         return true;
