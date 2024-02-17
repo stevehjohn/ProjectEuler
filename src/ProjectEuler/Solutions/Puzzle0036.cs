@@ -11,7 +11,7 @@ public class Puzzle0036 : Puzzle
     {
         var sum = 0;
         
-        for (var i = 1; i < 1_000_000; i++)
+        for (var i = 1; i < 1_000_000; i += 2)
         {
             if (i.IsPalindrome())
             {
@@ -19,7 +19,7 @@ public class Puzzle0036 : Puzzle
 
                 if (binary.IsPalindrome())
                 {
-                    sum++;
+                    sum += i;
                 }
             }
         }
