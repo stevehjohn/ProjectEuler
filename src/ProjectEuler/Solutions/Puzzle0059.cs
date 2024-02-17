@@ -26,6 +26,7 @@ public class Puzzle0059 : Puzzle
 
             if (plainText.Contains("Euler"))
             {
+                return plainText.ToCharArray().Select(l => (int) l).Sum().ToString("N0");
             }
 
             c++;
