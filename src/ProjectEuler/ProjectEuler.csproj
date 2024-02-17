@@ -8,4 +8,8 @@
         <LangVersion>12</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Solutions\" />
+    </ItemGroup>
+
 </Project>
