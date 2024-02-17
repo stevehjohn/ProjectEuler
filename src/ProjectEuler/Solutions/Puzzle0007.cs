@@ -8,9 +8,9 @@ public class Puzzle0007 : Puzzle
 {
     public override string GetAnswer()
     {
-        var count = 0;
+        var count = 1;
 
-        var number = 2L;
+        var number = 3L;
         
         while (true)
         {
@@ -24,7 +24,7 @@ public class Puzzle0007 : Puzzle
                 }
             }
 
-            number++;
+            number += 2;
         }
 
         return number.ToString("N0");
@@ -32,7 +32,7 @@ public class Puzzle0007 : Puzzle
 
     private static bool IsPrime(long number)
     {
-        for (var i = 2; i < number; i++)
+        for (var i = 3; i < number; i += 2)
         {
             if (number % i == 0)
             {
