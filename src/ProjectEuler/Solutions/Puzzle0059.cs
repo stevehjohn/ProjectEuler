@@ -6,30 +6,61 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0059 : Puzzle
 {
-    private byte[] _cipherText;
+    private char[] _cipherText;
     
     public override string GetAnswer()
     {
         LoadInput();
         
         ParseInput();
-        
+
+        var a = 'a';
+
+        var b = 'a';
+
+        var c = 'a';
+
+        while (true)
+        {
+            var plainText = new string(Decrypt($"{a}{b}{c}"));
+
+            if (plainText.Contains("Euler"))
+            {
+            }
+
+            c++;
+
+            if (c > 'z')
+            {
+                c = 'a';
+
+                b++;
+
+                if (b > 'z')
+                {
+                    b = 'a';
+
+                    a++;
+                }
+            }
+        }
+
         throw new NotImplementedException();
     }
 
-    private byte[] Decrypt(string key)
+    private char[] Decrypt(string key)
     {
-        var decrypted = new byte[_cipherText.Length];
+        var decrypted = new char[_cipherText.Length];
 
         var keyIndex = 0;
         
         for (var i = 0; i < _cipherText.Length; i++)
         {
-            decrypted[i] = (byte) (_cipherText[i] ^ key[keyIndex]);
+            decrypted[i] = (char) (_cipherText[i] ^ key[keyIndex]);
 
             keyIndex++;
 
-            if (keyIndex > key.Length)
+            if (keyIndex == key.Length)
             {
                 keyIndex = 0;
             }
@@ -40,6 +71,6 @@ public class Puzzle0059 : Puzzle
 
     private void ParseInput()
     {
-        _cipherText = Input[0].Split(',').Select(byte.Parse).ToArray();
+        _cipherText = Input[0].Split(',').Select(c => (char) byte.Parse(c)).ToArray();
     }
 }
