@@ -12,7 +12,7 @@ public class Puzzle0014 : Puzzle
 
         var maxNumber = 0;
         
-        for (var i = 1_000_000; i > 1; i--)
+        for (var i = 1_000_000; i > 500_000; i--)
         {
             var length = GetSequenceLength(i);
             
