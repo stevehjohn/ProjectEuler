@@ -34,6 +34,11 @@ public class Puzzle0011 : Puzzle
                 {
                     max = Math.Max(max, _matrix[x, y] * _matrix[x + 1, y + 1] * _matrix[x + 2, y + 2] * _matrix[x + 3, y + 3]);
                 }
+
+                if (x < 17 && y > 2)
+                {
+                    max = Math.Max(max, _matrix[x, y] * _matrix[x + 1, y - 1] * _matrix[x + 2, y - 2] * _matrix[x + 3, y - 3]);
+                }
             }
         }
 
