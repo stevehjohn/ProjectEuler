@@ -8,6 +8,13 @@ public class Puzzle0005 : Puzzle
 {
     public override string GetAnswer()
     {
-        throw new NotImplementedException();
+        var divisors = new List<long>();
+        
+        for (var i = 1; i < 21; i++)
+        {
+            divisors.Add(i);
+        }
+
+        return Maths.LowestCommonMultiple(divisors).ToString("N0");
     }
 }

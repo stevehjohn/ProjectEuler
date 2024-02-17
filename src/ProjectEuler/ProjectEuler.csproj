@@ -13,4 +13,8 @@
       <PackageReference Include="Ocp.Security" Version="1.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Libraries\" />
+    </ItemGroup>
+
 </Project>
