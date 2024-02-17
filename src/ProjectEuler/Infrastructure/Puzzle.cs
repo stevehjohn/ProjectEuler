@@ -8,6 +8,6 @@ public abstract class Puzzle
 
     protected void LoadInput()
     {
-        Input = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}/Inputs/{GetType().Name[6..]}.clear");
+        Input = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}/Inputs/{GetType().Name[6..]}.txt");
     }
 }
