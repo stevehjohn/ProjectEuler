@@ -54,7 +54,7 @@ public static class Program
 
         var colour = Console.ForegroundColor;
         
-        if (answer != _answers[number])
+        if (answer != _answers[number - 1])
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
         }
