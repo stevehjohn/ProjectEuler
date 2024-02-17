@@ -4,6 +4,20 @@ namespace ProjectEuler.Libraries;
 
 public static class Maths
 {
+    public static BigInteger Factorial(BigInteger number)
+    {
+        var result = new BigInteger(1);
+
+        while (number > 1)
+        {
+            result *= number;
+
+            number--;
+        }
+
+        return result;
+    }
+
     public static List<long> GetPrimes(long max)
     {
         var primes = new List<long>();
