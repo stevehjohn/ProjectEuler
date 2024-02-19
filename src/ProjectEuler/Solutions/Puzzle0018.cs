@@ -6,42 +6,55 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0018 : Puzzle
 {
+    private readonly Dictionary<int, List<int>> _rowCache = new();
+    
     public override string GetAnswer()
     {
         LoadInput();
 
-        var queue = new Queue<(int Sum, int Index)>();
+        var queue = new Queue<(int Sum, int Index, int Row)>();
 
-        queue.Enqueue((ParseRow(0).Single(), 0));
-
-        var rowNumber = 1;
+        queue.Enqueue((GetRow(0).Single(), 0, 1));
         
-        var row = ParseRow(rowNumber);
+        var max = 0;
+
+        var results = new List<int>();
         
         while (queue.TryDequeue(out var item))
         {
-            queue.Enqueue((item.Sum + row[item.Index], item.Index));
+            max = Math.Max(max, item.Sum);
             
-            queue.Enqueue((item.Sum + row[item.Index + 1], item.Index + 1));
-            
-            if (item.Index + 2 == row.Count)
+            if (item.Sum < max - 99)
             {
-                rowNumber++;
-
-                if (rowNumber == Input.Length)
-                {
-                    break;
-                }
-
-                row = ParseRow(rowNumber);
+                continue;
             }
+
+            if (item.Row == Input.Length)
+            {
+                results.Add(item.Sum);
+                
+                continue;
+            }
+
+            var row = GetRow(item.Row);
+            
+            queue.Enqueue((item.Sum + row[item.Index], item.Index, item.Row + 1));
+            
+            queue.Enqueue((item.Sum + row[item.Index + 1], item.Index + 1, item.Row + 1));
         }
 
-        return queue.MaxBy(i => i.Sum).Sum.ToString("N0");
+        return results.Max().ToString("N0");
     }
     
-    private List<int> ParseRow(int rowNumber)
+    private List<int> GetRow(int rowNumber)
     {
-        return Input[rowNumber].Split(' ').Select(int.Parse).ToList();
+        if (! _rowCache.TryGetValue(rowNumber, out var row))
+        {
+            row = Input[rowNumber].Split(' ').Select(int.Parse).ToList();
+            
+            _rowCache.Add(rowNumber, row);
+        }
+
+        return row;
     }
 }
