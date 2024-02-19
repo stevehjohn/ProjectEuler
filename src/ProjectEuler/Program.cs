@@ -32,7 +32,7 @@ public static class Program
         
         Console.WriteLine($"{new string(' ', 30)}--------------");
         
-        Console.WriteLine($"  {count} puzzles solved in {$"{elapsed / 1_000:N0}",22}ms");
+        Console.WriteLine($"  {count} puzzles solved in {$"{elapsed / 1_000:N0}",19}ms");
 
         Console.WriteLine();
     }
