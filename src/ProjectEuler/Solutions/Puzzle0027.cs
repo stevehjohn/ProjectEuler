@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 using ProjectEuler.Libraries;
 
-namespace ProjectEuler;
+namespace ProjectEuler.Solutions;
 
 [UsedImplicitly]
 public class Puzzle0027 : Puzzle
