@@ -20,15 +20,19 @@ public static class Program
         var elapsed = 0d;
 
         _answers = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}/Answers.txt");
+
+        var count = 0;
         
         foreach (var puzzle in puzzles)
         {
             elapsed += ExecutePuzzle(puzzle);
+
+            count++;
         }
         
         Console.WriteLine($"{new string(' ', 30)}--------------");
         
-        Console.WriteLine($"{$"{elapsed / 1_000:N0}",42}ms");
+        Console.WriteLine($"  {count} puzzles solved in {$"{elapsed / 1_000:N0}",22}ms");
 
         Console.WriteLine();
     }
