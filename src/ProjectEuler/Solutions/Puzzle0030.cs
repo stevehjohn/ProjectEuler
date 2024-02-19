@@ -10,7 +10,7 @@ public class Puzzle0030 : Puzzle
     {
         var sums = new List<long>();
         
-        for (var i = 1; i < 999_999; i++)
+        for (var i = 2; i < 999_999; i++)
         {
             var digits = i.ToString();
 
