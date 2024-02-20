@@ -1,4 +1,4 @@
-//#define DUMP
+#define DUMP
 #if DUMP
 using System.Diagnostics;
 #endif
@@ -16,7 +16,7 @@ public class Puzzle0096 : Puzzle
         
         var sum = 0;
         
-        for (var i = 0; i < 50; i++)
+        for (var i = 0; i < Input.Length / 10; i++)
         {
             var sudoku = LoadSudoku(i);
 
@@ -100,15 +100,15 @@ public class Puzzle0096 : Puzzle
 
     private static int[,] Solve(int[,] sudoku)
     {
-        var queue = new Queue<int[,]>();
+        var queue = new PriorityQueue<int[,], int>();
         
-        queue.Enqueue(sudoku);
+        queue.Enqueue(sudoku, 0);
 
 #if DUMP
         var cY = Console.CursorTop;
 #endif
         
-        while (queue.TryDequeue(out var puzzle))
+        while (queue.TryDequeue(out var puzzle, out _))
         {
 #if DUMP
             Console.CursorTop = cY;
@@ -126,12 +126,30 @@ public class Puzzle0096 : Puzzle
                 {
                     return solution;
                 }
-
-                queue.Enqueue(solution);
+                
+                queue.Enqueue(solution, GetScore(solution));
             }
         }
 
         return null;
+    }
+
+    private static int GetScore(int[,] sudoku)
+    {
+        var score = 81;
+        
+        for (var y = 0; y < 9; y++)
+        {
+            for (var x = 0; x < 9; x++)
+            {
+                if (sudoku[x, y] != 0)
+                {
+                    score--;
+                }
+            }
+        }
+
+        return score;
     }
 
     private static bool IsSolved(int[,] sudoku)
