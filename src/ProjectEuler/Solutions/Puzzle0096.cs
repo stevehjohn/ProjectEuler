@@ -17,6 +17,10 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
+            Dump(sudoku);
+            
+            Console.WriteLine();
+            
             var sw = Stopwatch.StartNew();
             
             var solution = Solve(sudoku);
@@ -27,23 +31,44 @@ public class Puzzle0096 : Puzzle
             
             Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds}ms\n");
             
-            Dump(solution);
+            Dump(sudoku, solution);
             
-            Console.WriteLine("\nSolving next puzzle.");
+            Console.WriteLine("\nSolving next puzzle.\n");
 
-            sum += sudoku[0, 0] * 100 + sudoku[1, 0] * 10 + sudoku[2, 0];
+            sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
         }
 
         return sum.ToString("N0");
     }
 
-    private static void Dump(int[,] sudoku)
+    private static void Dump(int[,] sudoku, int[,] solution = null)
     {
         for (var y = 0; y < 9; y++)
         {
             for (var x = 0; x < 9; x++)
             {
+                if (sudoku[x, y] == 0)
+                {
+                    Console.Write("  ");
+                    
+                    continue;
+                }
+
                 Console.Write($"{sudoku[x, y]} ");
+            }
+            
+            Console.Write("  ");
+
+            if (solution == null)
+            {
+                Console.WriteLine();
+                
+                continue;
+            }
+
+            for (var x = 0; x < 9; x++)
+            {
+                Console.Write($"{solution[x, y]} ");
             }
             
             Console.WriteLine();
@@ -137,6 +162,84 @@ public class Puzzle0096 : Puzzle
                 }
 
                 if (unique.Count < 9)
+                {
+                    return false;
+                }
+            }
+            
+        }
+
+        return true;
+    }
+    
+    private static bool IsValid(int[,] sudoku)
+    {
+        for (var y = 0; y < 9; y++)
+        {
+            var unique = new HashSet<int>();
+
+            var count = 0;
+            
+            for (var x = 0; x < 9; x++)
+            {
+                if (sudoku[x, y] != 0)
+                {
+                    count++;
+
+                    unique.Add(sudoku[x, y]);
+                }
+            }
+
+            if (unique.Count < count)
+            {
+                return false;
+            }
+        }
+
+        for (var x = 0; x < 9; x++)
+        {
+            var unique = new HashSet<int>();
+
+            var count = 0;
+            
+            for (var y = 0; y < 9; y++)
+            {
+                if (sudoku[x, y] != 0)
+                {
+                    count++;
+
+                    unique.Add(sudoku[x, y]);
+                }
+            }
+
+            if (unique.Count < count)
+            {
+                return false;
+            }
+        }
+
+        for (var x = 0; x < 3; x++)
+        {
+            for (var y = 0; y < 3; y++)
+            {
+                var unique = new HashSet<int>();
+
+                var count = 0;
+                
+                for (var x1 = 0; x1 < 3; x1++)
+                {
+                    for (var y1 = 0; y1 < 3; y1++)
+                    {
+                        if (sudoku[x * 3 + x1, y * 3 + y1] != 0)
+                        {
+                            count++;
+                            
+                            unique.Add(sudoku[x * 3 + x1, y * 3 + y1]);
+                        }
+                    }
+                }
+
+                if (unique.Count < count)
                 {
                     return false;
                 }
@@ -242,8 +345,11 @@ public class Puzzle0096 : Puzzle
             Array.Copy(sudoku, copy, 81);
 
             copy[position.X, position.Y] = move;
-            
-            solutions.Add(copy);
+
+            if (IsValid(copy))
+            {
+                solutions.Add(copy);
+            }
         }
         
         return solutions;
