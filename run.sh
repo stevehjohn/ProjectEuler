@@ -1,1 +1,1 @@
-dotnet run --project src/ProjectEuler/ProjectEuler.csproj
+dotnet run --project src/ProjectEuler/ProjectEuler.csproj $*
