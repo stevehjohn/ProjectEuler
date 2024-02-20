@@ -9,7 +9,7 @@ public static class Program
 {
     private static string[] _answers;
     
-    public static void Main()
+    public static void Main(string[] args)
     {
         var puzzles = Assembly.GetExecutingAssembly()
             .GetTypes()
@@ -26,6 +26,11 @@ public static class Program
         
         foreach (var puzzle in puzzles)
         {
+            if (args.Length > 0 && ! puzzle.Name.EndsWith(args[0]))
+            {
+                continue;
+            }
+
             elapsed += ExecutePuzzle(puzzle);
 
             count++;
