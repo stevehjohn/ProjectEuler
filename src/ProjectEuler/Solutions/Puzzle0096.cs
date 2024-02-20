@@ -36,8 +36,11 @@ public class Puzzle0096 : Puzzle
             Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds}ms\n");
             
             Dump(sudoku, solution);
-            
-            Console.WriteLine("\nSolving next puzzle.\n");
+
+            if (i < 49)
+            {
+                Console.WriteLine("\nSolving next puzzle.\n");
+            }
 
             Console.CursorVisible = true;
 #endif
