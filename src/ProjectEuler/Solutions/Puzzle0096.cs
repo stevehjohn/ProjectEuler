@@ -16,7 +16,7 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
-            Solve(sudoku, i);
+            Solve(sudoku);
 
             sum += sudoku[0, 0] * 100 + sudoku[1, 0] * 10 + sudoku[2, 0];
         }
@@ -24,7 +24,7 @@ public class Puzzle0096 : Puzzle
         return sum.ToString("N0");
     }
 
-    private static void Solve(int[,] sudoku, int n)
+    private static void Solve(int[,] sudoku)
     {
         var puzzle = new int[9, 9];
         
