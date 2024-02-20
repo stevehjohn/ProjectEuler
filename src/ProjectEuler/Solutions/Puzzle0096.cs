@@ -1,4 +1,4 @@
-//#define DUMP
+#define DUMP
 #if DUMP
 using System.Diagnostics;
 #endif
@@ -156,7 +156,9 @@ public class Puzzle0096 : Puzzle
     {
         for (var y = 0; y < 9; y++)
         {
-            var unique = new HashSet<int>();
+            var uniqueRow = new HashSet<int>();
+
+            var uniqueColumn = new HashSet<int>();
             
             for (var x = 0; x < 9; x++)
             {
@@ -165,30 +167,17 @@ public class Puzzle0096 : Puzzle
                     return false;
                 }
 
-                unique.Add(sudoku[x, y]);
-            }
+                uniqueRow.Add(sudoku[x, y]);
 
-            if (unique.Count < 9)
-            {
-                return false;
-            }
-        }
-
-        for (var x = 0; x < 9; x++)
-        {
-            var unique = new HashSet<int>();
-            
-            for (var y = 0; y < 9; y++)
-            {
-                if (sudoku[x, y] == 0)
+                if (sudoku[y, x] == 0)
                 {
                     return false;
                 }
 
-                unique.Add(sudoku[x, y]);
+                uniqueColumn.Add(sudoku[y, x]);
             }
 
-            if (unique.Count < 9)
+            if (uniqueRow.Count < 9 || uniqueColumn.Count < 9)
             {
                 return false;
             }
@@ -213,7 +202,6 @@ public class Puzzle0096 : Puzzle
                     return false;
                 }
             }
-            
         }
 
         return true;
@@ -223,43 +211,32 @@ public class Puzzle0096 : Puzzle
     {
         for (var y = 0; y < 9; y++)
         {
-            var unique = new HashSet<int>();
+            var uniqueRow = new HashSet<int>();
 
-            var count = 0;
+            var uniqueColumn = new HashSet<int>();
+            
+            var countRow = 0;
+
+            var countColum = 0;
             
             for (var x = 0; x < 9; x++)
             {
                 if (sudoku[x, y] != 0)
                 {
-                    count++;
+                    countRow++;
 
-                    unique.Add(sudoku[x, y]);
+                    uniqueRow.Add(sudoku[x, y]);
                 }
-            }
 
-            if (unique.Count < count)
-            {
-                return false;
-            }
-        }
-
-        for (var x = 0; x < 9; x++)
-        {
-            var unique = new HashSet<int>();
-
-            var count = 0;
-            
-            for (var y = 0; y < 9; y++)
-            {
-                if (sudoku[x, y] != 0)
+                if (sudoku[y, x] != 0)
                 {
-                    count++;
+                    countColum++;
 
-                    unique.Add(sudoku[x, y]);
+                    uniqueColumn.Add(sudoku[y, x]);
                 }
             }
 
-            if (unique.Count < count)
+            if (uniqueRow.Count < countRow || uniqueColumn.Count < countColum)
             {
                 return false;
             }
