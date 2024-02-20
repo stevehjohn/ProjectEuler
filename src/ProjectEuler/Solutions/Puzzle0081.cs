@@ -15,7 +15,7 @@ public class Puzzle0081 : Puzzle
         var queue = new PriorityQueue<(int X, int Y, int Sum), int>();
         
         queue.Enqueue((0, 0, matrix[0, 0]), matrix[0, 0]);
-
+        
         while (queue.TryDequeue(out var item, out _))
         {
             if (item.X == 79 && item.Y == 79)
@@ -33,7 +33,6 @@ public class Puzzle0081 : Puzzle
                 queue.Enqueue((item.X, item.Y + 1, item.Sum + matrix[item.X, item.Y + 1]), item.Sum + matrix[item.X, item.Y + 1]);
             }
         }
-        
         return "Unknown";
     }
 
