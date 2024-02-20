@@ -23,10 +23,6 @@ public class Puzzle0096 : Puzzle
 #if DUMP
             Console.CursorVisible = false;
             
-            Dump(sudoku);
-            
-            Console.WriteLine();
-            
             var sw = Stopwatch.StartNew();
 #endif
             
@@ -112,7 +108,7 @@ public class Puzzle0096 : Puzzle
 
             Dump(sudoku, puzzle);
             
-            Console.WriteLine($"Queue: {queue.Count}      \n");
+            Console.WriteLine($"\nQueue: {queue.Count}      \n");
 #endif
             
             var solutions = SolveStep(puzzle);
