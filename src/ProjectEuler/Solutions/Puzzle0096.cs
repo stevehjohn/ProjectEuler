@@ -26,10 +26,6 @@ public class Puzzle0096 : Puzzle
 
     private static void Solve(int[,] sudoku)
     {
-        var puzzle = new int[9, 9];
-        
-        Array.Copy(sudoku, puzzle, 81);
-
         var rowCandidates = new Dictionary<int, List<int>>();
         
         for (var y = 0; y < 9; y++)
