@@ -41,6 +41,10 @@ public class Puzzle0096 : Puzzle
             {
                 Console.WriteLine("\nSolving next puzzle.\n");
             }
+            else
+            {
+                Console.WriteLine();
+            }
 
             Console.CursorVisible = true;
 #endif
