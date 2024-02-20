@@ -25,7 +25,7 @@ public class Puzzle0082 : Puzzle
 
         while (queue.TryDequeue(out var item, out _))
         {
-            if (item.X == 79 && item.Y == 79)
+            if (item.X == 79)
             {
                 return item.Sum.ToString("N0");
             }
