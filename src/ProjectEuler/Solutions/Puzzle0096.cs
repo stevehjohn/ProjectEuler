@@ -25,9 +25,11 @@ public class Puzzle0096 : Puzzle
 
             Console.Clear();
             
+            Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds}ms\n");
+            
             Dump(solution);
             
-            Console.WriteLine($"\nPuzzle {i + 1}\n {sw.Elapsed.TotalMilliseconds}ms");
+            Console.WriteLine("\nSolving next puzzle.");
 
             sum += sudoku[0, 0] * 100 + sudoku[1, 0] * 10 + sudoku[2, 0];
         }
