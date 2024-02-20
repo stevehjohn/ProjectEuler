@@ -1,4 +1,4 @@
-//#define DUMP
+#define DUMP
 #if DUMP
 using System.Diagnostics;
 #endif
@@ -33,7 +33,7 @@ public class Puzzle0096 : Puzzle
 
             Console.Clear();
             
-            Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds}ms\n");
+            Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds:N3}ms\n");
             
             Dump(sudoku, solution);
 
