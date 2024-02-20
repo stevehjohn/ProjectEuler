@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -16,15 +17,17 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
-            Dump(sudoku);
+            var sw = Stopwatch.StartNew();
             
-            Solve(sudoku);
+            var solution = Solve(sudoku);
 
-            Dump(sudoku);
-                
-            Console.WriteLine();
+            sw.Stop();
 
-            Console.ReadKey();
+            Console.Clear();
+            
+            Dump(solution);
+            
+            Console.WriteLine($"\nPuzzle {i + 1}\n {sw.Elapsed.TotalMilliseconds}ms");
 
             sum += sudoku[0, 0] * 100 + sudoku[1, 0] * 10 + sudoku[2, 0];
         }
@@ -45,21 +48,101 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private static void Solve(int[,] sudoku)
+    private static int[,] Solve(int[,] sudoku)
     {
         var queue = new Queue<int[,]>();
         
         queue.Enqueue(sudoku);
 
+        var cY = Console.CursorTop;
+        
         while (queue.TryDequeue(out var puzzle))
         {
+            Console.CursorTop = cY;
+            
+            Console.WriteLine($"Queue: {queue.Count}      ");
+            
             var solutions = SolveStep(puzzle);
 
             foreach (var solution in solutions)
             {
+                if (IsSolved(solution))
+                {
+                    return solution;
+                }
+
                 queue.Enqueue(solution);
             }
         }
+
+        return null;
+    }
+
+    private static bool IsSolved(int[,] sudoku)
+    {
+        for (var y = 0; y < 9; y++)
+        {
+            var unique = new HashSet<int>();
+            
+            for (var x = 0; x < 9; x++)
+            {
+                if (sudoku[x, y] == 0)
+                {
+                    return false;
+                }
+
+                unique.Add(sudoku[x, y]);
+            }
+
+            if (unique.Count < 9)
+            {
+                return false;
+            }
+        }
+
+        for (var x = 0; x < 9; x++)
+        {
+            var unique = new HashSet<int>();
+            
+            for (var y = 0; y < 9; y++)
+            {
+                if (sudoku[x, y] == 0)
+                {
+                    return false;
+                }
+
+                unique.Add(sudoku[x, y]);
+            }
+
+            if (unique.Count < 9)
+            {
+                return false;
+            }
+        }
+
+        for (var x = 0; x < 3; x++)
+        {
+            for (var y = 0; y < 3; y++)
+            {
+                var unique = new HashSet<int>();
+
+                for (var x1 = 0; x1 < 3; x1++)
+                {
+                    for (var y1 = 0; y1 < 3; y1++)
+                    {
+                        unique.Add(sudoku[x * 3 + x1, y * 3 + y1]);
+                    }
+                }
+
+                if (unique.Count < 9)
+                {
+                    return false;
+                }
+            }
+            
+        }
+
+        return true;
     }
 
     private static List<int[,]> SolveStep(int[,] sudoku)
