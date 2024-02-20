@@ -1,4 +1,4 @@
-//#define DUMP
+#define DUMP
 #if DUMP
 using System.Diagnostics;
 #endif
@@ -20,7 +20,9 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
-#if DUMP            
+#if DUMP
+            Console.CursorVisible = false;
+            
             Dump(sudoku);
             
             Console.WriteLine();
@@ -40,6 +42,8 @@ public class Puzzle0096 : Puzzle
             Dump(sudoku, solution);
             
             Console.WriteLine("\nSolving next puzzle.\n");
+
+            Console.CursorVisible = true;
 #endif
             
             sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
@@ -98,8 +102,10 @@ public class Puzzle0096 : Puzzle
         {
 #if DUMP
             Console.CursorTop = cY;
+
+            Dump(sudoku, puzzle);
             
-            Console.WriteLine($"Queue: {queue.Count}      ");
+            Console.WriteLine($"Queue: {queue.Count}      \n");
 #endif
             
             var solutions = SolveStep(puzzle);
