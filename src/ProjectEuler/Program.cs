@@ -31,7 +31,7 @@ public static class Program
                 continue;
             }
 
-            elapsed += ExecutePuzzle(puzzle);
+            elapsed += ExecutePuzzle(puzzle, args.Length == 0);
 
             count++;
         }
@@ -43,7 +43,7 @@ public static class Program
         Console.WriteLine();
     }
 
-    private static double ExecutePuzzle(Type puzzle)
+    private static double ExecutePuzzle(Type puzzle, bool warmUp)
     {
         var instance = Activator.CreateInstance(puzzle) as Puzzle;
 
@@ -52,8 +52,11 @@ public static class Program
             return 0;
         }
 
-        instance.GetAnswer();
-        
+        if (warmUp)
+        {
+            instance.GetAnswer();
+        }
+
         var stopwatch = Stopwatch.StartNew();
 
         var answer = instance.GetAnswer();
