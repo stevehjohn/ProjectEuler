@@ -12,7 +12,29 @@ public class Puzzle0081 : Puzzle
 
         var matrix = ParseInput();
 
-        return "?";
+        var queue = new PriorityQueue<(int X, int Y, int Sum), int>();
+        
+        queue.Enqueue((0, 0, matrix[0, 0]), matrix[0, 0]);
+
+        while (queue.TryDequeue(out var item, out _))
+        {
+            if (item.X == 79 && item.Y == 79)
+            {
+                return item.Sum.ToString("N0");
+            }
+
+            if (item.X < 79)
+            {
+                queue.Enqueue((item.X + 1, item.Y, item.Sum + matrix[item.X + 1, item.Y]), item.Sum + matrix[item.X + 1, item.Y]);
+            }
+
+            if (item.Y < 79)
+            {
+                queue.Enqueue((item.X, item.Y + 1, item.Sum + matrix[item.X, item.Y + 1]), item.Sum + matrix[item.X, item.Y + 1]);
+            }
+        }
+        
+        return "Unknown";
     }
 
     private int[,] ParseInput()
