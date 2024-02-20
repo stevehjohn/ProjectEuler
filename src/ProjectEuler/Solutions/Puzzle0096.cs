@@ -80,6 +80,13 @@ public class Puzzle0096 : Puzzle
 
             for (var x = 0; x < 9; x++)
             {
+                if (solution[x, y] == 0)
+                {
+                    Console.Write("  ");
+                    
+                    continue;
+                }
+                
                 Console.Write($"{solution[x, y]} ");
             }
             
