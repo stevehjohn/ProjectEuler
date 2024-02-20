@@ -1,4 +1,7 @@
+//#define DUMP
+#if DUMP
 using System.Diagnostics;
+#endif
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -17,14 +20,17 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
+#if DUMP            
             Dump(sudoku);
             
             Console.WriteLine();
             
             var sw = Stopwatch.StartNew();
+#endif
             
             var solution = Solve(sudoku);
 
+#if DUMP            
             sw.Stop();
 
             Console.Clear();
@@ -34,7 +40,8 @@ public class Puzzle0096 : Puzzle
             Dump(sudoku, solution);
             
             Console.WriteLine("\nSolving next puzzle.\n");
-
+#endif
+            
             sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
         }
 
@@ -81,13 +88,17 @@ public class Puzzle0096 : Puzzle
         
         queue.Enqueue(sudoku);
 
+#if DUMP
         var cY = Console.CursorTop;
+#endif
         
         while (queue.TryDequeue(out var puzzle))
         {
+#if DUMP
             Console.CursorTop = cY;
             
             Console.WriteLine($"Queue: {queue.Count}      ");
+#endif
             
             var solutions = SolveStep(puzzle);
 
