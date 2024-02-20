@@ -15,6 +15,8 @@ public class Puzzle0081 : Puzzle
         var queue = new PriorityQueue<(int X, int Y, int Sum), int>();
         
         queue.Enqueue((0, 0, matrix[0, 0]), matrix[0, 0]);
+
+        var visited = new HashSet<(int, int)> { (0, 0) };
         
         while (queue.TryDequeue(out var item, out _))
         {
@@ -23,12 +25,12 @@ public class Puzzle0081 : Puzzle
                 return item.Sum.ToString("N0");
             }
 
-            if (item.X < 79)
+            if (item.X < 79 && visited.Add((item.X + 1, item.Y)))
             {
                 queue.Enqueue((item.X + 1, item.Y, item.Sum + matrix[item.X + 1, item.Y]), item.Sum + matrix[item.X + 1, item.Y]);
             }
 
-            if (item.Y < 79)
+            if (item.Y < 79 && visited.Add((item.X, item.Y + 1)))
             {
                 queue.Enqueue((item.X, item.Y + 1, item.Sum + matrix[item.X, item.Y + 1]), item.Sum + matrix[item.X, item.Y + 1]);
             }
