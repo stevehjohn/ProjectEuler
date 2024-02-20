@@ -48,6 +48,7 @@ public class Puzzle0096 : Puzzle
         return sum.ToString("N0");
     }
 
+#if DUMP    
     private static void Dump(int[,] sudoku, int[,] solution = null)
     {
         for (var y = 0; y < 9; y++)
@@ -81,6 +82,7 @@ public class Puzzle0096 : Puzzle
             Console.WriteLine();
         }
     }
+#endif
 
     private static int[,] Solve(int[,] sudoku)
     {
