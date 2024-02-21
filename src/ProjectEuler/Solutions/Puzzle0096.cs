@@ -127,9 +127,9 @@ public class Puzzle0096 : Puzzle
 
     private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
     {
-        var rowCandidates = new uint[9];
+        var rowCandidates = new int[9];
         
-        var columnCandidates = new uint[9];
+        var columnCandidates = new int[9];
         
         for (var y = 0; y < 9; y++)
         {
@@ -141,17 +141,17 @@ public class Puzzle0096 : Puzzle
             {
                 var value = sudoku[x, y];
 
-                rowCandidates[y] ^= (uint) 1 << value;
+                rowCandidates[y] ^= 1 << value;
                 
                 value = sudoku[y, x];
 
-                columnCandidates[y] ^= (uint) 1 << value;
+                columnCandidates[y] ^= 1 << value;
             }
         }
 
         var position = (X: -1, Y: -1);
 
-        var values = 0u;
+        var values = 0;
 
         var valueCount = 0b11_1111_1111;
         
@@ -180,7 +180,7 @@ public class Puzzle0096 : Puzzle
 
                 var common = row & column;
 
-                var count = BitOperations.PopCount(common);
+                var count = BitOperations.PopCount((uint) common);
                 
                 if (count < valueCount)
                 {
