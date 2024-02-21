@@ -82,7 +82,7 @@ public class Puzzle0096 : Puzzle
 
                 if (cell != 0)
                 {
-                    var bit = (uint) 1 << sudoku[y, x];
+                    var bit = (uint) 1 << cell;
 
                     if ((columnSet & bit) != 0)
                     {
