@@ -2,6 +2,7 @@
 #if DUMP
 using System.Diagnostics;
 #endif
+using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -138,9 +139,9 @@ public class Puzzle0096 : Puzzle
     {
         for (var y = 0; y < 9; y++)
         {
-            var uniqueRow = new HashSet<int>();
+            var rowSet = 0u;
 
-            var uniqueColumn = new HashSet<int>();
+            var columnSet = 0u;
             
             var countRow = 0;
 
@@ -152,18 +153,18 @@ public class Puzzle0096 : Puzzle
                 {
                     countRow++;
 
-                    uniqueRow.Add(sudoku[x, y]);
+                    rowSet |= (uint) 1 << sudoku[x, y];
                 }
 
                 if (sudoku[y, x] != 0)
                 {
                     countColumn++;
 
-                    uniqueColumn.Add(sudoku[y, x]);
+                    columnSet |= (uint) 1 << sudoku[y, x];
                 }
             }
 
-            if (uniqueRow.Count < countRow || uniqueColumn.Count < countColumn)
+            if (BitOperations.PopCount(rowSet) < countRow || BitOperations.PopCount(columnSet) < countColumn)
             {
                 return false;
             }
@@ -173,8 +174,8 @@ public class Puzzle0096 : Puzzle
         {
             for (var y = 0; y < 3; y++)
             {
-                var unique = new HashSet<int>();
-
+                var set = 0u;
+                
                 var count = 0;
                 
                 for (var x1 = 0; x1 < 3; x1++)
@@ -184,13 +185,13 @@ public class Puzzle0096 : Puzzle
                         if (sudoku[x * 3 + x1, y * 3 + y1] != 0)
                         {
                             count++;
-                            
-                            unique.Add(sudoku[x * 3 + x1, y * 3 + y1]);
+
+                            set |= (uint) 1 << sudoku[x * 3 + x1, y * 3 + y1];
                         }
                     }
                 }
 
-                if (unique.Count < count)
+                if (BitOperations.PopCount(set) < count)
                 {
                     return false;
                 }
