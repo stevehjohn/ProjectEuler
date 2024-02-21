@@ -122,7 +122,7 @@ public class Puzzle0096 : Puzzle
 
             foreach (var solution in solutions)
             {
-                if (IsSolved(solution.Sudoku))
+                if (solution.Score == 0)
                 {
                     return solution.Sudoku;
                 }
@@ -132,61 +132,6 @@ public class Puzzle0096 : Puzzle
         }
 
         return null;
-    }
-
-    private static bool IsSolved(int[,] sudoku)
-    {
-        for (var y = 0; y < 9; y++)
-        {
-            var uniqueRow = new HashSet<int>();
-
-            var uniqueColumn = new HashSet<int>();
-            
-            for (var x = 0; x < 9; x++)
-            {
-                if (sudoku[x, y] == 0)
-                {
-                    return false;
-                }
-
-                uniqueRow.Add(sudoku[x, y]);
-
-                if (sudoku[y, x] == 0)
-                {
-                    return false;
-                }
-
-                uniqueColumn.Add(sudoku[y, x]);
-            }
-
-            if (uniqueRow.Count < 9 || uniqueColumn.Count < 9)
-            {
-                return false;
-            }
-        }
-
-        for (var x = 0; x < 3; x++)
-        {
-            for (var y = 0; y < 3; y++)
-            {
-                var unique = new HashSet<int>();
-
-                for (var x1 = 0; x1 < 3; x1++)
-                {
-                    for (var y1 = 0; y1 < 3; y1++)
-                    {
-                        unique.Add(sudoku[x * 3 + x1, y * 3 + y1]);
-                    }
-                }
-
-                if (unique.Count < 9)
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
     
     private static bool IsValid(int[,] sudoku)
@@ -354,15 +299,20 @@ public class Puzzle0096 : Puzzle
             {
                 for (var x = 0; x < 9; x++)
                 {
-                    copy[x, y] = sudoku[x, y];
+                    var value = sudoku[x, y];
 
-                    score -= sudoku[x, y];
+                    copy[x, y] = value;
+
+                    if (value != 0)
+                    {
+                        score--;
+                    }
                 }
             }
 
             copy[position.X, position.Y] = move;
 
-            score -= move;
+            score--;
 
             if (IsValid(copy))
             {
