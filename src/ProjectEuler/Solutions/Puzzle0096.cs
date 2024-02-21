@@ -139,13 +139,9 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
-                var value = sudoku[x, y];
+                rowCandidates[y] ^= 1 << sudoku[x, y];
 
-                rowCandidates[y] ^= 1 << value;
-                
-                value = sudoku[y, x];
-
-                columnCandidates[y] ^= 1 << value;
+                columnCandidates[y] ^= 1 << sudoku[y, x];
             }
         }
 
