@@ -259,7 +259,15 @@ public class Puzzle0096 : Puzzle
                     continue;
                 }
 
-                var common = row.Intersect(column).ToList();
+                var common = new List<int>();
+
+                foreach (var item in row)
+                {
+                    if (column.Contains(item))
+                    {
+                        common.Add(item);
+                    }
+                }
 
                 if (values.Count == 0 || common.Count < values.Count)
                 {
