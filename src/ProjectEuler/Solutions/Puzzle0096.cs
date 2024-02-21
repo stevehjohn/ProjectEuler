@@ -272,9 +272,7 @@ public class Puzzle0096 : Puzzle
 
                 if (values.Count == 0 || common.Count < values.Count)
                 {
-                    position.X = x;
-
-                    position.Y = y;
+                    position = (x, y);
 
                     values = common;
                 }
