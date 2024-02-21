@@ -275,9 +275,15 @@ public class Puzzle0096 : Puzzle
                     position = (x, y);
 
                     values = common;
+
+                    if (values.Count == 1)
+                    {
+                        goto next;
+                    }
                 }
             }
         }
+        next:
 
         var solutions = new List<(int[,] Sudokus, int Score)>();
 
