@@ -34,5 +34,6 @@ public class Puzzle0050 : Puzzle
 
     private int GetSumLength(long prime)
     {
+        return 0;
     }
 }
