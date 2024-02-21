@@ -134,14 +134,14 @@ public class Puzzle0096 : Puzzle
 
                 if (value > 0)
                 {
-                    rowCandidates[y].Remove(sudoku[x, y]);
+                    rowCandidates[y].Remove(value);
                 }
                 
                 value = sudoku[y, x];
 
                 if (value > 0)
                 {
-                    columnCandidates[y].Remove(sudoku[y, x]);
+                    columnCandidates[y].Remove(value);
                 }
             }
         }
