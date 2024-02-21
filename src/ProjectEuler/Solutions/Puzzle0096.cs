@@ -144,7 +144,7 @@ public class Puzzle0096 : Puzzle
             
             var countRow = 0;
 
-            var countColum = 0;
+            var countColumn = 0;
             
             for (var x = 0; x < 9; x++)
             {
@@ -157,13 +157,13 @@ public class Puzzle0096 : Puzzle
 
                 if (sudoku[y, x] != 0)
                 {
-                    countColum++;
+                    countColumn++;
 
                     uniqueColumn.Add(sudoku[y, x]);
                 }
             }
 
-            if (uniqueRow.Count < countRow || uniqueColumn.Count < countColum)
+            if (uniqueRow.Count < countRow || uniqueColumn.Count < countColumn)
             {
                 return false;
             }
