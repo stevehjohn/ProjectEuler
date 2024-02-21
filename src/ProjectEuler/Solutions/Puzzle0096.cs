@@ -33,7 +33,6 @@ public class Puzzle0096 : Puzzle
 
         while (queue.TryDequeue(out var puzzle, out _))
         {
-            
             var solutions = SolveStep(puzzle);
 
             foreach (var solution in solutions)
