@@ -204,50 +204,33 @@ public class Puzzle0096 : Puzzle
 
     private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
     {
-        var rowCandidates = new Dictionary<int, List<int>>();
+        var rowCandidates = new Dictionary<int, HashSet<int>>();
         
-        var columnCandidates = new Dictionary<int, List<int>>();
+        var columnCandidates = new Dictionary<int, HashSet<int>>();
         
         for (var y = 0; y < 9; y++)
         {
-            rowCandidates[y] = new List<int>();
+            rowCandidates[y] = new HashSet<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-            columnCandidates[y] = new List<int>();
+            columnCandidates[y] = new HashSet<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             
-            for (var c = 1; c < 10; c++)
+            for (var x = 0; x < 9; x++)
             {
-                var found = false;
-                
-                for (var x = 0; x < 9; x++)
-                {
-                    if (sudoku[x, y] == c)
-                    {
-                        found = true;
-                        
-                        break;
-                    }
-                }
+                var value = sudoku[x, y];
 
-                if (! found)
+                if (value > 0)
                 {
-                    rowCandidates[y].Add(c);
+                    rowCandidates[y].Remove(sudoku[x, y]);
                 }
-                
-                found = false;
-                
-                for (var x = 0; x < 9; x++)
-                {
-                    if (sudoku[y, x] == c)
-                    {
-                        found = true;
-                        
-                        break;
-                    }
-                }
+            }
+            
+            for (var x = 0; x < 9; x++)
+            {
+                var value = sudoku[y, x];
 
-                if (! found)
+                if (value > 0)
                 {
-                    columnCandidates[y].Add(c);
+                    columnCandidates[y].Remove(sudoku[y, x]);
                 }
             }
         }
