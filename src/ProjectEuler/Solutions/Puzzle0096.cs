@@ -259,6 +259,11 @@ public class Puzzle0096 : Puzzle
         {
             var row = rowCandidates[y];
 
+            if (row.Count == 0)
+            {
+                continue;
+            }
+
             for (var x = 0; x < 9; x++)
             {
                 if (sudoku[x, y] != 0)
@@ -267,6 +272,11 @@ public class Puzzle0096 : Puzzle
                 }
 
                 var column = columnCandidates[x];
+
+                if (column.Count == 0)
+                {
+                    continue;
+                }
 
                 var common = row.Intersect(column).ToList();
 
