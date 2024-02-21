@@ -202,29 +202,29 @@ public class Puzzle0096 : Puzzle
 
         foreach (var move in values)
         {
-            var copy = new int[9, 9];
+            sudoku[position.X, position.Y] = move;
 
-            var score = 80;
-            
-            for (var y = 0; y < 9; y++)
+            if (IsValid(sudoku))
             {
-                for (var x = 0; x < 9; x++)
+                var copy = new int[9, 9];
+
+                var score = 80;
+            
+                for (var y = 0; y < 9; y++)
                 {
-                    var value = sudoku[x, y];
-
-                    copy[x, y] = value;
-
-                    if (value != 0)
+                    for (var x = 0; x < 9; x++)
                     {
-                        score--;
+                        var value = sudoku[x, y];
+
+                        copy[x, y] = value;
+
+                        if (value != 0)
+                        {
+                            score--;
+                        }
                     }
                 }
-            }
 
-            copy[position.X, position.Y] = move;
-
-            if (IsValid(copy))
-            {
                 solutions.Add((copy, score));
             }
         }
