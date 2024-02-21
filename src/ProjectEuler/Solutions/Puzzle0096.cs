@@ -205,9 +205,13 @@ public class Puzzle0096 : Puzzle
     {
         var rowCandidates = new Dictionary<int, List<int>>();
         
+        var columnCandidates = new Dictionary<int, List<int>>();
+        
         for (var y = 0; y < 9; y++)
         {
             rowCandidates[y] = new List<int>();
+
+            columnCandidates[y] = new List<int>();
             
             for (var c = 1; c < 10; c++)
             {
@@ -227,22 +231,12 @@ public class Puzzle0096 : Puzzle
                 {
                     rowCandidates[y].Add(c);
                 }
-            }
-        }
-
-        var columnCandidates = new Dictionary<int, List<int>>();
-        
-        for (var x = 0; x < 9; x++)
-        {
-            columnCandidates[x] = new List<int>();
-            
-            for (var c = 1; c < 10; c++)
-            {
-                var found = false;
                 
-                for (var y = 0; y < 9; y++)
+                found = false;
+                
+                for (var x = 0; x < 9; x++)
                 {
-                    if (sudoku[x, y] == c)
+                    if (sudoku[y, x] == c)
                     {
                         found = true;
                         
@@ -252,7 +246,7 @@ public class Puzzle0096 : Puzzle
 
                 if (! found)
                 {
-                    columnCandidates[x].Add(c);
+                    columnCandidates[y].Add(c);
                 }
             }
         }
