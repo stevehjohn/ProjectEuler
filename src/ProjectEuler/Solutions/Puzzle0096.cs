@@ -73,6 +73,11 @@ public class Puzzle0096 : Puzzle
                     rowSet |= bit;
                 }
 
+                if (x == y)
+                {
+                    continue;
+                }
+
                 cell = sudoku[y, x];
 
                 if (cell != 0)
