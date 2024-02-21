@@ -168,17 +168,23 @@ public class Puzzle0096 : Puzzle
                 }
 
                 var common = row & column;
+
+                var count = BitOperations.PopCount(common);
                 
-                if (values == 0 || BitOperations.PopCount(common) < BitOperations.PopCount(values))
+                if (count == 1)
                 {
                     position = (x, y);
 
                     values = common;
 
-                    if (BitOperations.PopCount(values) == 1)
-                    {
-                        goto next;
-                    }
+                    goto next;
+                }
+
+                if (values == 0 || count < BitOperations.PopCount(values))
+                {
+                    position = (x, y);
+
+                    values = common;
                 }
             }
         }
