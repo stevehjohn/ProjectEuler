@@ -118,43 +118,37 @@ public class Puzzle0096 : Puzzle
 
     private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
     {
-        var rowCandidates = new Dictionary<int, HashSet<int>>();
+        var rowCandidates = new Dictionary<int, uint>();
         
-        var columnCandidates = new Dictionary<int, HashSet<int>>();
+        var columnCandidates = new Dictionary<int, uint>();
         
         for (var y = 0; y < 9; y++)
         {
-            rowCandidates[y] = new HashSet<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            rowCandidates[y] = 0b11_1111_1111;
 
-            columnCandidates[y] = new HashSet<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            columnCandidates[y] = 0b11_1111_1111;
             
             for (var x = 0; x < 9; x++)
             {
                 var value = sudoku[x, y];
 
-                if (value > 0)
-                {
-                    rowCandidates[y].Remove(value);
-                }
+                rowCandidates[y] ^= (uint) 1 << value;
                 
                 value = sudoku[y, x];
 
-                if (value > 0)
-                {
-                    columnCandidates[y].Remove(value);
-                }
+                columnCandidates[y] ^= (uint) 1 << value;
             }
         }
 
         var position = (X: -1, Y: -1);
 
-        var values = new List<int>();
+        var values = 0u;
         
         for (var y = 0; y < 9; y++)
         {
             var row = rowCandidates[y];
 
-            if (row.Count == 0)
+            if (row == 0)
             {
                 continue;
             }
@@ -168,28 +162,20 @@ public class Puzzle0096 : Puzzle
 
                 var column = columnCandidates[x];
 
-                if (column.Count == 0)
+                if (column == 0)
                 {
                     continue;
                 }
 
-                var common = new List<int>();
-
-                foreach (var item in row)
-                {
-                    if (column.Contains(item))
-                    {
-                        common.Add(item);
-                    }
-                }
-
-                if (values.Count == 0 || common.Count < values.Count)
+                var common = row & column;
+                
+                if (values == 0 || BitOperations.PopCount(common) < BitOperations.PopCount(values))
                 {
                     position = (x, y);
 
                     values = common;
 
-                    if (values.Count == 1)
+                    if (BitOperations.PopCount(values) == 1)
                     {
                         goto next;
                     }
@@ -200,9 +186,14 @@ public class Puzzle0096 : Puzzle
 
         var solutions = new List<(int[,] Sudokus, int Score)>();
 
-        foreach (var move in values)
+        for (var i = 1; i < 10; i++)
         {
-            sudoku[position.X, position.Y] = move;
+            if ((values & (1 << i)) == 0)
+            {
+                continue;
+            }
+
+            sudoku[position.X, position.Y] = i;
 
             if (IsValid(sudoku))
             {
