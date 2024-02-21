@@ -118,9 +118,9 @@ public class Puzzle0096 : Puzzle
 
     private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
     {
-        var rowCandidates = new Dictionary<int, uint>();
+        var rowCandidates = new uint[9];
         
-        var columnCandidates = new Dictionary<int, uint>();
+        var columnCandidates = new uint[9];
         
         for (var y = 0; y < 9; y++)
         {
