@@ -34,6 +34,34 @@ public class Puzzle0050 : Puzzle
 
     private int GetSumLength(long prime)
     {
-        return 0;
+        var toTest = _primes.Where(p => p < prime / 2).ToList();
+
+        if (toTest.Count < 2)
+        {
+            return 0;
+        }
+
+        var sum = toTest.Sum();
+
+        var length = toTest.Count;
+        
+        while (true)
+        {
+            sum -= toTest.Last();
+            
+            toTest.RemoveAt(toTest.Count - 1);
+
+            length--;
+
+            if (sum == prime)
+            {
+                return length;
+            }
+
+            if (sum < prime || toTest.Count == 0)
+            {
+                return 0;
+            }
+        }
     }
 }
