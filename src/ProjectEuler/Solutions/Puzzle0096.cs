@@ -122,34 +122,16 @@ public class Puzzle0096 : Puzzle
 
             foreach (var solution in solutions)
             {
-                if (IsSolved(solution))
+                if (IsSolved(solution.Sudoku))
                 {
-                    return solution;
+                    return solution.Sudoku;
                 }
                 
-                queue.Enqueue(solution, GetScore(solution));
+                queue.Enqueue(solution.Sudoku, solution.Score);
             }
         }
 
         return null;
-    }
-
-    private static int GetScore(int[,] sudoku)
-    {
-        var score = 81;
-        
-        for (var y = 0; y < 9; y++)
-        {
-            for (var x = 0; x < 9; x++)
-            {
-                if (sudoku[x, y] != 0)
-                {
-                    score--;
-                }
-            }
-        }
-
-        return score;
     }
 
     private static bool IsSolved(int[,] sudoku)
@@ -274,7 +256,7 @@ public class Puzzle0096 : Puzzle
         return true;
     }
 
-    private static List<int[,]> SolveStep(int[,] sudoku)
+    private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
     {
         var rowCandidates = new Dictionary<int, List<int>>();
         
@@ -360,19 +342,31 @@ public class Puzzle0096 : Puzzle
             }
         }
 
-        var solutions = new List<int[,]>();
+        var solutions = new List<(int[,] Sudokus, int Score)>();
 
         foreach (var move in values)
         {
             var copy = new int[9, 9];
+
+            var score = 81;
             
-            Array.Copy(sudoku, copy, 81);
+            for (var y = 0; y < 9; y++)
+            {
+                for (var x = 0; x < 9; x++)
+                {
+                    copy[x, y] = sudoku[x, y];
+
+                    score -= sudoku[x, y];
+                }
+            }
 
             copy[position.X, position.Y] = move;
 
+            score -= move;
+
             if (IsValid(copy))
             {
-                solutions.Add(copy);
+                solutions.Add((copy, score));
             }
         }
         
