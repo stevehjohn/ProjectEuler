@@ -182,7 +182,7 @@ public class Puzzle0096 : Puzzle
 
                 var count = BitOperations.PopCount(common);
                 
-                if (values == 0 || count < valueCount)
+                if (count < valueCount)
                 {
                     position = (x, y);
 
