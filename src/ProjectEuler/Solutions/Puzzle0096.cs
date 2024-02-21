@@ -1,7 +1,3 @@
-//#define DUMP
-#if DUMP
-using System.Diagnostics;
-#endif
 using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
@@ -21,34 +17,7 @@ public class Puzzle0096 : Puzzle
         {
             var sudoku = LoadSudoku(i);
 
-#if DUMP
-            Console.CursorVisible = false;
-            
-            var sw = Stopwatch.StartNew();
-#endif
-            
             var solution = Solve(sudoku);
-
-#if DUMP            
-            sw.Stop();
-
-            Console.Clear();
-            
-            Console.WriteLine($"\nPuzzle {i + 1} solution found in {sw.Elapsed.TotalMilliseconds:N3}ms\n");
-            
-            Dump(sudoku, solution);
-
-            if (i < 49)
-            {
-                Console.WriteLine("\nSolving next puzzle.\n");
-            }
-            else
-            {
-                Console.WriteLine();
-            }
-
-            Console.CursorVisible = true;
-#endif
             
             sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
         }
@@ -56,68 +25,14 @@ public class Puzzle0096 : Puzzle
         return sum.ToString("N0");
     }
 
-#if DUMP    
-    private static void Dump(int[,] sudoku, int[,] solution = null)
-    {
-        for (var y = 0; y < 9; y++)
-        {
-            for (var x = 0; x < 9; x++)
-            {
-                if (sudoku[x, y] == 0)
-                {
-                    Console.Write("  ");
-                    
-                    continue;
-                }
-
-                Console.Write($"{sudoku[x, y]} ");
-            }
-            
-            Console.Write("  ");
-
-            if (solution == null)
-            {
-                Console.WriteLine();
-                
-                continue;
-            }
-
-            for (var x = 0; x < 9; x++)
-            {
-                if (solution[x, y] == 0)
-                {
-                    Console.Write("  ");
-                    
-                    continue;
-                }
-                
-                Console.Write($"{solution[x, y]} ");
-            }
-            
-            Console.WriteLine();
-        }
-    }
-#endif
-
     private static int[,] Solve(int[,] sudoku)
     {
         var queue = new PriorityQueue<int[,], int>();
         
         queue.Enqueue(sudoku, 0);
 
-#if DUMP
-        var cY = Console.CursorTop;
-#endif
-        
         while (queue.TryDequeue(out var puzzle, out _))
         {
-#if DUMP
-            Console.CursorTop = cY;
-
-            Dump(sudoku, puzzle);
-            
-            Console.WriteLine($"\nQueue: {queue.Count}      \n");
-#endif
             
             var solutions = SolveStep(puzzle);
 
