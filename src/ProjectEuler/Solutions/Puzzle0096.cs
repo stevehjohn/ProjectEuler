@@ -145,6 +145,24 @@ public class Puzzle0096 : Puzzle
             }
         }
 
+        var boxCandidates = new int[9];
+
+        for (var y = 0; y < 3; y++) 
+        {
+            for (var x = 0; x < 3; x++)
+            {
+                boxCandidates[y * 3 + x] = 0b11_1111_1111;
+
+                for (var y1 = 0; y1 < 3; y1++)
+                {
+                    for (var x1 = 0; x1 < 3; x1++)
+                    {
+                        boxCandidates[y * 3 + x] ^= 1 << sudoku[x * 3 + x1, y * 3 + y1];
+                    }
+                }
+            }
+        }
+
         var position = (X: -1, Y: -1);
 
         var values = 0;
@@ -174,7 +192,9 @@ public class Puzzle0096 : Puzzle
                     continue;
                 }
 
-                var common = row & column;
+                var box = boxCandidates[y / 3 * 3 + x / 3];
+                
+                var common = row & column & box;
 
                 var count = BitOperations.PopCount((uint) common);
                 
