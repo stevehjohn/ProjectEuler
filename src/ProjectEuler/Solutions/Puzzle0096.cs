@@ -152,6 +152,8 @@ public class Puzzle0096 : Puzzle
         var position = (X: -1, Y: -1);
 
         var values = 0u;
+
+        var valueCount = 0b11_1111_1111;
         
         for (var y = 0; y < 9; y++)
         {
@@ -180,20 +182,18 @@ public class Puzzle0096 : Puzzle
 
                 var count = BitOperations.PopCount(common);
                 
-                if (count == 1)
+                if (values == 0 || count < valueCount)
                 {
                     position = (x, y);
 
                     values = common;
 
-                    goto next;
-                }
+                    valueCount = count;
 
-                if (values == 0 || count < BitOperations.PopCount(values))
-                {
-                    position = (x, y);
-
-                    values = common;
+                    if (count == 1)
+                    {
+                        goto next;
+                    }
                 }
             }
         }
