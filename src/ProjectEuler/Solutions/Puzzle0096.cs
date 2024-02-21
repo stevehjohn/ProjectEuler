@@ -222,11 +222,8 @@ public class Puzzle0096 : Puzzle
                 {
                     rowCandidates[y].Remove(sudoku[x, y]);
                 }
-            }
-            
-            for (var x = 0; x < 9; x++)
-            {
-                var value = sudoku[y, x];
+                
+                value = sudoku[y, x];
 
                 if (value > 0)
                 {
