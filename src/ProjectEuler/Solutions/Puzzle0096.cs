@@ -57,30 +57,35 @@ public class Puzzle0096 : Puzzle
 
             var columnSet = 0u;
             
-            var countRow = 0;
-
-            var countColumn = 0;
-            
             for (var x = 0; x < 9; x++)
             {
-                if (sudoku[x, y] != 0)
-                {
-                    countRow++;
+                var cell = sudoku[x, y];
 
-                    rowSet |= (uint) 1 << sudoku[x, y];
+                if (cell != 0)
+                {
+                    var bit = (uint) 1 << cell;
+
+                    if ((rowSet & bit) != 0)
+                    {
+                        return false;
+                    }
+
+                    rowSet |= bit;
                 }
 
-                if (sudoku[y, x] != 0)
+                cell = sudoku[y, x];
+
+                if (cell != 0)
                 {
-                    countColumn++;
+                    var bit = (uint) 1 << sudoku[y, x];
 
-                    columnSet |= (uint) 1 << sudoku[y, x];
+                    if ((columnSet & bit) != 0)
+                    {
+                        return false;
+                    }
+
+                    columnSet |= bit;
                 }
-            }
-
-            if (BitOperations.PopCount(rowSet) < countRow || BitOperations.PopCount(columnSet) < countColumn)
-            {
-                return false;
             }
         }
 
@@ -90,27 +95,26 @@ public class Puzzle0096 : Puzzle
             {
                 var set = 0u;
                 
-                var count = 0;
-                
                 for (var x1 = 0; x1 < 3; x1++)
                 {
                     for (var y1 = 0; y1 < 3; y1++)
                     {
-                        if (sudoku[x * 3 + x1, y * 3 + y1] != 0)
-                        {
-                            count++;
+                        var cell = sudoku[x * 3 + x1, y * 3 + y1];
 
-                            set |= (uint) 1 << sudoku[x * 3 + x1, y * 3 + y1];
+                        if (cell != 0)
+                        {
+                            var value = (uint) 1 << cell;
+
+                            if ((set & value) != 0)
+                            {
+                                return false;
+                            }
+
+                            set |= value;
                         }
                     }
                 }
-
-                if (BitOperations.PopCount(set) < count)
-                {
-                    return false;
-                }
             }
-            
         }
 
         return true;
