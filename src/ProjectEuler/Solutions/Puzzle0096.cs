@@ -285,7 +285,7 @@ public class Puzzle0096 : Puzzle
         {
             var copy = new int[9, 9];
 
-            var score = 81;
+            var score = 80;
             
             for (var y = 0; y < 9; y++)
             {
@@ -303,8 +303,6 @@ public class Puzzle0096 : Puzzle
             }
 
             copy[position.X, position.Y] = move;
-
-            score--;
 
             if (IsValid(copy))
             {
