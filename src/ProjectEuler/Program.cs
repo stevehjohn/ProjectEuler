@@ -4,7 +4,6 @@ using ProjectEuler.Infrastructure;
 
 namespace ProjectEuler;
 
-// ReSharper disable once InconsistentNaming
 public static class Program
 {
     private static string[] _answers;
