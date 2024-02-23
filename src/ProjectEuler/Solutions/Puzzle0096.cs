@@ -9,8 +9,10 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
-    private readonly ConcurrentBag<(double Elapsed, int Solved)> _history = new();
-        
+    private readonly ConcurrentBag<(int Id, double Elapsed, int Solved)> _history = new();
+
+    private double _elapsed;
+    
     public override string GetAnswer()
     {
         LoadInput();
@@ -36,13 +38,15 @@ public class Puzzle0096 : Puzzle
                 
                 stopwatch.Stop();
                 
-                _history.Add((stopwatch.Elapsed.TotalMicroseconds, solved));
-
                 lock (consoleLock)
                 {
+                    _history.Add((i, stopwatch.Elapsed.TotalMicroseconds, solved));
+
                     Dump(sudoku, solution, solved);
 
                     solved++;
+
+                    _elapsed += stopwatch.Elapsed.TotalMicroseconds;
                 }
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
@@ -78,14 +82,18 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
-
                 Console.Write($" {right[x, y]}");
             }
             
             Console.WriteLine();
         }
         
-        Console.WriteLine($"\n Solved: {solved}/{Input.Length}.");
+        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles. Average time: {_elapsed / solved:N0}μs.\n");
+
+        foreach (var item in _history.TakeLast(10))
+        {
+            Console.WriteLine($" Puzzle #{item.Id} solved in {item.Elapsed:N0}μs.          ");
+        }
     }
 
     private static int[,] Solve(int[,] sudoku)
