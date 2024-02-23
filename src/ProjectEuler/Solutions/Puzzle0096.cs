@@ -13,6 +13,8 @@ public class Puzzle0096 : Puzzle
         
         var sum = 0;
 
+        var c = 0;
+        
         Parallel.For(0, Input.Length / 10,
             () => 0,
             (i, _, subTotal) => {
@@ -21,6 +23,13 @@ public class Puzzle0096 : Puzzle
                 var solution = Solve(sudoku);
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
+
+                c++;
+
+                if (c % 100 == 0)
+                {
+                    Console.WriteLine(c);
+                }
 
                 return subTotal;
             },
@@ -292,15 +301,13 @@ public class Puzzle0096 : Puzzle
     {
         var matrix = new int[9, 9];
 
-        var start = number * 10 + 1;
+        var line = Input[number];
         
         for (var y = 0; y < 9; y++)
         {
-            var line = Input[start + y];
-            
             for (var x = 0; x < 9; x++)
             {
-                matrix[x, y] = line[x] - '0';
+                matrix[x, y] = line[y * 9 + x] - '0';
             }
         }
 
