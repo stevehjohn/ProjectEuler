@@ -12,8 +12,6 @@ public class Puzzle0096 : Puzzle
         LoadInput();
         
         var sum = 0;
-
-        var c = 0;
         
         Parallel.For(0, Input.Length,
             () => 0,
@@ -23,13 +21,6 @@ public class Puzzle0096 : Puzzle
                 var solution = Solve(sudoku);
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
-
-                c++;
-
-                if (c % 100 == 0)
-                {
-                    Console.WriteLine(c);
-                }
 
                 return subTotal;
             },
