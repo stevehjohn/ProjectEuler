@@ -15,7 +15,7 @@ public class Puzzle0096 : Puzzle
 
         var c = 0;
         
-        Parallel.For(0, Input.Length / 10,
+        Parallel.For(0, Input.Length,
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
