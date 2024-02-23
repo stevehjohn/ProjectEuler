@@ -23,7 +23,7 @@ public class Puzzle0096 : Puzzle
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
-
+                
                 var solution = Solve(sudoku);
 
                 lock (consoleLock)
