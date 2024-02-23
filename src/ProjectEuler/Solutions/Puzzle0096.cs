@@ -13,14 +13,18 @@ public class Puzzle0096 : Puzzle
         
         var sum = 0;
 
-        Parallel.For(0, Input.Length / 10, i =>
-        {
-            var sudoku = LoadSudoku(i);
+        Parallel.For(0, Input.Length / 10,
+            () => 0,
+            (i, _, subTotal) => {
+                var sudoku = LoadSudoku(i);
 
-            var solution = Solve(sudoku);
+                var solution = Solve(sudoku);
 
-            sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
-        });
+                subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
+
+                return subTotal;
+            },
+            subTotal => Interlocked.Add(ref sum, subTotal));
 
         return sum.ToString("N0");
     }
@@ -28,25 +32,55 @@ public class Puzzle0096 : Puzzle
     private static int[,] Solve(int[,] sudoku)
     {
         var queue = new PriorityQueue<int[,], int>();
+
+        var queueLock = new object();
         
         queue.Enqueue(sudoku, 0);
 
-        while (queue.TryDequeue(out var puzzle, out _))
+        var complete = false;
+
+        int[,] answer = null;
+        
+        var worker = () =>
         {
-            var solutions = SolveStep(puzzle);
-
-            foreach (var solution in solutions)
+            while (! complete)
             {
-                if (solution.Score == 0)
-                {
-                    return solution.Sudoku;
-                }
+                int[,] puzzle;
                 
-                queue.Enqueue(solution.Sudoku, solution.Score);
-            }
-        }
+                lock (queueLock)
+                {
+                    queue.TryDequeue(out puzzle, out _);
+                }
 
-        return null;
+                if (puzzle != null)
+                {
+                    var solutions = SolveStep(puzzle);
+
+                    foreach (var solution in solutions)
+                    {
+                        if (solution.Score == 0)
+                        {
+                            answer = solution.Sudoku;
+
+                            complete = true;
+                        }
+
+                        lock (queueLock)
+                        {
+                            queue.Enqueue(solution.Sudoku, solution.Score);
+                        }
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(0);
+                }
+            }
+        };
+        
+        Parallel.Invoke(worker, worker, worker, worker, worker, worker, worker, worker);
+
+        return answer;
     }
     
     private static bool IsValid(int[,] sudoku)
@@ -256,14 +290,14 @@ public class Puzzle0096 : Puzzle
 
     private int[,] LoadSudoku(int number)
     {
-        var start = number * 10 + 1;
-
         var matrix = new int[9, 9];
 
+        var start = number * 10 + 1;
+        
         for (var y = 0; y < 9; y++)
         {
             var line = Input[start + y];
-
+            
             for (var x = 0; x < 9; x++)
             {
                 matrix[x, y] = line[x] - '0';
