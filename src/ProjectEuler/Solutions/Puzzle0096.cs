@@ -12,15 +12,15 @@ public class Puzzle0096 : Puzzle
         LoadInput();
         
         var sum = 0;
-        
-        for (var i = 0; i < Input.Length / 10; i++)
+
+        Parallel.For(0, Input.Length / 10, i =>
         {
             var sudoku = LoadSudoku(i);
 
             var solution = Solve(sudoku);
-            
+
             sum += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
-        }
+        });
 
         return sum.ToString("N0");
     }
