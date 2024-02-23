@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
@@ -7,12 +9,16 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
+    private readonly ConcurrentBag<(double Elapsed, int Solved)> _history = new();
+        
     public override string GetAnswer()
     {
         LoadInput();
         
         var sum = 0;
 
+        var solved = 0;
+        
         Console.Clear();
 
         Console.CursorVisible = false;
@@ -23,12 +29,20 @@ public class Puzzle0096 : Puzzle
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
+
+                var stopwatch = Stopwatch.StartNew();
                 
                 var solution = Solve(sudoku);
+                
+                stopwatch.Stop();
+                
+                _history.Add((stopwatch.Elapsed.TotalMicroseconds, solved));
 
                 lock (consoleLock)
                 {
-                    Dump(sudoku, solution);
+                    Dump(sudoku, solution, solved);
+
+                    solved++;
                 }
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
@@ -42,7 +56,7 @@ public class Puzzle0096 : Puzzle
         return sum.ToString("N0");
     }
 
-    private void Dump(int[,] left, int[,] right)
+    private void Dump(int[,] left, int[,] right, int solved)
     {
         Console.CursorTop = 1;
         
@@ -70,6 +84,8 @@ public class Puzzle0096 : Puzzle
             
             Console.WriteLine();
         }
+        
+        Console.WriteLine($"\n Solved: {solved}/{Input.Length}.");
     }
 
     private static int[,] Solve(int[,] sudoku)
