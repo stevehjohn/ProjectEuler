@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Numerics;
 using JetBrains.Annotations;
@@ -9,7 +8,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
-    private readonly ConcurrentBag<(int Id, double Elapsed, int Solved)> _history = new();
+    private readonly List<(int Id, double Elapsed, int Solved)> _history = new();
 
     private double _elapsed;
     
@@ -90,7 +89,7 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles. Average time: {_elapsed / solved:N0}μs.\n");
 
-        foreach (var item in _history.TakeLast(10))
+        foreach (var item in _history.TakeLast(10).Reverse())
         {
             Console.WriteLine($" Puzzle #{item.Id} solved in {item.Elapsed:N0}μs.          ");
         }
