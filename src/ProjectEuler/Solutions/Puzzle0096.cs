@@ -60,6 +60,14 @@ public class Puzzle0096 : Puzzle
                     Console.Write($" {left[x, y]}");
                 }
             }
+
+            Console.Write("    ");
+            
+            for (var x = 0; x < 9; x++)
+            {
+
+                Console.Write($" {right[x, y]}");
+            }
             
             Console.WriteLine();
         }
