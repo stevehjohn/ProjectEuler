@@ -1,5 +1,6 @@
 using System.Numerics;
 using JetBrains.Annotations;
+using Org.BouncyCastle.Asn1.Utilities;
 using ProjectEuler.Infrastructure;
 
 namespace ProjectEuler.Solutions;
@@ -12,6 +13,12 @@ public class Puzzle0096 : Puzzle
         LoadInput();
         
         var sum = 0;
+
+        Console.Clear();
+
+        Console.CursorVisible = false;
+        
+        var consoleLock = new object();
         
         Parallel.For(0, Input.Length,
             () => 0,
@@ -20,13 +27,42 @@ public class Puzzle0096 : Puzzle
 
                 var solution = Solve(sudoku);
 
+                lock (consoleLock)
+                {
+                    Dump(sudoku, solution);
+                }
+
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
 
                 return subTotal;
             },
             subTotal => Interlocked.Add(ref sum, subTotal));
 
+        Console.CursorVisible = true;
+        
         return sum.ToString("N0");
+    }
+
+    private void Dump(int[,] left, int[,] right)
+    {
+        Console.CursorTop = 1;
+        
+        for (var y = 0; y < 9; y++)
+        {
+            for (var x = 0; x < 9; x++)
+            {
+                if (left[x, y] == 0)
+                {
+                    Console.Write("  ");
+                }
+                else
+                {
+                    Console.Write($" {left[x, y]}");
+                }
+            }
+            
+            Console.WriteLine();
+        }
     }
 
     private static int[,] Solve(int[,] sudoku)
