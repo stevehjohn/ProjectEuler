@@ -127,6 +127,10 @@ public class Puzzle0096 : Puzzle
         var percent = 100 - (Input.Length - solved) * 100 / Input.Length;
 
         Console.WriteLine($" Solved: {percent:N0}%\n");
+
+        var line = percent / 2;
+        
+        Console.WriteLine($" {new string('\u25a0', line)}{new string('-', 50 - line)}\n");
         
         foreach (var item in _history.TakeLast(10).Reverse())
         {
