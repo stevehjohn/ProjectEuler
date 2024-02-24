@@ -160,7 +160,7 @@ public class Puzzle0096 : Puzzle
 
                                 if (steps > _steps.Maximum)
                                 {
-                                    _steps.Minimum = steps;
+                                    _steps.Maximum = steps;
 
                                     _maxPuzzleNumber = id;
                                 }
