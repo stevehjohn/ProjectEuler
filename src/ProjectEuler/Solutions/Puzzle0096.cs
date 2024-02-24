@@ -15,6 +15,8 @@ public class Puzzle0096 : Puzzle
     private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
 
     private int _maxPuzzleNumber;
+
+    private Stopwatch _stopwatch;
     
     public override string GetAnswer()
     {
@@ -30,7 +32,7 @@ public class Puzzle0096 : Puzzle
         
         var consoleLock = new object();
 
-        var timer = Stopwatch.StartNew();
+        _stopwatch = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
             () => 0,
@@ -64,9 +66,9 @@ public class Puzzle0096 : Puzzle
             },
             subTotal => Interlocked.Add(ref sum, subTotal));
 
-        timer.Stop();
+        _stopwatch.Stop();
 
-        Console.WriteLine($"\n All puzzles solved in: {timer.Elapsed.Minutes:N0}:{timer.Elapsed.Seconds:D2}.\n\n\n\n\n");
+        Console.WriteLine($"\n All puzzles solved in: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}.\n\n\n\n\n");
         
         Console.CursorVisible = true;
         
@@ -102,11 +104,17 @@ public class Puzzle0096 : Puzzle
         }
 
         Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles.\n");
+
+        var mean = _elapsed.Total / solved;
         
-        Console.WriteLine($" Timings... Minimum: {_elapsed.Minimum:N0}μs    Mean: {_elapsed.Total / solved:N0}μs    Maximum: {_elapsed.Maximum:N0}μs.           \n");
+        Console.WriteLine($" Timings... Minimum: {_elapsed.Minimum:N0}μs    Mean: {mean:N0}μs    Maximum: {_elapsed.Maximum:N0}μs.           \n");
         
         Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}    Mean: {_steps.Total / solved:N0}    Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
 
+        var eta = TimeSpan.FromMicroseconds((Input.Length - solved) * mean);
+        
+        Console.WriteLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
+        
         foreach (var item in _history.TakeLast(10).Reverse())
         {
             Console.WriteLine($" Puzzle #{item.Id} solved in {item.Elapsed:N0}μs.          ");
