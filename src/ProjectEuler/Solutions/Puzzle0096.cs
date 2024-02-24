@@ -14,8 +14,10 @@ public class Puzzle0096 : Puzzle
 
     private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
 
-    private int _maxPuzzleNumber;
+    private int _maxStepsPuzzleNumber;
 
+    private int _maxTimePuzzleNumber;
+    
     private Stopwatch _stopwatch;
 
     private readonly object _statsLock = new();
@@ -53,7 +55,12 @@ public class Puzzle0096 : Puzzle
 
                     _elapsed.Minimum = Math.Min(_elapsed.Minimum, stopwatch.Elapsed.TotalMicroseconds);
 
-                    _elapsed.Maximum = Math.Max(_elapsed.Maximum, stopwatch.Elapsed.TotalMicroseconds);
+                    if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Minimum)
+                    {
+                        _maxStepsPuzzleNumber = i;
+                        
+                        _elapsed.Maximum = stopwatch.Elapsed.TotalMicroseconds;
+                    }
 
                     solved++;
 
@@ -109,7 +116,7 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs          \n");
         
-        Console.WriteLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
+        Console.WriteLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0}).           \n");
 
         var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
         
@@ -119,7 +126,7 @@ public class Puzzle0096 : Puzzle
         
         foreach (var item in _history.TakeLast(10).Reverse())
         {
-            Console.WriteLine($" Puzzle #{item.Id} solved in {item.Elapsed:N0}μs.          ");
+            Console.WriteLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
         }
     }
 
@@ -172,7 +179,7 @@ public class Puzzle0096 : Puzzle
                                 {
                                     _steps.Maximum = steps;
 
-                                    _maxPuzzleNumber = id;
+                                    _maxStepsPuzzleNumber = id;
                                 }
                             }
                         }
