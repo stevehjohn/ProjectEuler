@@ -103,7 +103,7 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Timings... Minimum: {_elapsed.Minimum:N0}μs    Mean: {_elapsed.Total / solved:N0}μs    Maximum: {_elapsed.Maximum:N0}μs.           \n");
         
-        Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}μs    Mean: {_steps.Total / solved:N0}μs    Maximum: {_steps.Maximum:N0}μs.           \n");
+        Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}    Mean: {_steps.Total / solved:N0}    Maximum: {_steps.Maximum:N0}.           \n");
 
         foreach (var item in _history.TakeLast(10).Reverse())
         {
