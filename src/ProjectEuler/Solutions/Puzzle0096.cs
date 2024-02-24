@@ -18,7 +18,7 @@ public class Puzzle0096 : Puzzle
 
     private Stopwatch _stopwatch;
 
-    private object _statsLock = new();
+    private readonly object _statsLock = new();
     
     public override string GetAnswer()
     {
