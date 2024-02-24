@@ -10,7 +10,7 @@ public class Puzzle0096 : Puzzle
 {
     private readonly List<(int Id, double Elapsed, int Solved)> _history = new();
 
-    private TimeSpan _elapsed;
+    private double _elapsed;
     
     public override string GetAnswer()
     {
@@ -47,7 +47,7 @@ public class Puzzle0096 : Puzzle
 
                     solved++;
 
-                    _elapsed += stopwatch.Elapsed;
+                    _elapsed += stopwatch.Elapsed.TotalMicroseconds;
                 }
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
@@ -58,9 +58,7 @@ public class Puzzle0096 : Puzzle
 
         timer.Stop();
 
-        Console.Write($"\n All puzzles solved in elapsed: {timer.Elapsed.TotalMinutes:N0}:{timer.Elapsed.Seconds}. ");
-        
-        Console.WriteLine($"Actual processing time: {_elapsed.TotalMinutes:N0}:{_elapsed.Seconds}\n\n\n\n\n");
+        Console.WriteLine($"\n All puzzles solved in elapsed: {timer.Elapsed.TotalMinutes:N0}:{timer.Elapsed.Seconds}.");
         
         Console.CursorVisible = true;
         
