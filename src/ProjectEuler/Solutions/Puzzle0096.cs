@@ -111,7 +111,9 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}    Mean: {_steps.Total / solved:N0}    Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
 
-        var eta = TimeSpan.FromMicroseconds((Input.Length - solved) * mean);
+        var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
+        
+        var eta = TimeSpan.FromSeconds((Input.Length - solved) * meanTime);
         
         Console.WriteLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
         
