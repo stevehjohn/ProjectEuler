@@ -25,6 +25,8 @@ public class Puzzle0096 : Puzzle
         Console.CursorVisible = false;
         
         var consoleLock = new object();
+
+        var timer = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
             () => 0,
@@ -54,6 +56,10 @@ public class Puzzle0096 : Puzzle
             },
             subTotal => Interlocked.Add(ref sum, subTotal));
 
+        timer.Stop();
+        
+        Console.WriteLine($"\n All puzzles solved in: {timer.Elapsed.TotalMinutes:N0}:{timer.Elapsed.Seconds}.\n\n\n\n\n");
+        
         Console.CursorVisible = true;
         
         return sum.ToString("N0");
