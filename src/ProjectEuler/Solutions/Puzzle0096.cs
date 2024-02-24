@@ -10,7 +10,9 @@ public class Puzzle0096 : Puzzle
 {
     private readonly List<(int Id, double Elapsed, int Solved)> _history = new();
 
-    private double _elapsed;
+    private (double Total, double Minimum, double Maximum) _elapsed = (0, double.MaxValue, 0);
+
+    private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
     
     public override string GetAnswer()
     {
@@ -43,11 +45,15 @@ public class Puzzle0096 : Puzzle
                 {
                     _history.Add((i, stopwatch.Elapsed.TotalMicroseconds, solved));
 
-                    Dump(sudoku, solution, solved);
+                    _elapsed.Total += stopwatch.Elapsed.TotalMicroseconds;
+
+                    _elapsed.Minimum = Math.Min(_elapsed.Minimum, stopwatch.Elapsed.TotalMicroseconds);
+
+                    _elapsed.Maximum = Math.Max(_elapsed.Maximum, stopwatch.Elapsed.TotalMicroseconds);
 
                     solved++;
 
-                    _elapsed += stopwatch.Elapsed.TotalMicroseconds;
+                    Dump(sudoku, solution, solved);
                 }
 
                 subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
@@ -92,8 +98,12 @@ public class Puzzle0096 : Puzzle
             
             Console.WriteLine();
         }
+
+        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles.\n");
         
-        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles. Average time: {_elapsed / solved:N0}μs.\n");
+        Console.WriteLine($" Timings... Minimum: {_elapsed.Minimum:N0}μs    Mean: {_elapsed.Total / solved:N0}μs    Maximum: {_elapsed.Maximum:N0}μs.           \n");
+        
+        Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}μs    Mean: {_steps.Total / solved:N0}μs    Maximum: {_steps.Maximum:N0}μs.           \n");
 
         foreach (var item in _history.TakeLast(10).Reverse())
         {
@@ -101,7 +111,7 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private static int[,] Solve(int[,] sudoku)
+    private int[,] Solve(int[,] sudoku)
     {
         var queue = new PriorityQueue<int[,], int>();
 
@@ -112,6 +122,8 @@ public class Puzzle0096 : Puzzle
         var complete = false;
 
         int[,] answer = null;
+
+        var steps = 0;
         
         var worker = () =>
         {
@@ -122,6 +134,8 @@ public class Puzzle0096 : Puzzle
                 lock (queueLock)
                 {
                     queue.TryDequeue(out puzzle, out _);
+
+                    steps++;
                 }
 
                 if (puzzle != null)
@@ -135,6 +149,15 @@ public class Puzzle0096 : Puzzle
                             answer = solution.Sudoku;
 
                             complete = true;
+
+                            lock (queueLock)
+                            {
+                                _steps.Total += steps;
+
+                                _steps.Minimum = Math.Min(_steps.Minimum, steps);
+
+                                _steps.Maximum = Math.Max(_steps.Maximum, steps);
+                            }
                         }
 
                         lock (queueLock)
