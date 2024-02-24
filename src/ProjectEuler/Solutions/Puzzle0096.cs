@@ -18,7 +18,7 @@ public class Puzzle0096 : Puzzle
 
     private Stopwatch _stopwatch;
 
-    private object _queueLock = new();
+    private object _statsLock = new();
     
     public override string GetAnswer()
     {
@@ -32,8 +32,6 @@ public class Puzzle0096 : Puzzle
 
         Console.CursorVisible = false;
         
-        var consoleLock = new object();
-
         _stopwatch = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
@@ -47,7 +45,7 @@ public class Puzzle0096 : Puzzle
                 
                 stopwatch.Stop();
                 
-                lock (consoleLock)
+                lock (_statsLock)
                 {
                     _history.Add((i, stopwatch.Elapsed.TotalMicroseconds, solved));
 
@@ -129,6 +127,8 @@ public class Puzzle0096 : Puzzle
     {
         var queue = new PriorityQueue<int[,], int>();
 
+        var queueLock = new object();
+        
         queue.Enqueue(sudoku, 0);
 
         var complete = false;
@@ -143,7 +143,7 @@ public class Puzzle0096 : Puzzle
             {
                 int[,] puzzle;
                 
-                lock (_queueLock)
+                lock (queueLock)
                 {
                     queue.TryDequeue(out puzzle, out _);
 
@@ -162,7 +162,7 @@ public class Puzzle0096 : Puzzle
 
                             complete = true;
 
-                            lock (_queueLock)
+                            lock (_statsLock)
                             {
                                 _steps.Total += steps;
 
@@ -177,7 +177,7 @@ public class Puzzle0096 : Puzzle
                             }
                         }
 
-                        lock (_queueLock)
+                        lock (queueLock)
                         {
                             queue.Enqueue(solution.Sudoku, solution.Score);
                         }
