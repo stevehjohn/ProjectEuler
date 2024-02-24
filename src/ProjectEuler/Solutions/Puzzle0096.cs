@@ -57,7 +57,7 @@ public class Puzzle0096 : Puzzle
 
                     if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Minimum)
                     {
-                        _maxStepsPuzzleNumber = i;
+                        _maxTimePuzzleNumber = i;
                         
                         _elapsed.Maximum = stopwatch.Elapsed.TotalMicroseconds;
                     }
