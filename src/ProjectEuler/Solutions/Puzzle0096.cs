@@ -13,6 +13,8 @@ public class Puzzle0096 : Puzzle
     private (double Total, double Minimum, double Maximum) _elapsed = (0, double.MaxValue, 0);
 
     private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
+
+    private int _maxPuzzleNumber;
     
     public override string GetAnswer()
     {
@@ -37,7 +39,7 @@ public class Puzzle0096 : Puzzle
 
                 var stopwatch = Stopwatch.StartNew();
                 
-                var solution = Solve(sudoku);
+                var solution = Solve(i, sudoku);
                 
                 stopwatch.Stop();
                 
@@ -103,7 +105,7 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Timings... Minimum: {_elapsed.Minimum:N0}μs    Mean: {_elapsed.Total / solved:N0}μs    Maximum: {_elapsed.Maximum:N0}μs.           \n");
         
-        Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}    Mean: {_steps.Total / solved:N0}    Maximum: {_steps.Maximum:N0}.           \n");
+        Console.WriteLine($" Combinations... Minimum: {_steps.Minimum:N0}    Mean: {_steps.Total / solved:N0}    Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
 
         foreach (var item in _history.TakeLast(10).Reverse())
         {
@@ -111,7 +113,7 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private int[,] Solve(int[,] sudoku)
+    private int[,] Solve(int id, int[,] sudoku)
     {
         var queue = new PriorityQueue<int[,], int>();
 
@@ -156,7 +158,12 @@ public class Puzzle0096 : Puzzle
 
                                 _steps.Minimum = Math.Min(_steps.Minimum, steps);
 
-                                _steps.Maximum = Math.Max(_steps.Maximum, steps);
+                                if (steps > _steps.Maximum)
+                                {
+                                    _steps.Minimum = steps;
+
+                                    _maxPuzzleNumber = id;
+                                }
                             }
                         }
 
