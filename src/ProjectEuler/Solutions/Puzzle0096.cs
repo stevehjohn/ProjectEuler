@@ -58,7 +58,7 @@ public class Puzzle0096 : Puzzle
 
         timer.Stop();
 
-        Console.WriteLine($"\n All puzzles solved in: {timer.Elapsed.TotalMinutes:N0}:{timer.Elapsed.Seconds}.\n\n\n\n\n");
+        Console.WriteLine($"\n All puzzles solved in: {timer.Elapsed.Minutes:N0}:{timer.Elapsed.Seconds:D2}.\n\n\n\n\n");
         
         Console.CursorVisible = true;
         
