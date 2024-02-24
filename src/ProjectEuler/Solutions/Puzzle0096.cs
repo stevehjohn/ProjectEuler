@@ -124,6 +124,10 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
         
+        var percent = 100 - (Input.Length - solved) * 100 / Input.Length;
+
+        Console.WriteLine($" Solved: {percent:N0}%\n");
+        
         foreach (var item in _history.TakeLast(10).Reverse())
         {
             Console.WriteLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
