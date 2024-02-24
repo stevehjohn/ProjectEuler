@@ -17,6 +17,8 @@ public class Puzzle0096 : Puzzle
     private int _maxPuzzleNumber;
 
     private Stopwatch _stopwatch;
+
+    private object _queueLock = new();
     
     public override string GetAnswer()
     {
@@ -127,8 +129,6 @@ public class Puzzle0096 : Puzzle
     {
         var queue = new PriorityQueue<int[,], int>();
 
-        var queueLock = new object();
-        
         queue.Enqueue(sudoku, 0);
 
         var complete = false;
@@ -143,7 +143,7 @@ public class Puzzle0096 : Puzzle
             {
                 int[,] puzzle;
                 
-                lock (queueLock)
+                lock (_queueLock)
                 {
                     queue.TryDequeue(out puzzle, out _);
 
@@ -162,7 +162,7 @@ public class Puzzle0096 : Puzzle
 
                             complete = true;
 
-                            lock (queueLock)
+                            lock (_queueLock)
                             {
                                 _steps.Total += steps;
 
@@ -177,7 +177,7 @@ public class Puzzle0096 : Puzzle
                             }
                         }
 
-                        lock (queueLock)
+                        lock (_queueLock)
                         {
                             queue.Enqueue(solution.Sudoku, solution.Score);
                         }
