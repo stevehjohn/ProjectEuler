@@ -107,9 +107,9 @@ public class Puzzle0096 : Puzzle
 
         var mean = _elapsed.Total / solved;
         
-        Console.WriteLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean: {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs          \n");
+        Console.WriteLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs          \n");
         
-        Console.WriteLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean: {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
+        Console.WriteLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxPuzzleNumber}).           \n");
 
         var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
         
