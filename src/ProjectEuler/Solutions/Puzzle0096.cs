@@ -55,7 +55,7 @@ public class Puzzle0096 : Puzzle
 
                     _elapsed.Minimum = Math.Min(_elapsed.Minimum, stopwatch.Elapsed.TotalMicroseconds);
 
-                    if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Minimum)
+                    if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Maximum)
                     {
                         _maxTimePuzzleNumber = i;
                         
