@@ -17,11 +17,11 @@ public class Puzzle0096 : Puzzle
     private int _maxStepsPuzzleNumber;
 
     private int _maxTimePuzzleNumber;
-    
+
     private Stopwatch _stopwatch;
 
     private readonly object _statsLock = new();
-    
+
     public override string GetAnswer()
     {
         LoadInput();
