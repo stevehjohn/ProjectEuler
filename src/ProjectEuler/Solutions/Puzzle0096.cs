@@ -116,7 +116,7 @@ public class Puzzle0096 : Puzzle
             _output.AppendLine();
         }
 
-        _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).\n");
+        _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).       \n");
 
         var mean = _elapsed.Total / solved;
         
