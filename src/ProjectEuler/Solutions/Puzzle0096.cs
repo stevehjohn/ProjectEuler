@@ -37,6 +37,7 @@ public class Puzzle0096 : Puzzle
         _stopwatch = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
+            new ParallelOptions { MaxDegreeOfParallelism = 2 },
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
@@ -124,11 +125,11 @@ public class Puzzle0096 : Puzzle
         
         Console.WriteLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
         
-        var percent = 100 - (Input.Length - solved) * 100 / Input.Length;
+        var percent = 100 - (Input.Length - solved) * 100d / Input.Length;
 
         Console.WriteLine($" Solved: {percent:N0}%\n");
 
-        var line = percent / 2;
+        var line = (int) Math.Floor(percent / 2);
         
         Console.WriteLine($" {new string('\u25a0', line)}{new string('-', 50 - line)}\n");
         
