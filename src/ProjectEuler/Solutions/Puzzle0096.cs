@@ -423,13 +423,22 @@ public class Puzzle0096 : Puzzle
     {
         var puzzle = new int[81];
 
-        var line = Input[number].Replace('.', '0');
+        var line = Input[number];
         
         for (var y = 0; y < 9; y++)
         {
             for (var x = 0; x < 9; x++)
             {
-                puzzle[x + y * 9] = line[y * 9 + x] - '0';
+                var c = line[y * 9 + x];
+
+                if (c == '.')
+                {
+                    puzzle[x + y * 9] = 0;
+                }
+                else
+                {
+                    puzzle[x + y * 9] = line[y * 9 + x] - '0';
+                }
             }
         }
 
