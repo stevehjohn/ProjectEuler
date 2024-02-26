@@ -173,7 +173,7 @@ public class Puzzle0096 : Puzzle
 
                     foreach (var solution in solutions)
                     {
-                        if (solution.Score == 0)
+                        if (solution.Solved)
                         {
                             answer = solution.Sudoku;
 
@@ -288,11 +288,13 @@ public class Puzzle0096 : Puzzle
         return true;
     }
 
-    private static List<(int[] Sudoku, int Score)> SolveStep(Span<int> sudoku)
+    private static List<(int[] Sudoku, int Score, bool Solved)> SolveStep(Span<int> sudoku)
     {
         var rowCandidates = new int[9];
         
         var columnCandidates = new int[9];
+
+        var frequencies = new int[10];
         
         for (var y = 0; y < 9; y++)
         {
@@ -302,6 +304,8 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
+                frequencies[sudoku[x + y * 9]]++;
+                
                 rowCandidates[y] ^= 1 << sudoku[x + y * 9];
 
                 columnCandidates[y] ^= 1 << sudoku[y + x * 9];
@@ -356,7 +360,7 @@ public class Puzzle0096 : Puzzle
                 }
 
                 var box = boxCandidates[y / 3 * 3 + x / 3];
-                
+
                 var common = row & column & box;
 
                 var count = BitOperations.PopCount((uint) common);
@@ -378,7 +382,7 @@ public class Puzzle0096 : Puzzle
         }
         next:
 
-        var solutions = new List<(int[] Sudokus, int Score)>();
+        var solutions = new List<(int[] Sudokus, int Score, bool Solved)>();
 
         for (var i = 1; i < 10; i++)
         {
@@ -410,7 +414,12 @@ public class Puzzle0096 : Puzzle
                     }
                 }
 
-                solutions.Add((copy, score));
+                solutions.Add((copy, score * 10 + frequencies[i], score == 0));
+
+                if (score == 0)
+                {
+                    break;
+                }
             }
         }
         
