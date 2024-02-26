@@ -110,7 +110,7 @@ public class Puzzle0096 : Puzzle
             Console.WriteLine();
         }
 
-        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds} puzzles/sec).\n");
+        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).\n");
 
         var mean = _elapsed.Total / solved;
         
