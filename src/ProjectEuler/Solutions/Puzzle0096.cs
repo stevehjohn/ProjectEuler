@@ -303,15 +303,19 @@ public class Puzzle0096 : Puzzle
 
         for (var y = 0; y < 9; y += 3) 
         {
-            for (var x = 0; x < 9; x += 3)
+            for (var x = 0; x < 3; x++)
             {
-                boxCandidates[y * 3 + x] = 0b11_1111_1111;
+                boxCandidates[y + x] = 0b11_1111_1111;
 
+                var x3 = x * 3;
+                
                 for (var y1 = 0; y1 < 3; y1++)
                 {
+                    var yy1 = y + y1;
+                    
                     for (var x1 = 0; x1 < 3; x1++)
                     {
-                        boxCandidates[y + x] ^= 1 << sudoku[x + x1 + (y + y1) * 9];
+                        boxCandidates[y + x] ^= 1 << sudoku[x3 + x1 + yy1 * 9];
                     }
                 }
             }
