@@ -129,9 +129,16 @@ public class Puzzle0096 : Puzzle
         Console.WriteLine($" Solved: {Math.Floor(percent):N0}%\n");
 
         var line = (int) Math.Floor(percent / 2);
-        
-        Console.WriteLine($" {new string('\u25a0', line)}{new string('\u2500', 50 - line)}\n");
-        
+
+        if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
+        {
+            Console.WriteLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\n");
+        }
+        else
+        {
+            Console.WriteLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\n");
+        }
+
         foreach (var item in _history.TakeLast(10).Reverse())
         {
             Console.WriteLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
