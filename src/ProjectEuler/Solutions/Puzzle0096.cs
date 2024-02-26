@@ -142,74 +142,42 @@ public class Puzzle0096 : Puzzle
     {
         var queue = new PriorityQueue<Memory<int>, int>();
 
-        var queueLock = new object();
-        
         queue.Enqueue(sudoku, 0);
-
-        var complete = false;
-
-        int[] answer = null;
 
         var steps = 0;
         
-        var worker = () =>
+        while (queue.TryDequeue(out var puzzle, out _))
         {
-            while (! complete)
+            steps++;
+
+            var solutions = SolveStep(puzzle.Span);
+
+            foreach (var solution in solutions)
             {
-                Memory<int> puzzle;
-
-                bool dequeued;
-                
-                lock (queueLock)
+                if (solution.Solved)
                 {
-                    dequeued = queue.TryDequeue(out puzzle, out _);
-
-                    steps++;
-                }
-
-                if (dequeued)
-                {
-                    var solutions = SolveStep(puzzle.Span);
-
-                    foreach (var solution in solutions)
+                    lock (_statsLock)
                     {
-                        if (solution.Solved)
+                        _steps.Total += steps;
+
+                        _steps.Minimum = Math.Min(_steps.Minimum, steps);
+
+                        if (steps > _steps.Maximum)
                         {
-                            answer = solution.Sudoku;
+                            _steps.Maximum = steps;
 
-                            complete = true;
-
-                            lock (_statsLock)
-                            {
-                                _steps.Total += steps;
-
-                                _steps.Minimum = Math.Min(_steps.Minimum, steps);
-
-                                if (steps > _steps.Maximum)
-                                {
-                                    _steps.Maximum = steps;
-
-                                    _maxStepsPuzzleNumber = id;
-                                }
-                            }
-                        }
-
-                        lock (queueLock)
-                        {
-                            queue.Enqueue(solution.Sudoku, solution.Score);
+                            _maxStepsPuzzleNumber = id;
                         }
                     }
-                }
-                else
-                {
-                    Thread.Sleep(0);
-                }
-            }
-        };
-        
-        Parallel.Invoke(worker, worker, worker, worker, worker, worker, worker, worker);
 
-        return answer;
+                    return solution.Sudoku;
+                }
+
+                queue.Enqueue(solution.Sudoku, solution.Score);
+            }
+        }
+
+        return null;
     }
     
     private static bool IsValid(Span<int> sudoku)
