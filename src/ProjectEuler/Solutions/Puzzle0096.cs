@@ -110,7 +110,7 @@ public class Puzzle0096 : Puzzle
             Console.WriteLine();
         }
 
-        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles.\n");
+        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds} puzzles/sec).\n");
 
         var mean = _elapsed.Total / solved;
         
@@ -419,7 +419,7 @@ public class Puzzle0096 : Puzzle
     {
         var matrix = new int[9, 9];
 
-        var line = Input[number];
+        var line = Input[number].Replace('.', '0');
         
         for (var y = 0; y < 9; y++)
         {
