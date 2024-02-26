@@ -40,6 +40,7 @@ public class Puzzle0096 : Puzzle
         _stopwatch = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
+            new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 },
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
@@ -201,10 +202,12 @@ public class Puzzle0096 : Puzzle
             var rowSet = 0u;
 
             var columnSet = 0u;
+
+            var y9 = y * 9;
             
             for (var x = 0; x < 9; x++)
             {
-                var cell = sudoku[x + y * 9];
+                var cell = sudoku[x + y9];
 
                 if (cell != 0)
                 {
@@ -239,9 +242,9 @@ public class Puzzle0096 : Puzzle
             }
         }
 
-        for (var x = 0; x < 3; x++)
+        for (var x = 0; x < 9; x += 3)
         {
-            for (var y = 0; y < 3; y++)
+            for (var y = 0; y < 9; y += 3)
             {
                 var set = 0u;
                 
@@ -249,7 +252,7 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var y1 = 0; y1 < 3; y1++)
                     {
-                        var cell = sudoku[x * 3 + x1 + (y * 3 + y1) * 9];
+                        var cell = sudoku[x + x1 + (y + y1) * 9];
 
                         if (cell != 0)
                         {
@@ -283,12 +286,14 @@ public class Puzzle0096 : Puzzle
             rowCandidates[y] = 0b11_1111_1111;
 
             columnCandidates[y] = 0b11_1111_1111;
+
+            var y9 = y * 9;
             
             for (var x = 0; x < 9; x++)
             {
-                frequencies[sudoku[x + y * 9]]++;
+                frequencies[sudoku[x + y9]]++;
                 
-                rowCandidates[y] ^= 1 << sudoku[x + y * 9];
+                rowCandidates[y] ^= 1 << sudoku[x + y9];
 
                 columnCandidates[y] ^= 1 << sudoku[y + x * 9];
             }
@@ -296,9 +301,9 @@ public class Puzzle0096 : Puzzle
 
         var boxCandidates = new int[9];
 
-        for (var y = 0; y < 3; y++) 
+        for (var y = 0; y < 9; y += 3) 
         {
-            for (var x = 0; x < 3; x++)
+            for (var x = 0; x < 9; x += 3)
             {
                 boxCandidates[y * 3 + x] = 0b11_1111_1111;
 
@@ -306,7 +311,7 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var x1 = 0; x1 < 3; x1++)
                     {
-                        boxCandidates[y * 3 + x] ^= 1 << sudoku[x * 3 + x1 + (y * 3 + y1) * 9];
+                        boxCandidates[y + x] ^= 1 << sudoku[x + x1 + (y + y1) * 9];
                     }
                 }
             }
