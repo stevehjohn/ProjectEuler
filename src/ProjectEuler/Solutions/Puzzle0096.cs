@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Numerics;
+using System.Text;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -22,6 +23,8 @@ public class Puzzle0096 : Puzzle
 
     private readonly object _statsLock = new();
 
+    private readonly StringBuilder _output = new(10_000);
+    
     public override string GetAnswer()
     {
         LoadInput();
@@ -84,6 +87,8 @@ public class Puzzle0096 : Puzzle
 
     private void Dump(Span<int> left, Span<int> right, int solved)
     {
+        _output.Clear();
+        
         Console.CursorTop = 1;
         
         for (var y = 0; y < 9; y++)
@@ -92,57 +97,59 @@ public class Puzzle0096 : Puzzle
             {
                 if (left[x + y * 9] == 0)
                 {
-                    Console.Write("  ");
+                    _output.Append("  ");
                 }
                 else
                 {
-                    Console.Write($" {left[x + y * 9]}");
+                    _output.Append($" {left[x + y * 9]}");
                 }
             }
 
-            Console.Write("    ");
+            _output.Append("    ");
             
             for (var x = 0; x < 9; x++)
             {
-                Console.Write($" {right[x + y * 9]}");
+                _output.Append($" {right[x + y * 9]}");
             }
             
-            Console.WriteLine();
+            _output.AppendLine();
         }
 
-        Console.WriteLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).\n");
+        _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).\n");
 
         var mean = _elapsed.Total / solved;
         
-        Console.WriteLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
+        _output.AppendLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
         
-        Console.WriteLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
+        _output.AppendLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
 
         var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
         
         var eta = TimeSpan.FromSeconds((Input.Length - solved) * meanTime);
         
-        Console.WriteLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
+        _output.AppendLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
         
         var percent = 100 - (Input.Length - solved) * 100d / Input.Length;
 
-        Console.WriteLine($" Solved: {Math.Floor(percent):N0}%\n");
+        _output.AppendLine($" Solved: {Math.Floor(percent):N0}%\n");
 
         var line = (int) Math.Floor(percent / 2);
 
         if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
         {
-            Console.WriteLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\n");
+            _output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\n");
         }
         else
         {
-            Console.WriteLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\n");
+            _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\n");
         }
 
         foreach (var item in _history.TakeLast(10).Reverse())
         {
-            Console.WriteLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
+            _output.AppendLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
         }
+        
+        Console.Write(_output.ToString());
     }
 
     private int[] Solve(int id, Memory<int> sudoku)
