@@ -293,9 +293,9 @@ public class Puzzle0096 : Puzzle
             {
                 frequencies[sudoku[x + y9]]++;
                 
-                rowCandidates[y] ^= 1 << sudoku[x + y9];
+                rowCandidates[y] &= ~(1 << sudoku[x + y9]);
 
-                columnCandidates[y] ^= 1 << sudoku[y + x * 9];
+                columnCandidates[y] &= ~(1 << sudoku[y + x * 9]);
             }
         }
 
@@ -315,7 +315,7 @@ public class Puzzle0096 : Puzzle
                     
                     for (var x1 = 0; x1 < 3; x1++)
                     {
-                        boxCandidates[y + x] ^= 1 << sudoku[x3 + x1 + yy1 * 9];
+                        boxCandidates[y + x] &= ~(1 << sudoku[x3 + x1 + yy1 * 9]);
                     }
                 }
             }
@@ -336,9 +336,11 @@ public class Puzzle0096 : Puzzle
                 continue;
             }
 
+            var y9 = y * 9; 
+
             for (var x = 0; x < 9; x++)
             {
-                if (sudoku[x + y * 9] != 0)
+                if (sudoku[x + y9] != 0)
                 {
                     continue;
                 }
