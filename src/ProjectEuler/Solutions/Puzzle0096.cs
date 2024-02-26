@@ -67,7 +67,7 @@ public class Puzzle0096 : Puzzle
                     Dump(sudoku, solution, solved);
                 }
 
-                subTotal += solution[0, 0] * 100 + solution[1, 0] * 10 + solution[2, 0];
+                subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
 
                 return subTotal;
             },
@@ -82,7 +82,7 @@ public class Puzzle0096 : Puzzle
         return sum.ToString("N0");
     }
 
-    private void Dump(int[,] left, int[,] right, int solved)
+    private void Dump(int[] left, int[] right, int solved)
     {
         Console.CursorTop = 1;
         
@@ -90,13 +90,13 @@ public class Puzzle0096 : Puzzle
         {
             for (var x = 0; x < 9; x++)
             {
-                if (left[x, y] == 0)
+                if (left[x + y * 9] == 0)
                 {
                     Console.Write("  ");
                 }
                 else
                 {
-                    Console.Write($" {left[x, y]}");
+                    Console.Write($" {left[x + y * 9]}");
                 }
             }
 
@@ -104,7 +104,7 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
-                Console.Write($" {right[x, y]}");
+                Console.Write($" {right[x + y * 9]}");
             }
             
             Console.WriteLine();
@@ -138,9 +138,9 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private int[,] Solve(int id, int[,] sudoku)
+    private int[] Solve(int id, int[] sudoku)
     {
-        var queue = new PriorityQueue<int[,], int>();
+        var queue = new PriorityQueue<int[], int>();
 
         var queueLock = new object();
         
@@ -148,7 +148,7 @@ public class Puzzle0096 : Puzzle
 
         var complete = false;
 
-        int[,] answer = null;
+        int[] answer = null;
 
         var steps = 0;
         
@@ -156,7 +156,7 @@ public class Puzzle0096 : Puzzle
         {
             while (! complete)
             {
-                int[,] puzzle;
+                int[] puzzle;
                 
                 lock (queueLock)
                 {
@@ -210,7 +210,7 @@ public class Puzzle0096 : Puzzle
         return answer;
     }
     
-    private static bool IsValid(int[,] sudoku)
+    private static bool IsValid(Span<int> sudoku)
     {
         for (var y = 0; y < 9; y++)
         {
@@ -220,7 +220,7 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
-                var cell = sudoku[x, y];
+                var cell = sudoku[x + y * 9];
 
                 if (cell != 0)
                 {
@@ -239,7 +239,7 @@ public class Puzzle0096 : Puzzle
                     continue;
                 }
 
-                cell = sudoku[y, x];
+                cell = sudoku[y + x * 9];
 
                 if (cell != 0)
                 {
@@ -265,7 +265,7 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var y1 = 0; y1 < 3; y1++)
                     {
-                        var cell = sudoku[x * 3 + x1, y * 3 + y1];
+                        var cell = sudoku[x * 3 + x1 + (y * 3 + y1) * 9];
 
                         if (cell != 0)
                         {
@@ -286,8 +286,10 @@ public class Puzzle0096 : Puzzle
         return true;
     }
 
-    private static List<(int[,] Sudoku, int Score)> SolveStep(int[,] sudoku)
+    private static List<(int[] Sudoku, int Score)> SolveStep(int[] sudoku)
     {
+        var span = new Span<int>(sudoku);
+        
         var rowCandidates = new int[9];
         
         var columnCandidates = new int[9];
@@ -300,9 +302,9 @@ public class Puzzle0096 : Puzzle
             
             for (var x = 0; x < 9; x++)
             {
-                rowCandidates[y] ^= 1 << sudoku[x, y];
+                rowCandidates[y] ^= 1 << span[x + y * 9];
 
-                columnCandidates[y] ^= 1 << sudoku[y, x];
+                columnCandidates[y] ^= 1 << span[y + x * 9];
             }
         }
 
@@ -318,7 +320,7 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var x1 = 0; x1 < 3; x1++)
                     {
-                        boxCandidates[y * 3 + x] ^= 1 << sudoku[x * 3 + x1, y * 3 + y1];
+                        boxCandidates[y * 3 + x] ^= 1 << span[x * 3 + x1 + (y * 3 + y1) * 9];
                     }
                 }
             }
@@ -341,7 +343,7 @@ public class Puzzle0096 : Puzzle
 
             for (var x = 0; x < 9; x++)
             {
-                if (sudoku[x, y] != 0)
+                if (sudoku[x + y * 9] != 0)
                 {
                     continue;
                 }
@@ -376,7 +378,7 @@ public class Puzzle0096 : Puzzle
         }
         next:
 
-        var solutions = new List<(int[,] Sudokus, int Score)>();
+        var solutions = new List<(int[] Sudokus, int Score)>();
 
         for (var i = 1; i < 10; i++)
         {
@@ -385,11 +387,11 @@ public class Puzzle0096 : Puzzle
                 continue;
             }
 
-            sudoku[position.X, position.Y] = i;
+            span[position.X + position.Y * 9] = i;
 
-            if (IsValid(sudoku))
+            if (IsValid(span))
             {
-                var copy = new int[9, 9];
+                var copy = new int[81];
 
                 var score = 81;
             
@@ -397,9 +399,9 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var x = 0; x < 9; x++)
                     {
-                        var value = sudoku[x, y];
+                        var value = span[x + y * 9];
 
-                        copy[x, y] = value;
+                        copy[x + y * 9] = value;
 
                         if (value != 0)
                         {
@@ -415,9 +417,9 @@ public class Puzzle0096 : Puzzle
         return solutions;
     }
 
-    private int[,] LoadSudoku(int number)
+    private int[] LoadSudoku(int number)
     {
-        var matrix = new int[9, 9];
+        var puzzle = new int[81];
 
         var line = Input[number].Replace('.', '0');
         
@@ -425,10 +427,10 @@ public class Puzzle0096 : Puzzle
         {
             for (var x = 0; x < 9; x++)
             {
-                matrix[x, y] = line[y * 9 + x] - '0';
+                puzzle[x + y * 9] = line[y * 9 + x] - '0';
             }
         }
 
-        return matrix;
+        return puzzle;
     }
 }
