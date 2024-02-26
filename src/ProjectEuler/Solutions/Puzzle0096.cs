@@ -138,11 +138,11 @@ public class Puzzle0096 : Puzzle
 
         if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
         {
-            _output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\n");
+            _output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\u258f\n");
         }
         else
         {
-            _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\n");
+            _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
         }
 
         foreach (var item in _history.TakeLast(10).Reverse())
