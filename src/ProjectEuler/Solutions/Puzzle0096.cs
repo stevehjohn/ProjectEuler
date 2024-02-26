@@ -37,7 +37,6 @@ public class Puzzle0096 : Puzzle
         _stopwatch = Stopwatch.StartNew();
         
         Parallel.For(0, Input.Length,
-            new ParallelOptions { MaxDegreeOfParallelism = 2 },
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
