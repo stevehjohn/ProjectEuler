@@ -155,13 +155,13 @@ public class Puzzle0096 : Puzzle
 
     private int[] Solve(int id, Memory<int> sudoku)
     {
-        var queue = new PriorityQueue<Memory<int>, int>();
+        var stack = new Stack<Memory<int>>();
 
-        queue.Enqueue(sudoku, 0);
+        stack.Push(sudoku);
 
         var steps = 0;
         
-        while (queue.TryDequeue(out var puzzle, out _))
+        while (stack.TryPop(out var puzzle))
         {
             steps++;
 
@@ -188,91 +188,13 @@ public class Puzzle0096 : Puzzle
                     return solution.Sudoku;
                 }
 
-                queue.Enqueue(solution.Sudoku, solution.Score);
+                stack.Push(solution.Sudoku);
             }
         }
 
         return null;
     }
     
-    private static bool IsValid(Span<int> sudoku)
-    {
-        for (var y = 0; y < 9; y++)
-        {
-            var rowSet = 0u;
-
-            var columnSet = 0u;
-
-            var y9 = y * 9;
-            
-            for (var x = 0; x < 9; x++)
-            {
-                var cell = sudoku[x + y9];
-
-                if (cell != 0)
-                {
-                    var bit = (uint) 1 << cell;
-
-                    if ((rowSet & bit) != 0)
-                    {
-                        return false;
-                    }
-
-                    rowSet |= bit;
-                }
-
-                if (x == y)
-                {
-                    continue;
-                }
-
-                cell = sudoku[y + x * 9];
-
-                if (cell != 0)
-                {
-                    var bit = (uint) 1 << cell;
-
-                    if ((columnSet & bit) != 0)
-                    {
-                        return false;
-                    }
-
-                    columnSet |= bit;
-                }
-            }
-        }
-
-        for (var x = 0; x < 9; x += 3)
-        {
-            for (var y = 0; y < 9; y += 3)
-            {
-                var set = 0u;
-                
-                for (var x1 = 0; x1 < 3; x1++)
-                {
-                    for (var y1 = 0; y1 < 3; y1++)
-                    {
-                        var cell = sudoku[x + x1 + (y + y1) * 9];
-
-                        if (cell != 0)
-                        {
-                            var value = (uint) 1 << cell;
-
-                            if ((set & value) != 0)
-                            {
-                                return false;
-                            }
-
-                            set |= value;
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     private static List<(int[] Sudoku, int Score, bool Solved)> SolveStep(Span<int> sudoku)
     {
         var rowCandidates = new int[9];
@@ -390,35 +312,32 @@ public class Puzzle0096 : Puzzle
 
             sudoku[position.X + position.Y * 9] = i;
 
-            if (IsValid(sudoku))
+            var copy = new int[81];
+
+            var score = 81;
+        
+            for (var y = 0; y < 9; y++)
             {
-                var copy = new int[81];
-
-                var score = 81;
-            
-                for (var y = 0; y < 9; y++)
+                for (var x = 0; x < 9; x++)
                 {
-                    for (var x = 0; x < 9; x++)
+                    var cell = x + y * 9;
+                    
+                    var value = sudoku[cell];
+
+                    copy[cell] = value;
+
+                    if (value != 0)
                     {
-                        var cell = x + y * 9;
-                        
-                        var value = sudoku[cell];
-
-                        copy[cell] = value;
-
-                        if (value != 0)
-                        {
-                            score--;
-                        }
+                        score--;
                     }
                 }
+            }
 
-                solutions.Add((copy, score * 100 + valueCount * 10 + frequencies[i], score == 0));
+            solutions.Add((copy, score * 100 + valueCount * 10 + frequencies[i], score == 0));
 
-                if (score == 0)
-                {
-                    break;
-                }
+            if (score == 0)
+            {
+                break;
             }
         }
         
