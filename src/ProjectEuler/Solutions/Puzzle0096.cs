@@ -400,9 +400,11 @@ public class Puzzle0096 : Puzzle
                 {
                     for (var x = 0; x < 9; x++)
                     {
-                        var value = sudoku[x + y * 9];
+                        var cell = x + y * 9;
+                        
+                        var value = sudoku[cell];
 
-                        copy[x + y * 9] = value;
+                        copy[cell] = value;
 
                         if (value != 0)
                         {
