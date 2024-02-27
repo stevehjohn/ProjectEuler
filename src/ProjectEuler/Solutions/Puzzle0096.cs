@@ -375,15 +375,9 @@ public class Puzzle0096 : Puzzle
                     values = common;
 
                     valueCount = count;
-
-                    if (count == 1)
-                    {
-                        goto next;
-                    }
                 }
             }
         }
-        next:
 
         var solutions = new List<(int[] Sudokus, int Score, bool Solved)>();
 
