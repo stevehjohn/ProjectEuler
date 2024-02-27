@@ -9,11 +9,11 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
-    private readonly List<(int Id, double Elapsed, int Solved)> _history = new();
-
     private (double Total, double Minimum, double Maximum) _elapsed = (0, double.MaxValue, 0);
 
     private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
+
+    private (long Total, int Minimum, int Maximum) _clues = (0, int.MaxValue, 0);
 
     private int _maxStepsPuzzleNumber;
 
@@ -53,8 +53,6 @@ public class Puzzle0096 : Puzzle
                 
                 lock (_statsLock)
                 {
-                    _history.Add((i, stopwatch.Elapsed.TotalMicroseconds, solved));
-
                     _elapsed.Total += stopwatch.Elapsed.TotalMicroseconds;
 
                     _elapsed.Minimum = Math.Min(_elapsed.Minimum, stopwatch.Elapsed.TotalMicroseconds);
@@ -119,7 +117,9 @@ public class Puzzle0096 : Puzzle
         _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).       \n");
 
         var mean = _elapsed.Total / solved;
-        
+
+        _output.AppendLine($" Clues...\n  Minimum: {_clues.Minimum:N0}          \n  Mean:    {_clues.Total / solved:N0}          \n  Maximum: {_clues.Maximum:N0}         \n");
+
         _output.AppendLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
         
         _output.AppendLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
@@ -143,11 +143,6 @@ public class Puzzle0096 : Puzzle
         else
         {
             _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
-        }
-
-        foreach (var item in _history.TakeLast(10).Reverse())
-        {
-            _output.AppendLine($" Puzzle #{item.Id:N0} solved in {item.Elapsed:N0}μs.          ");
         }
         
         Console.Write(_output.ToString());
@@ -345,24 +340,39 @@ public class Puzzle0096 : Puzzle
         var puzzle = new int[81];
 
         var line = Input[number];
+
+        var clues = 0;
         
         for (var y = 0; y < 9; y++)
         {
             for (var x = 0; x < 9; x++)
             {
-                var c = line[y * 9 + x];
+                var position = x + y * 9;
+                
+                var c = line[position];
 
                 if (c == '.')
                 {
-                    puzzle[x + y * 9] = 0;
+                    puzzle[position] = 0;
                 }
                 else
                 {
-                    puzzle[x + y * 9] = line[y * 9 + x] - '0';
+                    puzzle[position] = line[position] - '0';
+                }
+
+                if (puzzle[position] != 0)
+                {
+                    clues++;
                 }
             }
         }
 
+        _clues.Total += clues;
+
+        _clues.Minimum = Math.Min(_clues.Minimum, clues);
+
+        _clues.Maximum = Math.Max(_clues.Maximum, clues);
+        
         return puzzle;
     }
 }
