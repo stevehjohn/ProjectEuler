@@ -407,7 +407,7 @@ public class Puzzle0096 : Puzzle
                     }
                 }
 
-                solutions.Add((copy, score * 10 + frequencies[i], score == 0));
+                solutions.Add((copy, score * 100 + valueCount * 10 + frequencies[i], score == 0));
 
                 if (score == 0)
                 {
