@@ -331,7 +331,7 @@ public class Puzzle0096 : Puzzle
         {
             var row = rowCandidates[y];
 
-            if (row == 0)
+            if (row == 1)
             {
                 continue;
             }
@@ -347,14 +347,24 @@ public class Puzzle0096 : Puzzle
 
                 var column = columnCandidates[x];
 
-                if (column == 0)
+                if (column == 1)
                 {
                     continue;
                 }
 
                 var box = boxCandidates[y / 3 * 3 + x / 3];
 
+                if (box == 1)
+                {
+                    continue;
+                }
+
                 var common = row & column & box;
+
+                if (common == 1)
+                {
+                    continue;
+                }
 
                 var count = BitOperations.PopCount((uint) common);
                 
