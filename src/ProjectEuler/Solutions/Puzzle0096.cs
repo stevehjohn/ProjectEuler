@@ -25,6 +25,8 @@ public class Puzzle0096 : Puzzle
 
     private readonly object _consoleLock = new();
 
+    private readonly StringBuilder _output = new(10_000);
+
     public override string GetAnswer()
     {
         LoadInput();
@@ -86,70 +88,68 @@ public class Puzzle0096 : Puzzle
 
     private void Dump(Span<int> left, Span<int> right, int solved)
     {
-        var output = new StringBuilder(10_000);
-        
-        output.Clear();
-        
-        for (var y = 0; y < 9; y++)
-        {
-            for (var x = 0; x < 9; x++)
-            {
-                if (left[x + y * 9] == 0)
-                {
-                    output.Append("  ");
-                }
-                else
-                {
-                    output.Append($" {left[x + y * 9]}");
-                }
-            }
-
-            output.Append("    ");
-            
-            for (var x = 0; x < 9; x++)
-            {
-                output.Append($" {right[x + y * 9]}");
-            }
-            
-            output.AppendLine();
-        }
-
-        output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).       \n");
-
-        var mean = _elapsed.Total / solved;
-
-        output.AppendLine($" Clues...\n  Minimum: {_clues.Minimum:N0}          \n  Mean:    {_clues.Total / solved:N0}          \n  Maximum: {_clues.Maximum:N0}         \n");
-
-        output.AppendLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
-        
-        output.AppendLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
-
-        var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
-        
-        var eta = TimeSpan.FromSeconds((Input.Length - solved) * meanTime);
-        
-        output.AppendLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
-        
-        var percent = 100 - (Input.Length - solved) * 100d / Input.Length;
-
-        output.AppendLine($" Solved: {Math.Floor(percent):N0}%\n");
-
-        var line = (int) Math.Floor(percent / 2);
-
-        if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
-        {
-            output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\u258f\n");
-        }
-        else
-        {
-            output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
-        }
-
         lock (_consoleLock)
         {
+            _output.Clear();
+        
+            for (var y = 0; y < 9; y++)
+            {
+                for (var x = 0; x < 9; x++)
+                {
+                    if (left[x + y * 9] == 0)
+                    {
+                        _output.Append("  ");
+                    }
+                    else
+                    {
+                        _output.Append($" {left[x + y * 9]}");
+                    }
+                }
+
+                _output.Append("    ");
+                
+                for (var x = 0; x < 9; x++)
+                {
+                    _output.Append($" {right[x + y * 9]}");
+                }
+                
+                _output.AppendLine();
+            }
+
+            _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).       \n");
+
+            var mean = _elapsed.Total / solved;
+
+            _output.AppendLine($" Clues...\n  Minimum: {_clues.Minimum:N0}          \n  Mean:    {_clues.Total / solved:N0}          \n  Maximum: {_clues.Maximum:N0}         \n");
+
+            _output.AppendLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
+            
+            _output.AppendLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
+
+            var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
+            
+            var eta = TimeSpan.FromSeconds((Input.Length - solved) * meanTime);
+            
+            _output.AppendLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
+            
+            var percent = 100 - (Input.Length - solved) * 100d / Input.Length;
+
+            _output.AppendLine($" Solved: {Math.Floor(percent):N0}%\n");
+
+            var line = (int) Math.Floor(percent / 2);
+
+            if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
+            {
+                _output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\u258f\n");
+            }
+            else
+            {
+                _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
+            }
+
             Console.CursorTop = 1;
         
-            Console.Write(output.ToString());
+            Console.Write(_output.ToString());
         }
     }
 
