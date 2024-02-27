@@ -23,8 +23,8 @@ public class Puzzle0096 : Puzzle
 
     private readonly object _statsLock = new();
 
-    private readonly StringBuilder _output = new(10_000);
-    
+    private readonly object _consoleLock = new();
+
     public override string GetAnswer()
     {
         LoadInput();
@@ -50,7 +50,7 @@ public class Puzzle0096 : Puzzle
                 var solution = Solve(i, sudoku);
                 
                 stopwatch.Stop();
-                
+
                 lock (_statsLock)
                 {
                     _elapsed.Total += stopwatch.Elapsed.TotalMicroseconds;
@@ -60,14 +60,14 @@ public class Puzzle0096 : Puzzle
                     if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Maximum)
                     {
                         _maxTimePuzzleNumber = i;
-                        
+
                         _elapsed.Maximum = stopwatch.Elapsed.TotalMicroseconds;
                     }
 
                     solved++;
-
-                    Dump(sudoku.Span, solution, solved);
                 }
+
+                Dump(sudoku.Span, solution, solved);
 
                 subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
 
@@ -86,9 +86,9 @@ public class Puzzle0096 : Puzzle
 
     private void Dump(Span<int> left, Span<int> right, int solved)
     {
-        _output.Clear();
+        var _output = new StringBuilder(10_000);
         
-        Console.CursorTop = 1;
+        _output.Clear();
         
         for (var y = 0; y < 9; y++)
         {
@@ -144,8 +144,13 @@ public class Puzzle0096 : Puzzle
         {
             _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
         }
+
+        lock (_consoleLock)
+        {
+            Console.CursorTop = 1;
         
-        Console.Write(_output.ToString());
+            Console.Write(_output.ToString());
+        }
     }
 
     private int[] Solve(int id, Memory<int> sudoku)
