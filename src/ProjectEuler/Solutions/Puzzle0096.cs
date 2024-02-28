@@ -317,14 +317,13 @@ public class Puzzle0096 : Puzzle
             if (score == 0)
             {
                 solutions.Clear();
-            }
 
-            solutions.Add((copy, score == 0));
-
-            if (score == 0)
-            {
+                solutions.Add((copy, true));
+                
                 break;
             }
+
+            solutions.Add((copy, false));
         }
         
         return solutions;
