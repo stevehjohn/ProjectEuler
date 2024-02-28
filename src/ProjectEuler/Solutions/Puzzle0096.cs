@@ -293,7 +293,7 @@ public class Puzzle0096 : Puzzle
             }
         }
 
-        var solutions = new List<(int[] Sudokus, bool Solved)>();
+        var solutions = new List<(int[] Sudoku, bool Solved)>();
 
         for (var i = 1; i < 10; i++)
         {
