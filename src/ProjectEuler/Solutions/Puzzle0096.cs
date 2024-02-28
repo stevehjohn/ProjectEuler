@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Diagnostics;
 using System.Numerics;
 using System.Text;
@@ -30,6 +31,8 @@ public class Puzzle0096 : Puzzle
     private readonly object _consoleLock = new();
 
     private readonly StringBuilder _output = new(10_000);
+
+    private readonly ArrayPool<int> _pool = ArrayPool<int>.Shared;
 
     public override string GetAnswer()
     {
@@ -75,7 +78,7 @@ public class Puzzle0096 : Puzzle
                     solved++;
                 }
 
-                Dump(sudoku.Span, solution, solved);
+                Dump(sudoku, solution, solved);
 
                 subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
 
@@ -159,9 +162,9 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private int[] Solve(int id, Memory<int> sudoku)
+    private int[] Solve(int id, int[] sudoku)
     {
-        var stack = new Stack<Memory<int>>();
+        var stack = new Stack<int[]>();
 
         stack.Push(sudoku);
 
@@ -171,7 +174,12 @@ public class Puzzle0096 : Puzzle
         {
             steps++;
 
-            var solutions = SolveStep(puzzle.Span);
+            var solutions = SolveStep(puzzle);
+
+            if (steps > 1)
+            {
+                _pool.Return(puzzle);
+            }
 
             foreach (var solution in solutions)
             {
@@ -201,7 +209,7 @@ public class Puzzle0096 : Puzzle
         return null;
     }
     
-    private static List<(int[] Sudoku, bool Solved)> SolveStep(Span<int> sudoku)
+    private List<(int[] Sudoku, bool Solved)> SolveStep(int[] sudoku)
     {
         var rowCandidates = new int[9];
         
@@ -304,7 +312,7 @@ public class Puzzle0096 : Puzzle
 
             sudoku[position.X + position.Y * 9] = i;
 
-            var copy = new int[81];
+            var copy = _pool.Rent(81);
 
             var score = 81;
         
@@ -335,7 +343,7 @@ public class Puzzle0096 : Puzzle
         return solutions;
     }
 
-    private Memory<int> LoadSudoku(int number)
+    private int[] LoadSudoku(int number)
     {
         var puzzle = new int[81];
 
