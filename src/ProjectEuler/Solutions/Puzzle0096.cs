@@ -302,20 +302,15 @@ public class Puzzle0096 : Puzzle
 
             var score = 81;
         
-            for (var y = 0; y < 9; y++)
+            for (var j = 0; j < 81; j++)
             {
-                for (var x = 0; x < 9; x++)
+                var value = sudoku[j];
+
+                copy[j] = value;
+
+                if (value != 0)
                 {
-                    var cell = x + y * 9;
-                    
-                    var value = sudoku[cell];
-
-                    copy[cell] = value;
-
-                    if (value != 0)
-                    {
-                        score--;
-                    }
+                    score--;
                 }
             }
 
