@@ -185,6 +185,11 @@ public class Puzzle0096 : Puzzle
             {
                 if (solution.Solved)
                 {
+                    while (stack.TryPop(out puzzle))
+                    {
+                        _pool.Return(puzzle);
+                    }
+
                     lock (_stepsLock)
                     {
                         _steps.Total += steps;
