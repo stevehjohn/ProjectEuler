@@ -55,15 +55,17 @@ public class Puzzle0096 : Puzzle
 
                 lock (_statsLock)
                 {
-                    _elapsed.Total += stopwatch.Elapsed.TotalMicroseconds;
+                    var totalMicroseconds = stopwatch.Elapsed.TotalMicroseconds;
+                    
+                    _elapsed.Total += totalMicroseconds;
 
-                    _elapsed.Minimum = Math.Min(_elapsed.Minimum, stopwatch.Elapsed.TotalMicroseconds);
+                    _elapsed.Minimum = Math.Min(_elapsed.Minimum, totalMicroseconds);
 
-                    if (stopwatch.Elapsed.TotalMicroseconds > _elapsed.Maximum)
+                    if (totalMicroseconds > _elapsed.Maximum)
                     {
                         _maxTimePuzzleNumber = i;
 
-                        _elapsed.Maximum = stopwatch.Elapsed.TotalMicroseconds;
+                        _elapsed.Maximum = totalMicroseconds;
                     }
 
                     solved++;
