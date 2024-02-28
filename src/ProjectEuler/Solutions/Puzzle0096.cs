@@ -21,6 +21,10 @@ public class Puzzle0096 : Puzzle
 
     private Stopwatch _stopwatch;
 
+    private readonly object _cluesLock = new();
+
+    private readonly object _stepsLock = new();
+
     private readonly object _statsLock = new();
 
     private readonly object _consoleLock = new();
@@ -173,7 +177,7 @@ public class Puzzle0096 : Puzzle
             {
                 if (solution.Solved)
                 {
-                    lock (_statsLock)
+                    lock (_stepsLock)
                     {
                         _steps.Total += steps;
 
@@ -363,12 +367,15 @@ public class Puzzle0096 : Puzzle
             }
         }
 
-        _clues.Total += clues;
+        lock (_cluesLock)
+        {
+            _clues.Total += clues;
 
-        _clues.Minimum = Math.Min(_clues.Minimum, clues);
+            _clues.Minimum = Math.Min(_clues.Minimum, clues);
 
-        _clues.Maximum = Math.Max(_clues.Maximum, clues);
-        
+            _clues.Maximum = Math.Max(_clues.Maximum, clues);
+        }
+
         return puzzle;
     }
 }
