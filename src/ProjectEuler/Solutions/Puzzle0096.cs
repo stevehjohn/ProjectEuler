@@ -16,7 +16,7 @@ public class Puzzle0096 : Puzzle
         
         var sum = 0;
 
-        Parallel.For(0, Input.Length,
+        Parallel.For(0, Input.Length / 10,
             new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 },
             () => 0,
             (i, _, subTotal) => {
@@ -209,24 +209,15 @@ public class Puzzle0096 : Puzzle
     {
         var puzzle = new int[81];
 
-        var line = Input[number];
+        var start = number * 10 + 1;
         
         for (var y = 0; y < 9; y++)
         {
+            var line = Input[start + y];
+        
             for (var x = 0; x < 9; x++)
             {
-                var position = x + y * 9;
-                
-                var c = line[position];
-
-                if (c == '.')
-                {
-                    puzzle[position] = 0;
-                }
-                else
-                {
-                    puzzle[position] = line[position] - '0';
-                }
+                puzzle[y * 9 + x] = line[x] - '0';
             }
         }
 
