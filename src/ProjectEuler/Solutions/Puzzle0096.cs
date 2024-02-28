@@ -1,7 +1,5 @@
 using System.Buffers;
-using System.Diagnostics;
 using System.Numerics;
-using System.Text;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -10,28 +8,6 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
-    private (double Total, double Minimum, double Maximum) _elapsed = (0, double.MaxValue, 0);
-
-    private (long Total, int Minimum, int Maximum) _steps = (0, int.MaxValue, 0);
-
-    private (long Total, int Minimum, int Maximum) _clues = (0, int.MaxValue, 0);
-
-    private int _maxStepsPuzzleNumber;
-
-    private int _maxTimePuzzleNumber;
-
-    private Stopwatch _stopwatch;
-
-    private readonly object _cluesLock = new();
-
-    private readonly object _stepsLock = new();
-
-    private readonly object _statsLock = new();
-
-    private readonly object _consoleLock = new();
-
-    private readonly StringBuilder _output = new(10_000);
-
     private readonly ArrayPool<int> _pool = ArrayPool<int>.Shared;
 
     public override string GetAnswer()
@@ -40,129 +16,24 @@ public class Puzzle0096 : Puzzle
         
         var sum = 0;
 
-        var solved = 0;
-        
-        Console.Clear();
-
-        Console.CursorVisible = false;
-        
-        _stopwatch = Stopwatch.StartNew();
-        
         Parallel.For(0, Input.Length,
             new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 },
             () => 0,
             (i, _, subTotal) => {
                 var sudoku = LoadSudoku(i);
 
-                var stopwatch = Stopwatch.StartNew();
-                
-                var solution = Solve(i, sudoku);
-                
-                stopwatch.Stop();
-
-                lock (_statsLock)
-                {
-                    var totalMicroseconds = stopwatch.Elapsed.TotalMicroseconds;
-                    
-                    _elapsed.Total += totalMicroseconds;
-
-                    _elapsed.Minimum = Math.Min(_elapsed.Minimum, totalMicroseconds);
-
-                    if (totalMicroseconds > _elapsed.Maximum)
-                    {
-                        _maxTimePuzzleNumber = i;
-
-                        _elapsed.Maximum = totalMicroseconds;
-                    }
-
-                    solved++;
-                }
-
-                Dump(sudoku, solution, solved);
+                var solution = Solve(sudoku);
 
                 subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
 
                 return subTotal;
             },
             subTotal => Interlocked.Add(ref sum, subTotal));
-
-        _stopwatch.Stop();
-
-        Console.WriteLine($"\n All puzzles solved in: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}.\n\n\n\n\n");
-        
-        Console.CursorVisible = true;
         
         return sum.ToString("N0");
     }
 
-    private void Dump(Span<int> left, Span<int> right, int solved)
-    {
-        lock (_consoleLock)
-        {
-            _output.Clear();
-        
-            for (var y = 0; y < 9; y++)
-            {
-                for (var x = 0; x < 9; x++)
-                {
-                    if (left[x + y * 9] == 0)
-                    {
-                        _output.Append("  ");
-                    }
-                    else
-                    {
-                        _output.Append($" {left[x + y * 9]}");
-                    }
-                }
-
-                _output.Append("    ");
-                
-                for (var x = 0; x < 9; x++)
-                {
-                    _output.Append($" {right[x + y * 9]}");
-                }
-                
-                _output.AppendLine();
-            }
-
-            _output.AppendLine($"\n Solved: {solved:N0}/{Input.Length:N0} puzzles ({solved / _stopwatch.Elapsed.TotalSeconds:N0} puzzles/sec).       \n");
-
-            var mean = _elapsed.Total / solved;
-
-            _output.AppendLine($" Clues...\n  Minimum: {_clues.Minimum:N0}          \n  Mean:    {_clues.Total / solved:N0}          \n  Maximum: {_clues.Maximum:N0}         \n");
-
-            _output.AppendLine($" Timings...\n  Minimum: {_elapsed.Minimum:N0}μs          \n  Mean:    {mean:N0}μs          \n  Maximum: {_elapsed.Maximum:N0}μs (Puzzle #{_maxTimePuzzleNumber:N0})         \n");
-            
-            _output.AppendLine($" Combinations...\n  Minimum: {_steps.Minimum:N0}          \n  Mean:    {_steps.Total / solved:N0}          \n  Maximum: {_steps.Maximum:N0} (Puzzle #{_maxStepsPuzzleNumber:N0})           \n");
-
-            var meanTime = _stopwatch.Elapsed.TotalSeconds / solved;
-            
-            var eta = TimeSpan.FromSeconds((Input.Length - solved) * meanTime);
-            
-            _output.AppendLine($" Elapsed time: {_stopwatch.Elapsed.Minutes:N0}:{_stopwatch.Elapsed.Seconds:D2}    Estimated remaining: {eta.Minutes:N0}:{eta.Seconds:D2}          \n");
-            
-            var percent = 100 - (Input.Length - solved) * 100d / Input.Length;
-
-            _output.AppendLine($" Solved: {Math.Floor(percent):N0}%\n");
-
-            var line = (int) Math.Floor(percent / 2);
-
-            if (Math.Floor(percent) > 0 && (int) Math.Floor(percent) % 2 == 1)
-            {
-                _output.AppendLine($" {new string('\u2588', line)}\u258c{new string('⁃', 49 - line)}\u258f\n");
-            }
-            else
-            {
-                _output.AppendLine($" {new string('\u2588', line)}{new string('⁃', 50 - line)}\u258f\n");
-            }
-
-            Console.CursorTop = 1;
-        
-            Console.Write(_output.ToString());
-        }
-    }
-
-    private int[] Solve(int id, int[] sudoku)
+    private int[] Solve(int[] sudoku)
     {
         var stack = new Stack<int[]>();
 
@@ -189,21 +60,7 @@ public class Puzzle0096 : Puzzle
                     {
                         _pool.Return(puzzle);
                     }
-
-                    lock (_stepsLock)
-                    {
-                        _steps.Total += steps;
-
-                        _steps.Minimum = Math.Min(_steps.Minimum, steps);
-
-                        if (steps > _steps.Maximum)
-                        {
-                            _steps.Maximum = steps;
-
-                            _maxStepsPuzzleNumber = id;
-                        }
-                    }
-
+                    
                     return solution.Sudoku;
                 }
 
@@ -353,8 +210,6 @@ public class Puzzle0096 : Puzzle
         var puzzle = new int[81];
 
         var line = Input[number];
-
-        var clues = 0;
         
         for (var y = 0; y < 9; y++)
         {
@@ -372,21 +227,7 @@ public class Puzzle0096 : Puzzle
                 {
                     puzzle[position] = line[position] - '0';
                 }
-
-                if (puzzle[position] != 0)
-                {
-                    clues++;
-                }
             }
-        }
-
-        lock (_cluesLock)
-        {
-            _clues.Total += clues;
-
-            _clues.Minimum = Math.Min(_clues.Minimum, clues);
-
-            _clues.Maximum = Math.Max(_clues.Maximum, clues);
         }
 
         return puzzle;
