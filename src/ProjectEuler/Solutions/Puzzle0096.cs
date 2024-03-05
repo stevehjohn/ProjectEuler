@@ -21,14 +21,25 @@ public class Puzzle0096 : Puzzle
 
         var sum = 0;
 
-        for (var i = 0; i < 50; i++)
-        {
-            var sudoku = LoadSudoku(i);
+        Parallel.For(
+            0,
+            Input.Length / 10,
+            new ParallelOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount - 1
+            },
+            () => 0,
+            (i, _, subTotal) =>
+            {
+                var sudoku = LoadSudoku(i);
 
-            var solution = Solve(sudoku);
+                var solution = Solve(sudoku);
 
-            sum += solution[0] * 100 + solution[1] * 10 + solution[2];
-        }
+                subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
+
+                return subTotal;
+            },
+            subTotal => Interlocked.Add(ref sum, subTotal));
         
         return sum.ToString("N0");
     }
