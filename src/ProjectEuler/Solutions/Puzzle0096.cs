@@ -242,6 +242,11 @@ public class Puzzle0096 : Puzzle
                     values = candidates;
 
                     valueCount = count;
+
+                    if (count == 1)
+                    {
+                        return (position, values, valueCount);
+                    }
                 }
             }
         }
