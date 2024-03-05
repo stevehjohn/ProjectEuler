@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
@@ -21,25 +22,14 @@ public class Puzzle0096 : Puzzle
 
         var sum = 0;
 
-        Parallel.For(
-            0,
-            Input.Length / 10,
-            new ParallelOptions
-            {
-                MaxDegreeOfParallelism = Environment.ProcessorCount - 1
-            },
-            () => 0,
-            (i, _, subTotal) =>
-            {
-                var sudoku = LoadSudoku(i);
+        for (var i = 0; i < 50; i++)
+        {
+            var sudoku = LoadSudoku(i);
 
-                var solution = Solve(sudoku);
+            var solution = Solve(sudoku);
 
-                subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
-
-                return subTotal;
-            },
-            subTotal => Interlocked.Add(ref sum, subTotal));
+            sum += solution[0] * 100 + solution[1] * 10 + solution[2];
+        }
         
         return sum.ToString("N0");
     }
