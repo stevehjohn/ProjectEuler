@@ -7,29 +7,6 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0096 : Puzzle
 {
-    public override string GetAnswer()
-    {
-        LoadInput();
-        
-        var sum = 0;
-
-        Parallel.For(0, Input.Length / 10,
-            new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount - 1 },
-            () => 0,
-            (i, _, subTotal) => {
-                var sudoku = LoadSudoku(i);
-
-                var solution = Solve(sudoku);
-
-                subTotal += solution[0] * 100 + solution[1] * 10 + solution[2];
-
-                return subTotal;
-            },
-            subTotal => Interlocked.Add(ref sum, subTotal));
-        
-        return sum.ToString("N0");
-    }
-
     private readonly int[] _rowCandidates = new int[9];
     
     private readonly int[] _columnCandidates = new int[9];
@@ -37,6 +14,24 @@ public class Puzzle0096 : Puzzle
     private readonly int[] _boxCandidates = new int[9];
 
     private readonly int[] _cellCandidates = new int[81];
+
+    public override string GetAnswer()
+    {
+        LoadInput();
+
+        var sum = 0;
+
+        for (var i = 0; i < 50; i++)
+        {
+            var sudoku = LoadSudoku(i);
+
+            var solution = Solve(sudoku);
+
+            sum += solution[0] * 100 + solution[1] * 10 + solution[2];
+        }
+        
+        return sum.ToString("N0");
+    }
 
     private int[] Solve(int[] puzzle)
     {
@@ -303,17 +298,17 @@ public class Puzzle0096 : Puzzle
 
         return false;
     }
-
+    
     private int[] LoadSudoku(int number)
     {
         var puzzle = new int[81];
 
         var start = number * 10 + 1;
-        
+
         for (var y = 0; y < 9; y++)
         {
             var line = Input[start + y];
-        
+
             for (var x = 0; x < 9; x++)
             {
                 puzzle[y * 9 + x] = line[x] - '0';
