@@ -51,8 +51,6 @@ public class Puzzle0096 : Puzzle
 
         var span = new Span<int>(workingCopy);
         
-        GetCellCandidates(span);
-
         SolveStep(span, score);
         
         return workingCopy;
@@ -60,6 +58,8 @@ public class Puzzle0096 : Puzzle
     
     private bool SolveStep(Span<int> puzzle, int score)
     {
+        GetCellCandidates(puzzle);
+
         FindHiddenSingles();
         
         var move = FindLowestMove(puzzle);
@@ -270,22 +270,7 @@ public class Puzzle0096 : Puzzle
             }
 
             puzzle[move.Position.X + (move.Position.Y << 3) + move.Position.Y] = i;
-
-            var copy = new int[81];
             
-            Array.Copy(_cellCandidates, copy, 81);
-
-            var box = move.Position.Y / 3 * 27 + move.Position.X / 3 * 3;
-            
-            for (var j = 0; j < 9; j++)
-            {
-                _cellCandidates[j + move.Position.Y * 9] &= ~bit;
-                
-                _cellCandidates[move.Position.X + j * 9] &= ~bit;
-                
-                _cellCandidates[box + j % 3 + j / 3 * 9] &= ~bit;
-            }
-
             score--;
 
             if (score == 0)
@@ -299,8 +284,6 @@ public class Puzzle0096 : Puzzle
             }
 
             puzzle[move.Position.X + (move.Position.Y << 3) + move.Position.Y] = 0;
-
-            Array.Copy(copy, _cellCandidates, 81);
 
             score++;
         }
