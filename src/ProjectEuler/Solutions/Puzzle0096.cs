@@ -60,7 +60,10 @@ public class Puzzle0096 : Puzzle
     {
         GetCellCandidates(puzzle);
 
-        FindHiddenSingles();
+        if (! FindHiddenSingles())
+        {
+            FindNakedPairs();
+        }
         
         var move = FindLowestMove(puzzle);
 
@@ -125,7 +128,7 @@ public class Puzzle0096 : Puzzle
         }
     }
 
-    private void FindHiddenSingles()
+    private bool FindHiddenSingles()
     {
         for (var y = 0; y < 9; y++)
         {
@@ -159,10 +162,10 @@ public class Puzzle0096 : Puzzle
                     if ((_cellCandidates[(y << 3) + y + x] & onceRow) > 0)
                     {
                         _cellCandidates[(y << 3) + y + x] = onceRow;
-
-                        return;
                     }
                 }
+
+                return true;
             }
         
             if (BitOperations.PopCount((uint) onceColumn) == 1)
@@ -172,10 +175,10 @@ public class Puzzle0096 : Puzzle
                     if ((_cellCandidates[(x << 3) + x + y] & onceColumn) > 0)
                     {
                         _cellCandidates[(x << 3) + x + y] = onceColumn;
-
-                        return;
                     }
                 }
+
+                return true;
             }
         }
 
@@ -213,6 +216,164 @@ public class Puzzle0096 : Puzzle
                             }
                         }
                     }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    private void FindNakedPairs()
+    {
+        var first = 0;
+
+        var second = 0;
+
+        var third = 0;
+
+        var count = 0;
+
+        for (var i = 0; i < 9; i++)
+        {
+            var candidate = _rowCandidates[i];
+            
+            if (BitOperations.PopCount((uint) candidate) == 2)
+            {
+                if (first > 0)
+                {
+                    if (second > 0)
+                    {
+                        third = candidate;
+                    }
+                    else
+                    {
+                        second = candidate;
+                    }
+                }
+                else
+                {
+                    first = candidate;
+                }
+            }
+
+            if (candidate > 0)
+            {
+                count++;
+            }
+        }
+
+        if (first == second && third == 0 && count > 2)
+        {
+            first = ~first;
+
+            for (var i = 0; i < 9; i++)
+            {
+                if (_rowCandidates[i] != first)
+                {
+                    _rowCandidates[i] &= first;
+                }
+            }
+
+            return;
+        }
+
+        first = 0;
+
+        second = 0;
+
+        third = 0;
+
+        for (var i = 0; i < 9; i++)
+        {
+            var candidate = _columnCandidates[i];
+            
+            if (BitOperations.PopCount((uint) candidate) == 2)
+            {
+                if (first > 0)
+                {
+                    if (second > 0)
+                    {
+                        third = candidate;
+                    }
+                    else
+                    {
+                        second = candidate;
+                    }
+                }
+                else
+                {
+                    first = candidate;
+                }
+            }
+
+            if (candidate > 0)
+            {
+                count++;
+            }
+
+        }
+
+        if (first == second && third == 0 && count > 2)
+        {
+            first = ~first;
+
+            for (var i = 0; i < 9; i++)
+            {
+                if (_columnCandidates[i] != first)
+                {
+                    _columnCandidates[i] &= first;
+                }
+            }
+
+            return;
+        }
+
+        first = 0;
+
+        second = 0;
+
+        third = 0;
+
+        for (var i = 0; i < 9; i++)
+        {
+            var candidate = _boxCandidates[i];
+            
+            if (BitOperations.PopCount((uint) candidate) == 2)
+            {
+                if (first > 0)
+                {
+                    if (second > 0)
+                    {
+                        third = candidate;
+                    }
+                    else
+                    {
+                        second = candidate;
+                    }
+                }
+                else
+                {
+                    first = candidate;
+                }
+            }
+
+            if (candidate > 0)
+            {
+                count++;
+            }
+        }
+
+        if (first == second && third == 0 && count > 2)
+        {
+            first = ~first;
+
+            for (var i = 0; i < 9; i++)
+            {
+                if (_boxCandidates[i] != first)
+                {
+                    _boxCandidates[i] &= first;
                 }
             }
         }
