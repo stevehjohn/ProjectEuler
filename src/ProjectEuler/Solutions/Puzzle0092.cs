@@ -21,7 +21,7 @@ public class Puzzle0092 : Puzzle
         return count.ToString("N0");
     }
 
-    private bool ChainReturns89(long value)
+    private static bool ChainReturns89(long value)
     {
         while (true)
         {
