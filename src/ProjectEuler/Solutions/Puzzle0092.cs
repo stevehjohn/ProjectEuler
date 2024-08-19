@@ -6,13 +6,11 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0092 : Puzzle
 {
-    private readonly HashSet<long> _history = new();
-    
     public override string GetAnswer()
     {
-        var count = 0;
+        var count = 0L;
         
-        for (var i = 0; i < 10_000_000; i++)
+        for (var i = 1; i < 10_000_000; i++)
         {
             if (ChainReturns89(i))
             {
@@ -20,23 +18,23 @@ public class Puzzle0092 : Puzzle
             }
         }
         
-        return count.ToString();
+        return count.ToString("N0");
     }
 
     private bool ChainReturns89(int start)
     {
-        _history.Clear();
-
         var digits = start.ToString();
-
+        
         while (true)
         {
             var sum = SumOfSquares(digits);
-
-            if (! _history.Add(sum))
+            
+            if (sum == 1 || sum == 89)
             {
                 return sum == 89;
             }
+
+            digits = sum.ToString();
         }
 }
 
