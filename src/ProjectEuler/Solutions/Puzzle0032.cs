@@ -10,14 +10,14 @@ public class Puzzle0032 : Puzzle
     
     public override string GetAnswer()
     {
+        _found.Clear();
+        
         var sum = 0;
 
         sum += ProcessMultiplicands(9, 99, 98, 988);
 
         sum += ProcessMultiplicands(9, 99, 98, 988);
 
-        Console.WriteLine(sum);
-        
         return sum.ToString("N0");
     }
 
