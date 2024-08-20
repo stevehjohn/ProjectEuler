@@ -15,7 +15,7 @@ public class Puzzle0024 : Puzzle
 
         var result = new StringBuilder();
 
-        var target = 1_000_000;
+        var target = 999_999;
         
         for (var i = digits.Count - 1; i >= 0; i--)
         {
