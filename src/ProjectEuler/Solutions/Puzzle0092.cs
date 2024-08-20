@@ -32,7 +32,7 @@ public class Puzzle0092 : Puzzle
                 return value == 89;
             }
         }
-}
+    }
 
     private static long SumOfSquares(long digits)
     {

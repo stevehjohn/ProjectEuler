@@ -1,8 +1,10 @@
 using System.Numerics;
+using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
 namespace ProjectEuler.Solutions;
 
+[UsedImplicitly]
 public class Puzzle0026 : Puzzle
 {
     public override string GetAnswer()

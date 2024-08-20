@@ -8,7 +8,7 @@ public class Puzzle0042 : Puzzle
 {
     private string[] _words;
 
-    private HashSet<int> _triangles = new();
+    private readonly HashSet<int> _triangles = new();
     
     public override string GetAnswer()
     {
@@ -37,7 +37,7 @@ public class Puzzle0042 : Puzzle
 
         while (n < max)
         {
-            _triangles.Add((n * (n + 1)) / 2);
+            _triangles.Add(n * (n + 1) / 2);
 
             n++;
         }
