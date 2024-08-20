@@ -170,7 +170,7 @@ public static class Maths
     public static int GetSumOfDivisors(int number)
     {
         var sum = 0;
-        
+
         for (var i = 1; i < number / 2 + 1; i++)
         {
             if (number % i == 0)
