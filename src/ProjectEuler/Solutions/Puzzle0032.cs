@@ -16,7 +16,7 @@ public class Puzzle0032 : Puzzle
 
         sum += ProcessMultiplicands(9, 99, 98, 988);
 
-        sum += ProcessMultiplicands(9, 99, 98, 988);
+        sum += ProcessMultiplicands(1, 10, 987, 9876);
 
         return sum.ToString("N0");
     }
