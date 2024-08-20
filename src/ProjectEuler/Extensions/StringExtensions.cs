@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace ProjectEuler.Extensions;
 
 public static class StringExtensions
