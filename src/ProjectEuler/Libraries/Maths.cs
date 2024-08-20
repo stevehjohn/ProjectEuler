@@ -166,4 +166,19 @@ public static class Maths
 
         return left << gcdExponentOnTwo;
     }
+
+    public static int GetSumOfDivisors(int number)
+    {
+        var sum = 0;
+        
+        for (var i = 1; i < number; i++)
+        {
+            if (number % i == 0)
+            {
+                sum += i;
+            }
+        }
+
+        return sum;
+    }
 }
