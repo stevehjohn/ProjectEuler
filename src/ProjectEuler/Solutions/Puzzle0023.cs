@@ -21,13 +21,13 @@ public class Puzzle0023 : Puzzle
             }
         }
 
-        for (var i = 1; i < 28_123; i++)
-        {
-            if (! IsSumOfAbundant(i))
-            {
-                sum += i;
-            }
-        }
+        // for (var i = 1; i < 28_123; i++)
+        // {
+        //     if (! IsSumOfAbundant(i))
+        //     {
+        //         sum += i;
+        //     }
+        // }
 
         return sum.ToString("N0");
     }
