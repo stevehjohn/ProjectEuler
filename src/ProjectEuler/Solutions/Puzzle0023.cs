@@ -1,11 +1,13 @@
+using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 using ProjectEuler.Libraries;
 
 namespace ProjectEuler.Solutions;
 
+[UsedImplicitly]
 public class Puzzle0023 : Puzzle
 {
-    private List<int> _abundant = new();
+    private readonly List<int> _abundant = new();
     
     public override string GetAnswer()
     {
@@ -21,8 +23,6 @@ public class Puzzle0023 : Puzzle
 
         for (var i = 1; i < 28_123; i++)
         {
-            Console.WriteLine(i);
-            
             if (! IsSumOfAbundant(i))
             {
                 sum += i;
