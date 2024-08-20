@@ -16,8 +16,6 @@ public class Puzzle0017 : Puzzle
         for (var i = 1; i <= Max; i++)
         {
             count += i.NumberToEnglish().Replace(" ", string.Empty).Length;
-            
-            Console.WriteLine(i.NumberToEnglish());
         }
 
         return count.ToString("N0");

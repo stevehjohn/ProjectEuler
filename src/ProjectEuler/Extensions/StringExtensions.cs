@@ -53,7 +53,12 @@ public static class StringExtensions
             {
                 result.Append($"{GetNumberWord(number / boundary.Key)} {boundary.Value.Word} ");
 
-                number -= number / boundary.Key * boundary.Value.DivisorToNext;
+                number -= number / boundary.Key * boundary.Key;
+
+                if (number < 100 && number > 0)
+                {
+                    result.Append("and ");
+                }
             }
         }
 
