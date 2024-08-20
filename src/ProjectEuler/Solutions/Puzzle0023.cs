@@ -8,6 +8,8 @@ namespace ProjectEuler.Solutions;
 public class Puzzle0023 : Puzzle
 {
     private readonly List<int> _abundant = new();
+
+    private readonly HashSet<int> _sums = new();
     
     public override string GetAnswer()
     {
@@ -21,41 +23,23 @@ public class Puzzle0023 : Puzzle
             }
         }
 
+        foreach (var l in _abundant)
+        {
+            foreach (var r in _abundant)
+            {
+                _sums.Add(l + r);
+            }
+        }
+        
         for (var i = 1; i < 28_123; i++)
         {
-            if (! IsSumOfAbundant(i))
+            if (! _sums.Contains(i))
             {
                 sum += i;
             }
         }
 
         return sum.ToString("N0");
-    }
-
-    private bool IsSumOfAbundant(int number)
-    {
-        foreach (var l in _abundant)
-        {
-            if (l > number)
-            {
-                return false;
-            }
-
-            foreach (var r in _abundant)
-            {
-                if (l + r > number)
-                {
-                    break;
-                }
-
-                if (l + r == number)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private static bool IsAbundant(int number)
