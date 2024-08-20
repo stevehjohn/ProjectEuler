@@ -43,7 +43,7 @@ public class Puzzle0023 : Puzzle
 
             foreach (var r in _abundant)
             {
-                if (r > number)
+                if (l + r > number)
                 {
                     break;
                 }
