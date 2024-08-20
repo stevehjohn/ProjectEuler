@@ -14,7 +14,7 @@ public class Puzzle0042 : Puzzle
     {
         LoadWords();
 
-        GetTriangleNumbers(100);
+        GetTriangleNumbers(20);
         
         var count = 0;
 
