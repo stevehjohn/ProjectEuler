@@ -65,13 +65,17 @@ public static class Program
         var number = int.Parse(puzzle.Name[6..]);
 
         var colour = Console.ForegroundColor;
+
+        var expected = string.Empty;
         
         if (answer != _answers[number - 1])
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
+
+            expected = $"  Expected: {_answers[number - 1]}";
         }
 
-        Console.WriteLine($"  {number,4}: {answer,-20}  {$"{stopwatch.Elapsed.TotalMicroseconds:N0}",12}μs");
+        Console.WriteLine($"  {number,4}: {answer,-20}  {$"{stopwatch.Elapsed.TotalMicroseconds:N0}",12}μs {expected}");
 
         Console.ForegroundColor = colour;
 

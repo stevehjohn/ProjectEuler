@@ -39,7 +39,7 @@ public static class StringExtensions
     private static readonly Dictionary<int, (string Word, int DivisorToNext)> Boundaries = new()
     {   
         { 1_000, ("thousand", 10) },
-        { 100, ("hundred", 10) },
+        { 100, ("hundred", 100) },
         { 1, (string.Empty, 1) }
     };
 
@@ -53,7 +53,7 @@ public static class StringExtensions
             {
                 result.Append($"{GetNumberWord(number / boundary.Key)} {boundary.Value.Word} ");
 
-                number /= boundary.Value.DivisorToNext;
+                number -= number / boundary.Key * boundary.Value.DivisorToNext;
             }
         }
 
