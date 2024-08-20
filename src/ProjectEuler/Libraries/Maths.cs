@@ -171,7 +171,9 @@ public static class Maths
     {
         var sum = 0;
 
-        for (var i = 1; i < number / 2 + 1; i++)
+        var step = number % 2 == 0 ? 1 : 2;
+
+        for (var i = 1; i < number / 2 + 1; i += step)
         {
             if (number % i == 0)
             {
