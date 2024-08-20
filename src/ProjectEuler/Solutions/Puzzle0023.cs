@@ -7,6 +7,8 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0023 : Puzzle
 {
+    private const int MagicNumber = 28_123;
+    
     private readonly List<int> _abundant = new();
 
     private readonly HashSet<int> _sums = new();
@@ -15,7 +17,7 @@ public class Puzzle0023 : Puzzle
     {
         var sum = 0;
         
-        for (var i = 1; i < 28_123; i++)
+        for (var i = 1; i < MagicNumber; i++)
         {
             if (IsAbundant(i))
             {
@@ -29,14 +31,14 @@ public class Puzzle0023 : Puzzle
             {
                 _sums.Add(l + r);
 
-                if (l + r > 28_123)
+                if (l + r > MagicNumber)
                 {
                     break;
                 }
             }
         }
         
-        for (var i = 1; i < 28_123; i++)
+        for (var i = 1; i < MagicNumber; i++)
         {
             if (! _sums.Contains(i))
             {
