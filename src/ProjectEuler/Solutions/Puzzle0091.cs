@@ -20,8 +20,7 @@ public class Puzzle0091 : Puzzle
                 {
                     for (var y2 = 0; y2 <= GridSize; y2++)
                     {
-                        if ((x1 != x2 || y1 != y2) && x1 * (y2 - y1) + y1 * (x1 - x2) >= 0 &&
-                            x2 * (y1 - y2) + y2 * (x2 - x1) >= 0)
+                        if (y2 * x1 < y1 * x2 && IsRightAngle(x1, y1, x2, y2))
                         {
                             count++;
                         }
@@ -31,5 +30,17 @@ public class Puzzle0091 : Puzzle
         }
 
         return count.ToString("N0");
+    }
+
+    private static bool IsRightAngle(int x1, int y1, int x2, int y2)
+    {
+        var a = Math.Pow(x1, 2) + Math.Pow(y1, 2);
+
+        var b = Math.Pow(x2, 2) + Math.Pow(y2, 2);
+
+        var c = Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2);
+
+        // ReSharper disable CompareOfFloatsByEqualityOperator
+        return a + b == c || b + c == a || c + a == b;
     }
 }
