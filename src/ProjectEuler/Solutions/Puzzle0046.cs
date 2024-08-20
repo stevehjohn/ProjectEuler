@@ -11,7 +11,7 @@ public class Puzzle0046 : Puzzle
     
     public override string GetAnswer()
     {
-        _primes = Maths.GetPrimes(10000);
+        _primes = Maths.GetPrimes(10_000);
         
         var i = 33;
         
