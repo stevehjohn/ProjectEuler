@@ -28,6 +28,11 @@ public class Puzzle0023 : Puzzle
             foreach (var r in _abundant)
             {
                 _sums.Add(l + r);
+
+                if (l + r > 28_123)
+                {
+                    break;
+                }
             }
         }
         
