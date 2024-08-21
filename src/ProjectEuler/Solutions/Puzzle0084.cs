@@ -92,6 +92,8 @@ public class Puzzle0084 : Puzzle
             }
 
             var turnOver = false;
+
+            var reevaluate = false;
             
             if (SpecialSquares.TryGetValue(_position, out var square))
             {
@@ -104,12 +106,12 @@ public class Puzzle0084 : Puzzle
                         break;
                     
                     case "CC":
-                        turnOver = PickCard(_chestCards, ref _chestCard);
+                        (turnOver, reevaluate) = PickCard(_chestCards, ref _chestCard);
 
                         break;
                     
                     case "CH":
-                        turnOver = PickCard(_chanceCards, ref _chanceCard);
+                        (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
                         
                         break;
                 }
@@ -127,9 +129,11 @@ public class Puzzle0084 : Puzzle
         } while (roll1 == roll2);
     }
 
-    private bool PickCard(string[] cards, ref int card)
+    private (bool TurnOver, bool Reevaluate) PickCard(string[] cards, ref int card)
     {
         var turnOver = false;
+
+        var reevaluate = false;
         
         switch (cards[card])
         {
@@ -181,6 +185,8 @@ public class Puzzle0084 : Puzzle
                 {
                     _position += BoardLength;
                 }
+
+                reevaluate = true;
                 
                 break;
         }
@@ -192,7 +198,7 @@ public class Puzzle0084 : Puzzle
             card = 0;
         }
 
-        return turnOver;
+        return (turnOver, reevaluate);
     }
 
     private void GoToNext(string position)
