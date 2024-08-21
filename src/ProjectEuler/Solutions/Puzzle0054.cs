@@ -102,7 +102,7 @@ public class Puzzle0054 : Puzzle
                 return ScoreBoundary * 7 + 100 * (int) _cards[0].Value + (int) _cards[3].Value;
             }
             
-            if (matchCounts[1] == 2 && matchCounts[0] == 3)
+            if (matchCounts[1] == 3 && matchCounts[0] == 2)
             {
                 return ScoreBoundary * 7 + 100 * (int) _cards[3].Value + (int) _cards[0].Value;
             }
