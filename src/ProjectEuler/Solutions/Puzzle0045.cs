@@ -31,6 +31,7 @@ public class Puzzle0045 : Puzzle
 
         var k = (1 + rootDiscriminant) / 6;
 
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
         return k == (int) k;
     }
 
@@ -42,6 +43,7 @@ public class Puzzle0045 : Puzzle
 
         var k = (1 + rootDiscriminant) / 4;
 
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
         return k == (int) k;
     }
 }
