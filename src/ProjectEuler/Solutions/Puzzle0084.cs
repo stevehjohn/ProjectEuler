@@ -48,11 +48,14 @@ public class Puzzle0084 : Puzzle
     
     public override string GetAnswer()
     {
-        InitialiseGame();
-
-        for (var i = 0; i < 10_000_000; i++)
+        for (var g = 0; g < 1_000; g++)
         {
-            PlayRound();
+            InitialiseGame();
+
+            for (var i = 0; i < 1_000; i++)
+            {
+                PlayRound();
+            }
         }
 
         var ordered = _squareLandings.Select((value, index) => new { Value = value, Index = index }).OrderByDescending(i => i.Value).ToList();
