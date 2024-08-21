@@ -50,10 +50,12 @@ public class Puzzle0084 : Puzzle
     {
         InitialiseGame();
 
-        for (var i = 0; i < 1_000_000; i++)
+        for (var i = 0; i < 10_000_000; i++)
         {
             PlayRound();
         }
+
+        var ordered = _squareLandings.Select((value, index) => new { Value = value, Index = index }).OrderByDescending(i => i.Value).ToList(); 
 
         throw new NotImplementedException();
     }
@@ -71,6 +73,8 @@ public class Puzzle0084 : Puzzle
             {
                 SetPosition("JL");
                 
+                _squareLandings[_position]++;
+
                 break;
             }
 
@@ -108,6 +112,8 @@ public class Puzzle0084 : Puzzle
                 }
             }
 
+            _squareLandings[_position]++;
+
             if (turnOver)
             {
                 break;
@@ -116,8 +122,6 @@ public class Puzzle0084 : Puzzle
             rolls++;
 
         } while (roll1 == roll2);
-
-        _squareLandings[_position]++;
     }
 
     private bool PickCard(string[] cards, ref int card)
@@ -154,6 +158,14 @@ public class Puzzle0084 : Puzzle
             
             case "R1":
                 SetPosition("R1");
+                
+                break;
+            
+            case "NR":
+                
+                break;
+            
+            case "NU":
                 
                 break;
             
