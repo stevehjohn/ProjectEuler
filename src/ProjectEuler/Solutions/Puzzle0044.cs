@@ -20,7 +20,7 @@ public class Puzzle0044 : Puzzle
             {
                 if (IsPentagonal(_pentagonals[l] + _pentagonals[r]))
                 {
-                    var difference = _pentagonals[l] - _pentagonals[r];
+                    var difference = _pentagonals[r] - _pentagonals[l];
 
                     if (IsPentagonal(difference) && difference < minimumDifference)
                     {
