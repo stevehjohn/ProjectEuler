@@ -93,31 +93,36 @@ public class Puzzle0084 : Puzzle
 
             var turnOver = false;
 
-            var reevaluate = false;
-            
-            if (SpecialSquares.TryGetValue(_position, out var square))
+            var reevaluate = true;
+
+            while (reevaluate)
             {
-                switch (square)
+                reevaluate = false;
+                
+                if (SpecialSquares.TryGetValue(_position, out var square))
                 {
-                    case "GJ":
-                        SetPosition("JL");
-                        turnOver = true;
+                    switch (square)
+                    {
+                        case "GJ":
+                            SetPosition("JL");
+                            turnOver = true;
 
-                        break;
-                    
-                    case "CC":
-                        (turnOver, reevaluate) = PickCard(_chestCards, ref _chestCard);
+                            break;
 
-                        break;
-                    
-                    case "CH":
-                        (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
-                        
-                        break;
+                        case "CC":
+                            (turnOver, reevaluate) = PickCard(_chestCards, ref _chestCard);
+
+                            break;
+
+                        case "CH":
+                            (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
+
+                            break;
+                    }
                 }
-            }
 
-            _squareLandings[_position]++;
+                _squareLandings[_position]++;
+            }
 
             if (turnOver)
             {
