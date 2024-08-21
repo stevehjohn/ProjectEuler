@@ -12,7 +12,7 @@ public class Puzzle0084 : Puzzle
     
     private readonly int[] _squareLandings = new int[40];
 
-    private static readonly Dictionary<int, string> SpecialSqaures = new()
+    private static readonly Dictionary<int, string> SpecialSquares = new()
     {
         { 0, "GO" },
         { 2, "CC" },
@@ -90,7 +90,7 @@ public class Puzzle0084 : Puzzle
 
             var turnOver = false;
             
-            if (SpecialSqaures.TryGetValue(_position, out var square))
+            if (SpecialSquares.TryGetValue(_position, out var square))
             {
                 switch (square)
                 {
@@ -162,10 +162,12 @@ public class Puzzle0084 : Puzzle
                 break;
             
             case "NR":
+                GoToNext("R");
                 
                 break;
             
             case "NU":
+                GoToNext("U");
                 
                 break;
             
@@ -190,9 +192,14 @@ public class Puzzle0084 : Puzzle
         return turnOver;
     }
 
+    private void GoToNext(string position)
+    {
+        throw new NotImplementedException();
+    }
+
     private void SetPosition(string position)
     {
-        _position = SpecialSqaures.Single(s => s.Value == position).Key;
+        _position = SpecialSquares.Single(s => s.Value == position).Key;
     }
 
     private void InitialiseGame()
