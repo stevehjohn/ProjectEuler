@@ -140,7 +140,7 @@ public static class Maths
         }
     }
 
-    private static long GreatestCommonFactor(long left, long right)
+    public static long GreatestCommonFactor(long left, long right)
     {
         var gcdExponentOnTwo = BitOperations.TrailingZeroCount(left | right);
 
