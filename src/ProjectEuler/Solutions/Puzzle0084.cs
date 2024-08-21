@@ -7,6 +7,8 @@ namespace ProjectEuler.Solutions;
 public class Puzzle0084 : Puzzle
 {
     private const int DiceSides = 6;
+
+    private const int BoardLength = 40;
     
     private readonly int[] _squareLandings = new int[40];
 
@@ -77,9 +79,9 @@ public class Puzzle0084 : Puzzle
 
             _position += roll1 + roll2;
 
-            if (_position > 39)
+            if (_position >= BoardLength)
             {
-                _position -= 39;
+                _position -= BoardLength;
             }
 
             var turnOver = false;
@@ -132,6 +134,36 @@ public class Puzzle0084 : Puzzle
             
             case "GO":
                 SetPosition("GO");
+                
+                break;
+            
+            case "C1":
+                SetPosition("C1");
+                
+                break;
+            
+            case "E3":
+                SetPosition("E3");
+                
+                break;
+            
+            case "H2":
+                SetPosition("H2");
+                
+                break;
+            
+            case "R1":
+                SetPosition("R1");
+                
+                break;
+            
+            case "B3":
+                _position -= 3;
+
+                if (_position < 0)
+                {
+                    _position += BoardLength;
+                }
                 
                 break;
         }
