@@ -93,6 +93,30 @@ public class Puzzle0084 : Puzzle
                         turnOver = true;
 
                         break;
+                    
+                    case "CC:":
+                        turnOver = PickCard(_chestCards);
+
+                        _chestCard++;
+                        
+                        if (_chestCard >= _chestCards.Length)
+                        {
+                            _chestCard = 0;
+                        }
+
+                        break;
+                    
+                    case "CH":
+                        turnOver = PickCard(_chanceCards);
+
+                        _chanceCard++;
+                        
+                        if (_chanceCard >= _chanceCards.Length)
+                        {
+                            _chanceCard = 0;
+                        }
+                        
+                        break;
                 }
             }
 
@@ -106,6 +130,11 @@ public class Puzzle0084 : Puzzle
         } while (roll1 == roll2);
 
         _squareLandings[_position]++;
+    }
+
+    private bool PickCard(string[] chestCards)
+    {
+        throw new NotImplementedException();
     }
 
     private void SetPosition(string position)
