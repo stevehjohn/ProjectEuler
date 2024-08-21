@@ -103,7 +103,7 @@ public class Puzzle0084 : Puzzle
 
                         break;
                     
-                    case "CC:":
+                    case "CC":
                         turnOver = PickCard(_chestCards, ref _chestCard);
 
                         break;
@@ -219,7 +219,7 @@ public class Puzzle0084 : Puzzle
 
         _chanceCards = new string[16];
 
-        _chanceCard = 0;
+        _chestCard = 0;
 
         _chanceCard = 0;
         
