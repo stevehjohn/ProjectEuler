@@ -1,3 +1,4 @@
+using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -12,7 +13,7 @@ public class Puzzle0048 : Puzzle
 
         for (var i = 1; i <= 1_000; i++)
         {
-            result += ModPow(i, i, 10_000_000_000);
+            result += (long) ModPow(i, i, 10_000_000_000);
 
             result %= 10_000_000_000;
         }
@@ -20,9 +21,9 @@ public class Puzzle0048 : Puzzle
         return result.ToString("N0");
     }
 
-    private static long ModPow(long b, long e, long m)
+    private static BigInteger ModPow(BigInteger b, BigInteger e, BigInteger m)
     {
-        var r = 1L;
+        var r = new BigInteger(1);
 
         while (e > 0)
         {
