@@ -282,9 +282,9 @@ public class Puzzle0054 : Puzzle
 
     private class Card
     {
-        public Suite Suite { get; init; }
+        public Suite Suite { get; }
 
-        public Value Value { get; init; }
+        public Value Value { get; }
 
         public Card(Suite suit, Value value)
         {
