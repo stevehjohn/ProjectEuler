@@ -47,7 +47,12 @@ public class Puzzle0084 : Puzzle
     public override string GetAnswer()
     {
         InitialiseGame();
-        
+
+        for (var i = 0; i < 1_000_000; i++)
+        {
+            PlayRound();
+        }
+
         throw new NotImplementedException();
     }
 
@@ -55,9 +60,15 @@ public class Puzzle0084 : Puzzle
     {
         int roll1;
         int roll2;
+
+        var rolls = 1;
         
         do
         {
+            if (rolls == 3)
+            {
+            }
+
             roll1 = _rng.Next(DiceSides) + 1;
             roll2 = _rng.Next(DiceSides) + 1;
 
@@ -68,18 +79,35 @@ public class Puzzle0084 : Puzzle
                 _position -= 39;
             }
 
-            if (_specialSqaures.TryGetValue(_position, out var sqaure))
+            var turnOver = false;
+            
+            if (_specialSqaures.TryGetValue(_position, out var square))
             {
-                switch (sqaure)
+                switch (square)
                 {
-                    case "JL":
-                        
+                    case "GJ":
+                        SetPosition("JL");
+                        turnOver = true;
+
+                        break;
                 }
             }
 
+            if (turnOver)
+            {
+                break;
+            }
+
+            rolls++;
+
         } while (roll1 == roll2);
     }
-    
+
+    private void SetPosition(string position)
+    {
+        _position = _specialSqaures.Single(s => s.Value == position).Key;
+    }
+
     private void InitialiseGame()
     {
         _chestCards = new string[16];
