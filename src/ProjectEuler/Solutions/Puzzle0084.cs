@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
-    private const int DiceSides = 6;
+    private const int DiceSides = 4;
 
     private const int BoardLength = 40;
     
@@ -194,7 +194,15 @@ public class Puzzle0084 : Puzzle
 
     private void GoToNext(string position)
     {
-        throw new NotImplementedException();
+        while (! SpecialSquares.ContainsKey(_position) || ! SpecialSquares[_position].StartsWith(position))
+        {
+            _position++;
+
+            if (_position >= BoardLength)
+            {
+                _position -= BoardLength;
+            }
+        }
     }
 
     private void SetPosition(string position)
