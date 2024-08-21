@@ -64,48 +64,126 @@ public class Puzzle0054 : Puzzle
 
     private class Hand
     {
+        private const long ScoreBoundary = 1_00_00_00_00_00;
+        
         private readonly Card[] _cards;
 
         public Hand(List<Card> cards)
         {
-            _cards = cards.OrderBy(c => c.Value).ToArray();
+            _cards = cards.OrderByDescending(c => c.Value).ToArray();
         }
 
-        public int Score()
+        public long Score()
         {
             if (ConsecutiveSameSuite())
             {
                 if (_cards[0].Value == Value.Ten)
                 {
-                    return 900;
+                    return ScoreBoundary * 10;
                 }
 
-                return 800 + (int) _cards[4].Value;
+                return ScoreBoundary * 9 + CardValues();
             }
 
             var matchCounts = CountMatches();
 
             if (matchCounts[0] == 4)
             {
-                return 700 + 20 * (int) _cards[0].Value + (int) _cards[4].Value;
+                return ScoreBoundary * 8 + 100 * (int) _cards[0].Value + (int) _cards[4].Value;
             }
 
             if (matchCounts[1] == 4)
             {
-                return 700 + 20 * (int) _cards[1].Value + (int) _cards[0].Value;
+                return ScoreBoundary * 8 + 100 * (int) _cards[1].Value + (int) _cards[0].Value;
             }
 
             if (matchCounts[0] == 3 && matchCounts[1] == 2)
             {
-                return 600 + 20 * (int) _cards[0].Value + (int) _cards[3].Value;
+                return ScoreBoundary * 7 + 100 * (int) _cards[0].Value + (int) _cards[3].Value;
             }
             
             if (matchCounts[1] == 2 && matchCounts[0] == 3)
             {
-                return 600 + 20 * (int) _cards[3].Value + (int) _cards[0].Value;
+                return ScoreBoundary * 7 + 100 * (int) _cards[3].Value + (int) _cards[0].Value;
             }
 
-            return 0;
+            if (SameSuit())
+            {
+                return ScoreBoundary * 6 + CardValues();
+            }
+
+            if (Consecutive())
+            {
+                return ScoreBoundary * 5 + CardValues();
+            }
+
+            if (matchCounts[0] == 3 && matchCounts[1] == 1)
+            {
+                return ScoreBoundary * 4 + 100 * (int) _cards[3].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[1] == 3 && matchCounts[0] == 1)
+            {
+                return ScoreBoundary * 4 + 100 * (int) _cards[0].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[2] == 3 && matchCounts[0] == 1)
+            {
+                return ScoreBoundary * 4 + 100 * (int) _cards[0].Value + (int) _cards[1].Value;
+            }
+
+            if (matchCounts[0] == 2 && matchCounts[1] == 2)
+            {
+                return ScoreBoundary * 3 + 10_000 * (int) _cards[0].Value + 100 * (int) _cards[2].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[0] == 2 && matchCounts[2] == 2)
+            {
+                return ScoreBoundary * 3 + 10_000 * (int) _cards[0].Value + 100 * (int) _cards[3].Value + (int) _cards[2].Value;
+            }
+
+            if (matchCounts[1] == 2 && matchCounts[2] == 2)
+            {
+                return ScoreBoundary * 3 + 10_000 * (int) _cards[1].Value + 100 * (int) _cards[3].Value + (int) _cards[0].Value;
+            }
+
+            if (matchCounts[0] == 2 && matchCounts[1] == 1 && matchCounts[2] == 1 && matchCounts[3] == 1)
+            {
+                return ScoreBoundary * 2 + 1_000_000 * (int) _cards[0].Value + 10_000 * (int) _cards[2].Value + 100 * (int) _cards[3].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[1] == 2 && matchCounts[0] == 1 && matchCounts[2] == 1 && matchCounts[3] == 1)
+            {
+                return ScoreBoundary * 2 + 1_000_000 * (int) _cards[1].Value + 10_000 * (int) _cards[0].Value + 100 * (int) _cards[3].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[2] == 2 && matchCounts[0] == 1 && matchCounts[1] == 1 && matchCounts[3] == 1)
+            {
+                return ScoreBoundary * 2 + 1_000_000 * (int) _cards[2].Value + 10_000 * (int) _cards[0].Value + 100 * (int) _cards[1].Value + (int) _cards[4].Value;
+            }
+
+            if (matchCounts[3] == 2 && matchCounts[0] == 1 && matchCounts[1] == 1 && matchCounts[2] == 1)
+            {
+                return ScoreBoundary * 2 + 1_000_000 * (int) _cards[3].Value + 10_000 * (int) _cards[0].Value + 100 * (int) _cards[1].Value + (int) _cards[2].Value;
+            }
+
+            return CardValues();
+        }
+
+        private long CardValues()
+        {
+            var values = 0L;
+            
+            var multiplier = ScoreBoundary / 100;
+
+            for (var i = 0; i < 5; i++)
+            {
+                values += multiplier * (long) _cards[i].Value;
+
+                multiplier /= 100;
+            }
+
+            return values;
         }
 
         private List<int> CountMatches()
@@ -130,6 +208,40 @@ public class Puzzle0054 : Puzzle
             for (var i = 1; i < 5; i++)
             {
                 if (_cards[i].Value != current.Value + 1 || _cards[i].Suite != current.Suite)
+                {
+                    return false;
+                }
+
+                current = _cards[i];
+            }
+
+            return true;
+        }
+
+        private bool Consecutive()
+        {
+            var current = _cards[0];
+            
+            for (var i = 1; i < 5; i++)
+            {
+                if (_cards[i].Value != current.Value + 1)
+                {
+                    return false;
+                }
+
+                current = _cards[i];
+            }
+
+            return true;
+        }
+
+        private bool SameSuit()
+        {
+            var current = _cards[0];
+            
+            for (var i = 1; i < 5; i++)
+            {
+                if (_cards[i].Suite != current.Suite)
                 {
                     return false;
                 }
