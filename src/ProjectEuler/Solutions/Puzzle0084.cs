@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
-    private const int DiceSides = 6;
+    private const int DiceSides = 4;
 
     private const int BoardLength = 40;
     
@@ -69,6 +69,8 @@ public class Puzzle0084 : Puzzle
         int roll2;
 
         var rolls = 1;
+
+        var reevaluate = false;
         
         do
         {
@@ -93,32 +95,25 @@ public class Puzzle0084 : Puzzle
 
             var turnOver = false;
 
-            var reevaluate = true;
-
-            while (reevaluate)
+            if (SpecialSquares.TryGetValue(_position, out var square))
             {
-                reevaluate = false;
-                
-                if (SpecialSquares.TryGetValue(_position, out var square))
+                switch (square)
                 {
-                    switch (square)
-                    {
-                        case "GJ":
-                            SetPosition("JL");
-                            turnOver = true;
+                    case "GJ":
+                        SetPosition("JL");
+                        turnOver = true;
 
-                            break;
+                        break;
 
-                        case "CC":
-                            (turnOver, reevaluate) = PickCard(_chestCards, ref _chestCard);
+                    case "CC":
+                        (turnOver, reevaluate) = PickCard(_chestCards, ref _chestCard);
 
-                            break;
+                        break;
 
-                        case "CH":
-                            (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
+                    case "CH":
+                        (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
 
-                            break;
-                    }
+                        break;
                 }
 
                 _squareLandings[_position]++;
@@ -131,7 +126,7 @@ public class Puzzle0084 : Puzzle
 
             rolls++;
 
-        } while (roll1 == roll2);
+        } while (roll1 == roll2 || reevaluate);
     }
 
     private (bool TurnOver, bool Reevaluate) PickCard(string[] cards, ref int card)
