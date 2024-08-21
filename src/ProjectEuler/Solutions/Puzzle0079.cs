@@ -1,3 +1,4 @@
+using System.Text;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -30,6 +31,13 @@ public class Puzzle0079 : Puzzle
             }
         }
 
-        return "";
+        var passcode = new StringBuilder();
+        
+        while (pointers.Count > 0)
+        {
+            
+        }
+
+        return int.Parse(passcode.ToString()).ToString("N0");
     }
 }
