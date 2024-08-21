@@ -72,6 +72,9 @@ public class Puzzle0084 : Puzzle
         
         do
         {
+            roll1 = _rng.Next(DiceSides) + 1;
+            roll2 = _rng.Next(DiceSides) + 1;
+
             if (rolls == 3)
             {
                 SetPosition("JL");
@@ -80,9 +83,6 @@ public class Puzzle0084 : Puzzle
 
                 break;
             }
-
-            roll1 = _rng.Next(DiceSides) + 1;
-            roll2 = _rng.Next(DiceSides) + 1;
 
             _position += roll1 + roll2;
 
