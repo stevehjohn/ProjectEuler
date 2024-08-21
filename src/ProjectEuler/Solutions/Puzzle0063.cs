@@ -1,3 +1,4 @@
+using System.Globalization;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -16,7 +17,7 @@ public class Puzzle0063 : Puzzle
 
             while (true)
             {
-                if (power == ((int) Math.Pow(i, power)).ToString().Length)
+                if (power == ((decimal) Math.Pow(i, power)).ToString(CultureInfo.InvariantCulture).Length)
                 {
                     count++;
                 }
