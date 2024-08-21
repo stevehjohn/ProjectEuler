@@ -8,9 +8,9 @@ public class Puzzle0084 : Puzzle
 {
     private const int DiceSides = 6;
     
-    private int[] _squareLandings = new int[40];
+    private readonly int[] _squareLandings = new int[40];
 
-    private static readonly Dictionary<int, string> _specialSqaures = new()
+    private static readonly Dictionary<int, string> SpecialSqaures = new()
     {
         { 0, "GO" },
         { 2, "CC" },
@@ -84,7 +84,7 @@ public class Puzzle0084 : Puzzle
 
             var turnOver = false;
             
-            if (_specialSqaures.TryGetValue(_position, out var square))
+            if (SpecialSqaures.TryGetValue(_position, out var square))
             {
                 switch (square)
                 {
@@ -95,26 +95,12 @@ public class Puzzle0084 : Puzzle
                         break;
                     
                     case "CC:":
-                        turnOver = PickCard(_chestCards);
-
-                        _chestCard++;
-                        
-                        if (_chestCard >= _chestCards.Length)
-                        {
-                            _chestCard = 0;
-                        }
+                        turnOver = PickCard(_chestCards, ref _chestCard);
 
                         break;
                     
                     case "CH":
-                        turnOver = PickCard(_chanceCards);
-
-                        _chanceCard++;
-                        
-                        if (_chanceCard >= _chanceCards.Length)
-                        {
-                            _chanceCard = 0;
-                        }
+                        turnOver = PickCard(_chanceCards, ref _chanceCard);
                         
                         break;
                 }
@@ -132,14 +118,37 @@ public class Puzzle0084 : Puzzle
         _squareLandings[_position]++;
     }
 
-    private bool PickCard(string[] chestCards)
+    private bool PickCard(string[] cards, ref int card)
     {
-        throw new NotImplementedException();
+        var turnOver = false;
+
+        switch (cards[card])
+        {
+            case "JL":
+                SetPosition("JL");
+                turnOver = true;
+                
+                break;
+            
+            case "GO":
+                SetPosition("GO");
+                
+                break;
+        }
+        
+        card++;
+
+        if (card >= cards.Length)
+        {
+            card = 0;
+        }
+
+        return turnOver;
     }
 
     private void SetPosition(string position)
     {
-        _position = _specialSqaures.Single(s => s.Value == position).Key;
+        _position = SpecialSqaures.Single(s => s.Value == position).Key;
     }
 
     private void InitialiseGame()
