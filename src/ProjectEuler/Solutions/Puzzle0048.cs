@@ -13,6 +13,8 @@ public class Puzzle0048 : Puzzle
         for (var i = 1; i <= 1_000; i++)
         {
             result += ModPow(i, i, 10_000_000_000);
+
+            result %= 10_000_000_000;
         }
 
         return result.ToString("N0");
@@ -29,7 +31,8 @@ public class Puzzle0048 : Puzzle
                 r = r * b % m;
             }
 
-            b = (b * b) % m;
+            b = b * b % m;
+            
             e >>= 1;
         }
 
