@@ -10,7 +10,7 @@ public class Puzzle0043 : Puzzle
     private static readonly int[] Primes = { 2, 3, 5, 7, 11, 13, 17 };
     public override string GetAnswer()
     {
-        var digits = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
         var permutations = digits.GetPermutations();
 
@@ -18,7 +18,7 @@ public class Puzzle0043 : Puzzle
         
         foreach (var permutation in permutations)
         {
-            var number = new string(permutation.Select(d => (char) ('0' + d)).ToArray());
+            var number = new string(permutation);
             
             if (DigitsDivisibleByPrimes(number))
             {
