@@ -6,6 +6,8 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
+    private const int DiceSides = 6;
+    
     private int[] _squareLandings = new int[40];
 
     private static readonly Dictionary<int, string> _specialSqaures = new()
@@ -34,7 +36,13 @@ public class Puzzle0084 : Puzzle
 
     private string[] _chanceCards;
 
+    private int _chestCard;
+
+    private int _chanceCard;
+
     private readonly Random _rng = new();
+
+    private int _position;
     
     public override string GetAnswer()
     {
@@ -43,11 +51,44 @@ public class Puzzle0084 : Puzzle
         throw new NotImplementedException();
     }
 
+    private void PlayRound()
+    {
+        int roll1;
+        int roll2;
+        
+        do
+        {
+            roll1 = _rng.Next(DiceSides) + 1;
+            roll2 = _rng.Next(DiceSides) + 1;
+
+            _position += roll1 + roll2;
+
+            if (_position > 39)
+            {
+                _position -= 39;
+            }
+
+            if (_specialSqaures.TryGetValue(_position, out var sqaure))
+            {
+                switch (sqaure)
+                {
+                    case "JL":
+                        
+                }
+            }
+
+        } while (roll1 == roll2);
+    }
+    
     private void InitialiseGame()
     {
         _chestCards = new string[16];
 
         _chanceCards = new string[16];
+
+        _chanceCard = 0;
+
+        _chanceCard = 0;
         
         PlaceCard(_chestCards, "GO");   
         PlaceCard(_chestCards, "JL");
@@ -62,6 +103,8 @@ public class Puzzle0084 : Puzzle
         PlaceCard(_chanceCards, "NR");
         PlaceCard(_chanceCards, "NU");
         PlaceCard(_chanceCards, "B3");
+
+        _position = 0;
     }
 
     private void PlaceCard(string[] set, string card)
