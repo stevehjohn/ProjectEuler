@@ -18,7 +18,7 @@ public class Puzzle0043 : Puzzle
         
         foreach (var permutation in permutations)
         {
-            if ((permutation[3] - '0') % 2 != 0 || permutation[5] != '5')
+            if ((permutation[3] - '0') % 2 != 0 || permutation[4] is not ('3' or '9') || permutation[5] != '5')
             {
                 continue;
             }
