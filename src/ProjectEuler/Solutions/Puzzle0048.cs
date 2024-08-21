@@ -20,7 +20,7 @@ public class Puzzle0048 : Puzzle
         return result.ToString("N0");
     }
 
-    private long ModPow(long b, long e, long m)
+    private static long ModPow(long b, long e, long m)
     {
         var r = 1L;
 
