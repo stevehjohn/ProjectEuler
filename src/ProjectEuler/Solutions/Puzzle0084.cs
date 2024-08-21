@@ -67,6 +67,9 @@ public class Puzzle0084 : Puzzle
         {
             if (rolls == 3)
             {
+                SetPosition("JL");
+                
+                break;
             }
 
             roll1 = _rng.Next(DiceSides) + 1;
@@ -101,6 +104,8 @@ public class Puzzle0084 : Puzzle
             rolls++;
 
         } while (roll1 == roll2);
+
+        _squareLandings[_position]++;
     }
 
     private void SetPosition(string position)
