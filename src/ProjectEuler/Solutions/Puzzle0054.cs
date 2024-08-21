@@ -95,6 +95,16 @@ public class Puzzle0054 : Puzzle
                 return 700 + 20 * (int) _cards[1].Value + (int) _cards[0].Value;
             }
 
+            if (matchCounts[0] == 3 && matchCounts[1] == 2)
+            {
+                return 600 + 20 * (int) _cards[0].Value + (int) _cards[3].Value;
+            }
+            
+            if (matchCounts[1] == 2 && matchCounts[0] == 3)
+            {
+                return 600 + 20 * (int) _cards[3].Value + (int) _cards[0].Value;
+            }
+
             return 0;
         }
 
