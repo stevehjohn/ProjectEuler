@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
-    private const int DiceSides = 4;
+    private const int DiceSides = 6;
 
     private const int BoardLength = 40;
     
@@ -55,9 +55,9 @@ public class Puzzle0084 : Puzzle
             PlayRound();
         }
 
-        var ordered = _squareLandings.Select((value, index) => new { Value = value, Index = index }).OrderByDescending(i => i.Value).ToList(); 
+        var ordered = _squareLandings.Select((value, index) => new { Value = value, Index = index }).OrderByDescending(i => i.Value).ToList();
 
-        throw new NotImplementedException();
+        return $"{ordered[0].Index:00}{ordered[1].Index:00}{ordered[2].Index:00}";
     }
 
     private void PlayRound()
