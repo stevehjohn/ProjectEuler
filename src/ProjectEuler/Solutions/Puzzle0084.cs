@@ -130,6 +130,8 @@ public class Puzzle0084 : Puzzle
     private bool PickCard(string[] cards, ref int card)
     {
         var turnOver = false;
+        
+        Console.WriteLine(cards[card]);
 
         switch (cards[card])
         {
