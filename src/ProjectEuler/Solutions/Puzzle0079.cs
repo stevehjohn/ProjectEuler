@@ -35,7 +35,27 @@ public class Puzzle0079 : Puzzle
         
         while (pointers.Count > 0)
         {
+            var removeKey = '\0';
             
+            foreach (var pointer in pointers)
+            {
+                if (pointer.Value.Count == 0)
+                {
+                    passcode.Append(pointer.Key);
+
+                    removeKey = pointer.Key;
+                }
+            }
+
+            pointers.Remove(removeKey);
+
+            foreach (var pointer in pointers)
+            {
+                if (pointer.Value.Contains(removeKey))
+                {
+                    pointer.Value.Remove(removeKey);
+                }
+            }
         }
 
         return int.Parse(passcode.ToString()).ToString("N0");
