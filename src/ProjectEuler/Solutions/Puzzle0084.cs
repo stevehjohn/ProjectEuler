@@ -131,8 +131,6 @@ public class Puzzle0084 : Puzzle
     {
         var turnOver = false;
         
-        Console.WriteLine(cards[card]);
-
         switch (cards[card])
         {
             case "JL":
@@ -178,7 +176,7 @@ public class Puzzle0084 : Puzzle
             
             case "B3":
                 _position -= 3;
-
+                
                 if (_position < 0)
                 {
                     _position += BoardLength;
