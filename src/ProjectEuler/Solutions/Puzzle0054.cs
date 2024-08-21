@@ -12,13 +12,13 @@ public class Puzzle0054 : Puzzle
         LoadInput();
 
         var player1Wins = 0;
-        
+
         foreach (var line in Input)
         {
             var player1 = ParseHand(line[..14]);
 
             var player2 = ParseHand(line[15..]);
-
+            
             if (player1.Score() > player2.Score())
             {
                 player1Wins++;
@@ -207,7 +207,7 @@ public class Puzzle0054 : Puzzle
             
             for (var i = 1; i < 5; i++)
             {
-                if (_cards[i].Value != current.Value + 1 || _cards[i].Suite != current.Suite)
+                if (_cards[i].Value != current.Value - 1 || _cards[i].Suite != current.Suite)
                 {
                     return false;
                 }
@@ -224,7 +224,7 @@ public class Puzzle0054 : Puzzle
             
             for (var i = 1; i < 5; i++)
             {
-                if (_cards[i].Value != current.Value + 1)
+                if (_cards[i].Value != current.Value - 1)
                 {
                     return false;
                 }
