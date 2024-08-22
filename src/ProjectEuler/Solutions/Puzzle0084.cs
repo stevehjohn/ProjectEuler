@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
-    private const int DiceSides = 4;
+    private const int DiceSides = 6;
 
     private const int BoardLength = 40;
     
@@ -114,14 +114,10 @@ public class Puzzle0084 : Puzzle
                         (turnOver, reevaluate) = PickCard(_chanceCards, ref _chanceCard);
 
                         break;
-                    
-                    default:
-                        _squareLandings[_position]++;
-                        
-                        break;
-
                 }
             }
+
+            _squareLandings[_position]++;
 
             if (turnOver)
             {
@@ -190,8 +186,6 @@ public class Puzzle0084 : Puzzle
                     _position += BoardLength;
                 }
 
-                _squareLandings[_position]++;
-
                 reevaluate = true;
                 
                 break;
@@ -218,15 +212,11 @@ public class Puzzle0084 : Puzzle
                 _position -= BoardLength;
             }
         }
-
-        _squareLandings[_position]++;
     }
 
     private void SetPosition(string position)
     {
         _position = SpecialSquares.Single(s => s.Value == position).Key;
-
-        _squareLandings[_position]++;
     }
 
     private void InitialiseGame()
