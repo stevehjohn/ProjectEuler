@@ -77,7 +77,7 @@ public class Puzzle0084 : Puzzle
             roll1 = _rng.Next(DiceSides) + 1;
             roll2 = _rng.Next(DiceSides) + 1;
 
-            if (rolls == 3)
+            if (rolls == 3 && roll1 == roll2)
             {
                 SetPosition("JL");
                 
