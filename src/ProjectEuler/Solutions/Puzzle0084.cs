@@ -115,9 +115,9 @@ public class Puzzle0084 : Puzzle
 
                         break;
                 }
-
-                _squareLandings[_position]++;
             }
+
+            _squareLandings[_position]++;
 
             if (turnOver)
             {
