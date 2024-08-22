@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0084 : Puzzle
 {
-    private const int DiceSides = 6;
+    private const int DiceSides = 4;
 
     private const int BoardLength = 40;
     
@@ -115,9 +115,9 @@ public class Puzzle0084 : Puzzle
 
                         break;
                 }
-            }
 
-            _squareLandings[_position]++;
+                _squareLandings[_position]++;
+            }
 
             if (turnOver)
             {
