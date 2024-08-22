@@ -31,15 +31,15 @@ public class Puzzle0058 : Puzzle
                 }
             }
 
-            increment += 2;
-
             if (increment > 6)
             {
-                if (primes < total / 10)
+                if (primes < total / 10d)
                 {
                     return (increment + 1).ToString("N0");
                 }
             }
+
+            increment += 2;
         }
     }
 }
