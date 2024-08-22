@@ -1,3 +1,4 @@
+using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 
@@ -8,7 +9,7 @@ public class Puzzle0065 : Puzzle
 {
     public override string GetAnswer()
     {
-        var fractions = new List<long>();
+        var fractions = new List<BigInteger> { 2 };
 
         var i = 1;
 
@@ -23,15 +24,15 @@ public class Puzzle0065 : Puzzle
             i++;
         }
 
-        var numerator = 1L;
+        var numerator = new BigInteger(1);
 
         var denominator = fractions.Last();
         
         fractions.RemoveAt(fractions.Count - 1);
 
-        foreach (var fraction in fractions)
+        for (i = fractions.Count - 1; i >= 0; i--)
         {
-            (denominator, numerator) = (denominator * fraction + numerator, denominator);
+            (denominator, numerator) = (denominator * fractions[i] + numerator, denominator);
         }
 
         var denominatorString = denominator.ToString();
