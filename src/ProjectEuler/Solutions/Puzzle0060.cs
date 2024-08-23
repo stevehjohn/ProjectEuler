@@ -7,18 +7,39 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0060 : Puzzle
 {
+    private List<(long Left, long Right)> _concatenationSet;
+    
     public override string GetAnswer()
     {
         var primes = Maths.GetPrimes(10_000);
 
-        var concatenationSet = GetPrimesThatConcatenateToAPrime(primes);
+        GetPrimesThatConcatenateToAPrime(primes);
+
+        foreach (var item in _concatenationSet)
+        {
+            WalkChain(item.Right);
+        }
         
         throw new NotImplementedException();
     }
 
-    private List<(long First, long Second)> GetPrimesThatConcatenateToAPrime(List<long> primes)
+    private void WalkChain(long left, int depth = 0)
     {
-        var result = new List<(long, long)>();
+        if (depth == 4)
+        {
+        }
+
+        var items = _concatenationSet.Where(i => i.Left == left);
+
+        foreach (var item in items)
+        {
+            WalkChain(item.Right, depth + 1);
+        }
+    }
+
+    private void GetPrimesThatConcatenateToAPrime(List<long> primes)
+    {
+        _concatenationSet = new List<(long, long)>();
         
         for (var l = 0; l < primes.Count; l++)
         {
@@ -32,11 +53,9 @@ public class Puzzle0060 : Puzzle
 
                 if (Maths.IsPrime(concatenated))
                 {
-                    result.Add((left, right));
+                    _concatenationSet.Add((left, right));
                 }
             }
         }
-
-        return result;
     }
 }
