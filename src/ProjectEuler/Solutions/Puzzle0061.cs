@@ -19,6 +19,7 @@ public class Puzzle0061 : Puzzle
 
             if (chain != null)
             {
+                return chain.Sum(i => i.Number).ToString("N0");
             }
         }
 
@@ -27,57 +28,40 @@ public class Puzzle0061 : Puzzle
     
     private List<(long Number, NumberType Shape)> WalkChain(List<(long Number, NumberType Shape)> chain)
     {
-        if (chain.Count >= 5)
-        {
-            Console.WriteLine(string.Join(" ", chain.Select(c => $"{c.Number:0000} {c.Shape.ToString()[..3]}")));
-        }
-
         if (chain.Count == 6)
         {
-            return chain;
+            Console.WriteLine(string.Join(' ', chain.Select(n => n.Number)));
+            
+            if (chain.Last().Number % 100 == chain.First().Number / 100)
+            {
+                return chain;
+            }
         }
+        
+        var end = chain.Last().Number % 100;
 
-        if (chain.All(i => i.Shape != NumberType.Heptagonal))
+        foreach (var shape in Enum.GetValues<NumberType>())
         {
-            WalkChain(chain, NumberType.Heptagonal);
-        }
+            if (chain.All(i => i.Shape != shape))
+            {
+                foreach (var number in _numbers[shape])
+                {
+                    if (number / 100 == end)
+                    {
+                        var result = WalkChain([..chain, (number, shape)]);
 
-        if (chain.All(i => i.Shape != NumberType.Hexagonal))
-        {
-            WalkChain(chain, NumberType.Hexagonal);
-        }
-
-        if (chain.All(i => i.Shape != NumberType.Pentagonal))
-        {
-            WalkChain(chain, NumberType.Pentagonal);
-        }
-
-        if (chain.All(i => i.Shape != NumberType.Square))
-        {
-            WalkChain(chain, NumberType.Square);
-        }
-
-        if (chain.All(i => i.Shape != NumberType.Triangle))
-        {
-            WalkChain(chain, NumberType.Triangle);
+                        if (result != null)
+                        {
+                            return chain;
+                        }
+                    }
+                }
+            }
         }
         
         return null;
     }
-
-    private void WalkChain(List<(long Number, NumberType Shape)> chain, NumberType shape)
-    {
-        var end = chain.Last().Number % 100;
-        
-        foreach (var number in _numbers[shape])
-        {
-            if (number / 100 == end)
-            {
-                WalkChain([..chain, (number, shape)]);
-            }
-        }
-    }
-
+    
     private void GenerateShapedNumbers()
     {
         _numbers.Clear();
