@@ -13,7 +13,7 @@ public class Puzzle0060 : Puzzle
     
     public override string GetAnswer()
     {
-        var primes = Maths.GetPrimes(10_000);
+        var primes = Maths.GetPrimes(9_000);
 
         GetPrimesThatConcatenateToAPrime(primes);
 
