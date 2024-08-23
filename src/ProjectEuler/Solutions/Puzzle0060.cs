@@ -86,16 +86,17 @@ public class Puzzle0060 : Puzzle
 
     private static bool ConcatenatesToPrime(long left, long right)
     {
-        var concatenated = long.Parse($"{left}{right}");
+        var rightDigits = (long) Math.Pow(10, Math.Floor(Math.Log10(right) + 1));
+        
+        var concatenated = left * rightDigits + right;
 
         if (Maths.IsPrime(concatenated))
         {
-            concatenated = long.Parse($"{right}{left}");
-                    
-            if (Maths.IsPrime(concatenated))
-            {
-                return true;
-            }
+            var leftDigits = (long) Math.Pow(10, Math.Floor(Math.Log10(left) + 1));
+            
+            concatenated = right * leftDigits + left;
+
+            return Maths.IsPrime(concatenated);
         }
 
         return false;
