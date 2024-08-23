@@ -14,4 +14,19 @@ public static class StringExtensions
 
         return true;
     }
+
+    public static int CountCharacters(this string text, char character)
+    {
+        var count = 0;
+        
+        for (var i = 0; i < text.Length; i++)
+        {
+            if (text[i] == character)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }
