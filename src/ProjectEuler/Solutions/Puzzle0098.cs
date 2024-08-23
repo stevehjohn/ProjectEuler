@@ -9,16 +9,16 @@ public class Puzzle0098 : Puzzle
     public override string GetAnswer()
     {
         LoadInput();
-
+        
         var words = Input[0].Split(',').Select(l => l.Trim('"')).ToList();
 
         var anagrams = FindAnagrams(words).OrderBy(a => a.Left.Length).ToList();
-
+        
         var allSquares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
 
         var lastLength = 0;
 
-        List<string> relevantSquares = null;
+        HashSet<string> relevantSquares = null;
 
         var max = 0L;
         
@@ -28,8 +28,8 @@ public class Puzzle0098 : Puzzle
             
             if (length != lastLength)
             {
-                relevantSquares = allSquares.Where(s => s.Length == length).Select(s => s.Number).ToList();
-
+                relevantSquares = allSquares.Where(s => s.Length == length).Select(s => s.Number).ToHashSet();
+                
                 lastLength = length;
             }
 
@@ -39,7 +39,7 @@ public class Puzzle0098 : Puzzle
         return max.ToString("N0");
     }
 
-    private static long FindMaxMapping((string Left, string Right) anagram, List<string> relevantSquares, int length)
+    private static long FindMaxMapping((string Left, string Right) anagram, HashSet<string> relevantSquares, int length)
     {
         var mapping = new int[26];
 
