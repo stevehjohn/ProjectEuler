@@ -7,7 +7,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0060 : Puzzle
 {
-    private const int ChainLength = 4;
+    private const int ChainLength = 5;
     
     private List<(long Left, long Right)> _concatenationSet;
     
@@ -21,29 +21,14 @@ public class Puzzle0060 : Puzzle
         
         foreach (var item in _concatenationSet)
         {
-            Console.WriteLine($"Checking {i}/{_concatenationSet.Count}");
-
             i++;
             
             var chain = WalkChain([item.Left, item.Right]);
 
             if (chain != null)
             {
-                for (var l = 0; l < 5; l++)
-                {
-                    for (var r = l; r < 5; r++)
-                    {
-                        if (! ConcatenatesToPrime(chain[l], chain[r]))
-                        {
-                            goto next;
-                        }
-                    }
-                }
-
                 return chain.Sum().ToString("N0");
             }
-            
-            next: ;
         }
 
         return "Unknown";
@@ -56,17 +41,19 @@ public class Puzzle0060 : Puzzle
             return chain;
         }
 
-        var items = _concatenationSet.Where(i => i.Left == chain.Last());
+        var last = chain.Last();
+        
+        var items = _concatenationSet.Where(i => i.Left == last);
 
         foreach (var right in items)
         {
-            // for (var l = 0; l < chain.Count; l++)
-            // {
-            //     if (! ConcatenatesToPrime(chain[l], right.Left))
-            //     {
-            //         goto next;
-            //     }
-            // }
+            for (var i = 0; i < chain.Count - 1; i++)
+            {
+                if (! ConcatenatesToPrime(chain[i], right.Right))
+                {
+                    goto next;
+                }
+            }
 
             return WalkChain([..chain, right.Right]);
             
