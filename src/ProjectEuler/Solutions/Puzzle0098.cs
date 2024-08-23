@@ -22,7 +22,7 @@ public class Puzzle0098 : Puzzle
 
         var max = 0L;
         
-        foreach (var anagram in anagrams)
+        Parallel.ForEach(anagrams, anagram =>
         {
             var length = anagram.Left.Length;
             
@@ -34,7 +34,7 @@ public class Puzzle0098 : Puzzle
             }
 
             max = Math.Max(FindMaxMapping(anagram, relevantSquares, length), max);
-        }
+        });
 
         return max.ToString("N0");
     }
