@@ -29,16 +29,16 @@ public class Puzzle0060 : Puzzle
 
             if (chain != null)
             {
-                // for (var l = 0; l < 5; l++)
-                // {
-                //     for (var r = l; r < 5; r++)
-                //     {
-                //         if (! ConcatenatesToPrime(chain[l], chain[r]))
-                //         {
-                //             goto next;
-                //         }
-                //     }
-                // }
+                for (var l = 0; l < 5; l++)
+                {
+                    for (var r = l; r < 5; r++)
+                    {
+                        if (! ConcatenatesToPrime(chain[l], chain[r]))
+                        {
+                            goto next;
+                        }
+                    }
+                }
 
                 return chain.Sum().ToString("N0");
             }
@@ -60,13 +60,13 @@ public class Puzzle0060 : Puzzle
 
         foreach (var right in items)
         {
-            for (var l = 0; l < chain.Count; l++)
-            {
-                if (! ConcatenatesToPrime(chain[l], right.Left))
-                {
-                    goto next;
-                }
-            }
+            // for (var l = 0; l < chain.Count; l++)
+            // {
+            //     if (! ConcatenatesToPrime(chain[l], right.Left))
+            //     {
+            //         goto next;
+            //     }
+            // }
 
             return WalkChain([..chain, right.Right]);
             
