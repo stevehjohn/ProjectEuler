@@ -67,21 +67,24 @@ public class Puzzle0060 : Puzzle
     private void GetPrimesThatConcatenateToAPrime(List<long> primes)
     {
         _concatenationSet = new List<(long, long)>();
-        
-        for (var l = 0; l < primes.Count; l++)
+
+        Parallel.For(0, primes.Count, l =>
         {
             var left = primes[l];
-            
+
             for (var r = l + 1; r < primes.Count; r++)
             {
                 var right = primes[r];
 
                 if (ConcatenatesToPrime(left, right))
                 {
-                    _concatenationSet.Add((left, right));
+                    lock (_concatenationSet)
+                    {
+                        _concatenationSet.Add((left, right));
+                    }
                 }
             }
-        }
+        });
     }
 
     private static bool ConcatenatesToPrime(long left, long right)
