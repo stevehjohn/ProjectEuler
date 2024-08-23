@@ -14,7 +14,34 @@ public class Puzzle0098 : Puzzle
 
         var anagrams = FindAnagrams(words);
 
+        var squares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
+        
+        
+
         return "0";
+    }
+
+    private List<(long Number, int Length)> GetSquares(long max)
+    {
+        var squares = new List<(long Number, int Length)>();
+
+        var i = 1;
+        
+        while (true)
+        {
+            var square = i * i;
+
+            if (square > max)
+            {
+                break;
+            }
+            
+            squares.Add((square, (int) Math.Log10(square) + 1));
+
+            i++;
+        }
+
+        return squares;
     }
 
     private static List<(string Left, string Right)> FindAnagrams(List<string> words)
