@@ -40,6 +40,8 @@ public class Puzzle0061 : Puzzle
         {
             var number = Maths.GenerateShapedNumber(origin, shape);
 
+            origin++;
+
             if (number < 1_000)
             {
                 continue;
