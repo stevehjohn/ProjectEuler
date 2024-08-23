@@ -17,8 +17,10 @@ public class Puzzle0098 : Puzzle
         var allSquares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
 
         var lastLength = 0;
-        
-        List<long> relevantSquares;
+
+        List<string> relevantSquares = null;
+
+        var max = 0L;
         
         foreach (var anagram in anagrams)
         {
@@ -30,14 +32,47 @@ public class Puzzle0098 : Puzzle
 
                 lastLength = length;
             }
+
+            max = Math.Max(FindMaxMapping(anagram, relevantSquares, length), max);
         }
 
-        return "0";
+        return max.ToString("N0");
     }
 
-    private static List<(long Number, int Length)> GetSquares(long max)
+    private static long FindMaxMapping((string Left, string Right) anagram, List<string> relevantSquares, int length)
     {
-        var squares = new List<(long Number, int Length)>();
+        var mapping = new int[26];
+
+        var right = new char[length];
+
+        var max = 0;
+        
+        foreach (var square in relevantSquares)
+        {
+            for (var i = 0; i < length; i++)
+            {
+                mapping[anagram.Left[i] - 'A'] = square[i] - '0';
+            }
+            
+            for (var i = 0; i < length; i++)
+            {
+                right[i] = (char) (mapping[anagram.Right[i] - 'A'] + '0');
+            }
+
+            var result = int.Parse(new string(right));
+
+            if (relevantSquares.Contains(result.ToString()))
+            {
+                max = result;
+            }
+        }
+
+        return max;
+    }
+
+    private static List<(string Number, int Length)> GetSquares(long max)
+    {
+        var squares = new List<(string Number, int Length)>();
 
         var i = 1;
         
@@ -49,8 +84,10 @@ public class Puzzle0098 : Puzzle
             {
                 break;
             }
+
+            var digits = square.ToString();
             
-            squares.Add((square, (int) Math.Log10(square) + 1));
+            squares.Add((digits, digits.Length));
 
             i++;
         }
