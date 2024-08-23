@@ -43,17 +43,22 @@ public class Puzzle0060 : Puzzle
 
         foreach (var right in items)
         {
+            var pursue = true;
+            
             for (var i = 0; i < chain.Count - 1; i++)
             {
                 if (! ConcatenatesToPrime(chain[i], right.Right))
                 {
-                    goto next;
+                    pursue = false;
+
+                    break;
                 }
             }
 
-            return WalkChain([..chain, right.Right]);
-            
-            next: ;
+            if (pursue)
+            {
+                return WalkChain([..chain, right.Right]);
+            }
         }
 
         return null;
