@@ -59,11 +59,17 @@ public class Puzzle0098 : Puzzle
                 right[i] = (char) (mapping[anagram.Right[i] - 'A'] + '0');
             }
 
-            var result = int.Parse(new string(right));
+            var result = new string(right);
 
-            if (relevantSquares.Contains(result.ToString()))
+            if (result == square)
             {
-                max = result;
+                continue;
+            }
+
+            if (relevantSquares.Contains(result))
+            {
+                Console.WriteLine($"{square} {result}");
+                max = int.Parse(result);
             }
         }
 
