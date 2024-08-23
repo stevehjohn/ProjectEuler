@@ -66,7 +66,7 @@ public class Puzzle0098 : Puzzle
                 continue;
             }
 
-            if (relevantSquares.Contains(result) && result.Distinct().Count()== length)
+            if (relevantSquares.Contains(result) && result.Distinct().Count() == length)
             {
                 max = int.Parse(result);
             }
