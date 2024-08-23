@@ -52,7 +52,7 @@ public class Puzzle0061 : Puzzle
 
                         if (result != null)
                         {
-                            return chain;
+                            return result;
                         }
                     }
                 }
