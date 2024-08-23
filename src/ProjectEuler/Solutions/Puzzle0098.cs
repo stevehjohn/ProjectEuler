@@ -12,7 +12,7 @@ public class Puzzle0098 : Puzzle
 
         var words = Input[0].Split(',').Select(l => l.Trim('"')).ToList();
 
-        var anagrams = FindAnagrams(words);
+        var anagrams = FindAnagrams(words).OrderBy(a => a.Left.Length);
 
         var squares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
         
@@ -21,7 +21,7 @@ public class Puzzle0098 : Puzzle
         return "0";
     }
 
-    private List<(long Number, int Length)> GetSquares(long max)
+    private static List<(long Number, int Length)> GetSquares(long max)
     {
         var squares = new List<(long Number, int Length)>();
 
@@ -51,6 +51,8 @@ public class Puzzle0098 : Puzzle
         var leftFrequencies = new int[26];
         
         var rightFrequencies = new int[26];
+
+        var found = new HashSet<string>();
         
         foreach (var left in words)
         {
@@ -90,9 +92,13 @@ public class Puzzle0098 : Puzzle
                     }
                 }
 
-                if (anagrams)
+                if (anagrams && ! found.Contains(left))
                 {
                     result.Add((left, right));
+
+                    found.Add(left);
+
+                    found.Add(right);
                 }
             }
         }
