@@ -35,12 +35,12 @@ public class Puzzle0051 : Puzzle
     private static long CreatesEightPrimesAndRetunsFirst(List<string> strings, long prime)
     {
         var length = prime.ToString().Length;
-
-        var first = long.MaxValue;
         
         foreach (var number in strings)
         {
             var count = 0;
+
+            var first = 0;
             
             for (var i = 0; i <= 9; i++)
             {
@@ -53,7 +53,7 @@ public class Puzzle0051 : Puzzle
 
                 if (Maths.IsPrime(candidate))
                 {
-                    if (candidate < first)
+                    if (first == 0)
                     {
                         first = candidate;
                     }
