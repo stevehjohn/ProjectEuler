@@ -12,11 +12,25 @@ public class Puzzle0098 : Puzzle
 
         var words = Input[0].Split(',').Select(l => l.Trim('"')).ToList();
 
-        var anagrams = FindAnagrams(words).OrderBy(a => a.Left.Length);
+        var anagrams = FindAnagrams(words).OrderBy(a => a.Left.Length).ToList();
 
-        var squares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
+        var allSquares = GetSquares((long) Math.Pow(10, anagrams.Max(a => a.Left.Length)));
+
+        var lastLength = 0;
         
+        List<long> relevantSquares;
         
+        foreach (var anagram in anagrams)
+        {
+            var length = anagram.Left.Length;
+            
+            if (length != lastLength)
+            {
+                relevantSquares = allSquares.Where(s => s.Length == length).Select(s => s.Number).ToList();
+
+                lastLength = length;
+            }
+        }
 
         return "0";
     }
