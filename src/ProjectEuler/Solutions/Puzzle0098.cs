@@ -6,20 +6,18 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0098 : Puzzle
 {
-    private List<string> _words;
-    
     public override string GetAnswer()
     {
         LoadInput();
 
-        _words = Input[0].Split(',').Select(l => l.Trim('"')).ToList();
+        var words = Input[0].Split(',').Select(l => l.Trim('"')).ToList();
 
-        var anagrams = FindAnagrams();
+        var anagrams = FindAnagrams(words);
 
         return "0";
     }
 
-    private List<(string Left, string Right)> FindAnagrams()
+    private static List<(string Left, string Right)> FindAnagrams(List<string> words)
     {
         var result = new List<(string Left, string Right)>();
 
@@ -27,7 +25,7 @@ public class Puzzle0098 : Puzzle
         
         var rightFrequencies = new int[26];
         
-        foreach (var left in _words)
+        foreach (var left in words)
         {
             if (left.Length < 1)
             {
@@ -41,7 +39,7 @@ public class Puzzle0098 : Puzzle
                 leftFrequencies[c - 'A']++;
             }
             
-            foreach (var right in _words.Where(l => l.Length == left.Length))
+            foreach (var right in words.Where(l => l.Length == left.Length))
             {
                 Array.Clear(rightFrequencies);
                 
