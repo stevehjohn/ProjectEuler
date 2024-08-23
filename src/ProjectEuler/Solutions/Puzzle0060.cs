@@ -24,7 +24,7 @@ public class Puzzle0060 : Puzzle
         {
             var left = primes[l];
             
-            for (var r = l + 1; l < primes.Count; r++)
+            for (var r = l + 1; r < primes.Count; r++)
             {
                 var right = primes[r];
                 
