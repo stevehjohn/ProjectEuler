@@ -15,7 +15,7 @@ public class Puzzle0062 : Puzzle
 
         while (true)
         {
-            var text = new string((number * number * number).ToString().ToCharArray().Order().ToArray());
+            var text = new string($"{number * number * number}".ToCharArray().Order().ToArray());
 
             numbers.Add(text);
 
