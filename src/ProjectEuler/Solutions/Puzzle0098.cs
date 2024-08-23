@@ -68,7 +68,7 @@ public class Puzzle0098 : Puzzle
 
             if (relevantSquares.Contains(result))
             {
-                Console.WriteLine($"{square} {result}");
+                Console.WriteLine($"{square} {result} {anagram.Left} {anagram.Right}");
                 max = int.Parse(result);
             }
         }
