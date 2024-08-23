@@ -15,26 +15,53 @@ public class Puzzle0060 : Puzzle
 
         GetPrimesThatConcatenateToAPrime(primes);
 
+        var i = 1;
+        
         foreach (var item in _concatenationSet)
         {
-            WalkChain(item.Right);
+            Console.WriteLine($"Checking {i}/{_concatenationSet.Count}");
+
+            i++;
+            
+            var chain = WalkChain([item.Right]);
+
+            if (chain != null)
+            {
+                for (var l = 0; l < 5; l++)
+                {
+                    for (var r = l; r < 5; r++)
+                    {
+                        if (! ConcatenatesToPrime(chain[l], chain[r]))
+                        {
+                            goto next;
+                        }
+                    }
+                }
+
+                return "0";
+            }
+            
+            next: ;
         }
-        
-        throw new NotImplementedException();
+
+        return "Unknown";
     }
 
-    private void WalkChain(long left, int depth = 0)
+    private List<long> WalkChain(List<long> chain, int depth = 0)
     {
         if (depth == 4)
         {
+            return chain;
         }
 
-        var items = _concatenationSet.Where(i => i.Left == left);
+        var items = _concatenationSet.Where(i => i.Left == chain.Last());
 
-        foreach (var item in items)
+        foreach (var right in items)
         {
-            WalkChain(item.Right, depth + 1);
+            WalkChain([..chain, right.Right], depth + 1);
         }
+
+        return null;
     }
 
     private void GetPrimesThatConcatenateToAPrime(List<long> primes)
@@ -48,14 +75,29 @@ public class Puzzle0060 : Puzzle
             for (var r = l + 1; r < primes.Count; r++)
             {
                 var right = primes[r];
-                
-                var concatenated = long.Parse($"{left}{right}");
 
-                if (Maths.IsPrime(concatenated))
+                if (ConcatenatesToPrime(left, right))
                 {
                     _concatenationSet.Add((left, right));
                 }
             }
         }
+    }
+
+    private bool ConcatenatesToPrime(long left, long right)
+    {
+        var concatenated = long.Parse($"{left}{right}");
+
+        if (Maths.IsPrime(concatenated))
+        {
+            concatenated = long.Parse($"{right}{left}");
+                    
+            if (Maths.IsPrime(concatenated))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
