@@ -30,8 +30,6 @@ public class Puzzle0061 : Puzzle
     {
         if (chain.Count == 6)
         {
-            Console.WriteLine(string.Join(' ', chain.Select(n => n.Number)));
-            
             if (chain.Last().Number % 100 == chain.First().Number / 100)
             {
                 return chain;
