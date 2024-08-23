@@ -4,6 +4,65 @@ namespace ProjectEuler.Libraries;
 
 public static class Maths
 {
+    public static long GenerateShapedNumber(int origin, NumberType shape)
+    {
+        long multiplier;
+
+        long adjust;
+
+        var result = 0L;
+
+        switch (shape)
+        {
+            case NumberType.Square:
+                result = origin * origin;
+
+                break;
+
+            case NumberType.Triangle:
+            case NumberType.Pentagonal:
+            case NumberType.Heptagonal:
+                multiplier = shape switch
+                {
+                    NumberType.Pentagonal => 3,
+                    NumberType.Heptagonal => 5,
+                    _ => 1
+                };
+
+                adjust = shape switch
+                {
+                    NumberType.Pentagonal => -1,
+                    NumberType.Heptagonal => -3,
+                    _ => 1
+                };
+
+                result = origin * (origin * multiplier + adjust) / 2;
+                
+                break;
+
+            case NumberType.Hexagonal:
+            case NumberType.Octagonal:
+                multiplier = shape switch
+                {
+                    NumberType.Hexagonal => 2,
+                    _ => 3
+                };
+
+                adjust = shape switch
+                {
+                    NumberType.Hexagonal => -1,
+                    _ => -2
+                };
+                
+                result = origin * (origin * multiplier + adjust);
+
+                break;
+
+        }
+
+        return result;
+    }
+
     public static BigInteger Factorial(BigInteger number)
     {
         var result = new BigInteger(1);
