@@ -29,8 +29,6 @@ public class Puzzle0060 : Puzzle
             {
                 return "0";
             }
-            
-            next: ;
         }
 
         return "Unknown";
