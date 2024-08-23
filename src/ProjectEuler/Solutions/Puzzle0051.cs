@@ -21,17 +21,23 @@ public class Puzzle0051 : Puzzle
                 continue;
             }
 
-            if (CreatesEightPrimes(strings))
+            var answer = CreatesEightPrimesAndRetunsFirst(strings, prime); 
+            
+            if (answer > 0)
             {
-                return prime.ToString("N0");
+                return answer.ToString("N0");
             }
         }
 
         return "Unknown";
     }
 
-    private static bool CreatesEightPrimes(List<string> strings)
+    private static long CreatesEightPrimesAndRetunsFirst(List<string> strings, long prime)
     {
+        var length = prime.ToString().Length;
+
+        var first = long.MaxValue;
+        
         foreach (var number in strings)
         {
             var count = 0;
@@ -39,20 +45,30 @@ public class Puzzle0051 : Puzzle
             for (var i = 0; i <= 9; i++)
             {
                 var candidate = int.Parse(number.Replace('*', (char) ('0' + i)));
-                
+
+                if (candidate.ToString().Length < length)
+                {
+                    continue;
+                }
+
                 if (Maths.IsPrime(candidate))
                 {
+                    if (candidate < first)
+                    {
+                        first = candidate;
+                    }
+
                     count++;
                 }
             }
             
             if (count == 8)
             {
-                return true;
+                return first;
             }
         }
 
-        return false;
+        return 0;
     }
 
     private static List<string> GenerateWildcardStrings(long prime)
