@@ -29,20 +29,4 @@ public static class StringExtensions
 
         return count;
     }
-
-    public static int CountOccurrences(this string text, string subString)
-    {
-        var count = 0;
-        
-        var i = 0;
-        
-        while (i < text.Length && (i = text.IndexOf(subString, i, StringComparison.InvariantCulture) + 1) != 0)
-        {
-            i++;
-            
-            count++;
-        }
-        
-        return count;
-    }
 }

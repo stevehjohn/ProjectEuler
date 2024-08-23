@@ -11,17 +11,17 @@ public class Puzzle0062 : Puzzle
     {
         var number = 0L;
 
-        var characters = string.Empty;
+        var numbers = new List<string>();
 
         while (true)
         {
             var text = new string((number * number * number).ToString().ToCharArray().Order().ToArray());
 
-            characters = $"{characters}{text}";
+            numbers.Add(text);
 
-            if (characters.CountOccurrences(text) == 5)
+            if (numbers.Count(n => n == text) == 5)
             {
-                var index = (long) characters.IndexOf(text, StringComparison.InvariantCulture) + 1;
+                var index = (long) numbers.IndexOf(text);
 
                 return (index * index * index).ToString("N0");
             }
