@@ -65,13 +65,11 @@ public class Puzzle0061 : Puzzle
     private void GenerateShapedNumbers()
     {
         _numbers.Clear();
-        
-        GenerateShapedNumbers(NumberType.Triangle);
-        GenerateShapedNumbers(NumberType.Square);
-        GenerateShapedNumbers(NumberType.Pentagonal);
-        GenerateShapedNumbers(NumberType.Hexagonal);
-        GenerateShapedNumbers(NumberType.Heptagonal);
-        GenerateShapedNumbers(NumberType.Octagonal);
+
+        foreach (var shape in Enum.GetValues<NumberType>())
+        {
+            GenerateShapedNumbers(shape);
+        }
     }
 
     private void GenerateShapedNumbers(NumberType shape)
