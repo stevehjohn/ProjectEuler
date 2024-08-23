@@ -23,7 +23,7 @@ public class Puzzle0060 : Puzzle
 
             i++;
             
-            var chain = WalkChain([item.Left]);
+            var chain = WalkChain([item.Left, item.Right]);
 
             if (chain != null)
             {
@@ -47,9 +47,9 @@ public class Puzzle0060 : Puzzle
         return "Unknown";
     }
 
-    private List<long> WalkChain(List<long> chain, int depth = 0)
+    private List<long> WalkChain(List<long> chain)
     {
-        if (depth == 5)
+        if (chain.Count == 5)
         {
             return chain;
         }
@@ -58,7 +58,7 @@ public class Puzzle0060 : Puzzle
 
         foreach (var right in items)
         {
-            WalkChain([..chain, right.Right], depth + 1);
+            WalkChain([..chain, right.Right]);
         }
 
         return null;
