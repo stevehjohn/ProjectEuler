@@ -66,9 +66,8 @@ public class Puzzle0098 : Puzzle
                 continue;
             }
 
-            if (relevantSquares.Contains(result))
+            if (relevantSquares.Contains(result) && result.Distinct().Count( )== length)
             {
-                Console.WriteLine($"{square} {result} {anagram.Left} {anagram.Right}");
                 max = int.Parse(result);
             }
         }
