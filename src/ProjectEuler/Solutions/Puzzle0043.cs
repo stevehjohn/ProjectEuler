@@ -7,7 +7,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0043 : Puzzle
 {
-    private static readonly int[] Primes = { 2, 3, 5, 7, 11, 13, 17 };
+    private static readonly int[] Primes = [2, 3, 5, 7, 11, 13, 17];
     public override string GetAnswer()
     {
         var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };

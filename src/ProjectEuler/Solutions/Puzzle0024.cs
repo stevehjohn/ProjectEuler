@@ -7,7 +7,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0024 : Puzzle
 {
-    private static readonly int[] Factorials = { 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880 };
+    private static readonly int[] Factorials = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
     
     public override string GetAnswer()
     {

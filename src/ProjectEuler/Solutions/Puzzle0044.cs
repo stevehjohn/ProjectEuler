@@ -35,7 +35,7 @@ public class Puzzle0044 : Puzzle
 
     private void GeneratePentagonals()
     {
-        _pentagonals = new List<int> { 1 };
+        _pentagonals = [1];
 
         var i = 2;
         
