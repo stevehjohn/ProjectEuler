@@ -17,12 +17,8 @@ public class Puzzle0060 : Puzzle
 
         GetPrimesThatConcatenateToAPrime(primes);
 
-        var i = 1;
-        
         foreach (var item in _concatenationSet)
         {
-            i++;
-            
             var chain = WalkChain([item.Left, item.Right]);
 
             if (chain != null)
