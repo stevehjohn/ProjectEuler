@@ -6,7 +6,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0173 : Puzzle
 {
-    private const int MaxTiles = 1000000;
+    private const int MaxTiles = 1_000_000;
     
     public override string GetAnswer()
     {
