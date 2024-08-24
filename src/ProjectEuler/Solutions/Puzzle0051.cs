@@ -21,7 +21,7 @@ public class Puzzle0051 : Puzzle
                 continue;
             }
 
-            var answer = CreatesEightPrimesAndRetunsFirst(strings, prime); 
+            var answer = CreatesEightPrimesAndReturnsFirst(strings, prime); 
             
             if (answer > 0)
             {
@@ -32,7 +32,7 @@ public class Puzzle0051 : Puzzle
         return "Unknown";
     }
 
-    private static long CreatesEightPrimesAndRetunsFirst(List<string> strings, long prime)
+    private static long CreatesEightPrimesAndReturnsFirst(List<string> strings, long prime)
     {
         var length = prime.ToString().Length;
         
