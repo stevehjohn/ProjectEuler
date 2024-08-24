@@ -1,4 +1,3 @@
-using System.Numerics;
 using JetBrains.Annotations;
 using ProjectEuler.Infrastructure;
 using ProjectEuler.Libraries;
@@ -9,6 +8,8 @@ namespace ProjectEuler.Solutions;
 public class Puzzle0074 : Puzzle
 {
     private static readonly HashSet<long> Chain = [];
+
+    private static readonly Dictionary<long, long> Cache = [];
     
     public override string GetAnswer()
     {
@@ -25,13 +26,11 @@ public class Puzzle0074 : Puzzle
         return count.ToString("N0");
     }
 
-    private static int GetChainLength(long origin)
+    private static int GetChainLength(long number)
     {
         Chain.Clear();
 
-        Chain.Add(origin);
-        
-        var text = origin.ToString();
+        Chain.Add(number);
 
         long sum;
         
@@ -39,12 +38,27 @@ public class Puzzle0074 : Puzzle
         {
             sum = 0L;
 
-            for (var i = 0; i < text.Length; i++)
+            if (Cache.TryGetValue(number, out var value))
             {
-                sum += (long) Maths.Factorial(text[i] - '0');
-            }
+                sum += value;
 
-            text = sum.ToString();
+                number = value;
+            }
+            else
+            {
+                var text = number.ToString();
+            
+                for (var i = 0; i < text.Length; i++)
+                {
+                    var factorial = (long) Maths.Factorial(text[i] - '0');
+
+                    sum += factorial;
+                }
+                    
+                Cache.Add(number, sum);
+
+                number = sum;
+            }
 
         } while (Chain.Add(sum));
 
