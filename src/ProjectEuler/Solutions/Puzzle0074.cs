@@ -64,16 +64,18 @@ public class Puzzle0074 : Puzzle
             }
             else
             {
-                var text = number.ToString();
-            
-                for (var i = 0; i < text.Length; i++)
+                var original = number;
+                
+                while (number > 0)
                 {
-                    var factorial = FactorialCache[text[i] - '0'];
+                    var factorial = FactorialCache[number % 10];
 
                     sum += factorial;
+
+                    number /= 10;
                 }
                     
-                Cache.Add(number, sum);
+                Cache.Add(original, sum);
 
                 number = sum;
             }
