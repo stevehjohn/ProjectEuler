@@ -39,6 +39,7 @@ public class Puzzle0064 : Puzzle
             while (an != 2 * a0)
             {
                 mn = dn * an - mn;
+                
                 dn = (number - mn * mn) / dn;
 
                 an = (int) ((a0 + mn) / dn);
