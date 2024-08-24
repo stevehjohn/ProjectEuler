@@ -8,7 +8,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0121 : Puzzle
 {
-    private const int MaxRounds = 63;
+    private const int MaxRounds = 15;
     
     public override string GetAnswer()
     {
@@ -46,7 +46,7 @@ public class Puzzle0121 : Puzzle
     {
         var i = 1;
 
-        var target = MaxRounds / 2 + 1;
+        const int target = MaxRounds / 2 + 1;
 
         var grayCode = 0u;
         
