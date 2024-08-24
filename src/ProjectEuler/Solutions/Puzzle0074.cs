@@ -15,6 +15,10 @@ public class Puzzle0074 : Puzzle
     
     public override string GetAnswer()
     {
+        Cache.Clear();
+        
+        FactorialCache.Clear();
+        
         InitialiseFactorialCache();
         
         var count = 0;
