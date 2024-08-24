@@ -8,7 +8,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0074 : Puzzle
 {
-    private static readonly HashSet<BigInteger> Chain = [];
+    private static readonly HashSet<long> Chain = [];
     
     public override string GetAnswer()
     {
@@ -33,15 +33,15 @@ public class Puzzle0074 : Puzzle
         
         var text = origin.ToString();
 
-        BigInteger sum;
+        long sum;
         
         do
         {
-            sum = new BigInteger(0);
+            sum = 0L;
 
             for (var i = 0; i < text.Length; i++)
             {
-                sum += Maths.Factorial(text[i] - '0');
+                sum += (long) Maths.Factorial(text[i] - '0');
             }
 
             text = sum.ToString();
