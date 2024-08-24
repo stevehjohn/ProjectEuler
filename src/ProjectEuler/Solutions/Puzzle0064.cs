@@ -25,24 +25,24 @@ public class Puzzle0064 : Puzzle
     {
         var period = 0;
 
-        var a0 = (int) Math.Sqrt(number);
+        var squareRoot = (int) Math.Sqrt(number);
 
-        var an = (int) Math.Sqrt(number);
+        var xN = (int) Math.Sqrt(number);
 
-        var mn = 0d;
+        var mantissaN = 0d;
 
-        var dn = 1d;
+        var denominator = 1d;
 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (a0 != Math.Sqrt(number))
+        if (squareRoot != Math.Sqrt(number))
         {
-            while (an != 2 * a0)
+            while (xN != 2 * squareRoot)
             {
-                mn = dn * an - mn;
+                mantissaN = denominator * xN - mantissaN;
                 
-                dn = (number - mn * mn) / dn;
+                denominator = (number - mantissaN * mantissaN) / denominator;
 
-                an = (int) ((a0 + mn) / dn);
+                xN = (int) ((squareRoot + mantissaN) / denominator);
 
                 period++;
             }
