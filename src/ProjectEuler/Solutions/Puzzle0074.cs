@@ -10,9 +10,13 @@ public class Puzzle0074 : Puzzle
     private static readonly HashSet<long> Chain = [];
 
     private static readonly Dictionary<long, long> Cache = [];
+
+    private static readonly Dictionary<long, long> FactorialCache = [];
     
     public override string GetAnswer()
     {
+        InitialiseFactorialCache();
+        
         var count = 0;
 
         for (var i = 10; i < 1_000_000; i++)
@@ -24,6 +28,16 @@ public class Puzzle0074 : Puzzle
         }
 
         return count.ToString("N0");
+    }
+
+    private static void InitialiseFactorialCache()
+    {
+        FactorialCache.Add(0, 1);
+
+        for (var i = 1; i < 10; i++)
+        {
+            FactorialCache.Add(i, (long) Maths.Factorial(i));
+        }
     }
 
     private static int GetChainLength(long number)
@@ -50,7 +64,7 @@ public class Puzzle0074 : Puzzle
             
                 for (var i = 0; i < text.Length; i++)
                 {
-                    var factorial = (long) Maths.Factorial(text[i] - '0');
+                    var factorial = FactorialCache[text[i] - '0'];
 
                     sum += factorial;
                 }
