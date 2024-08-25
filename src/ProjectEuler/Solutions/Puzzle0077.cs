@@ -7,7 +7,7 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0077 : Puzzle
 {
-    private const int Max = 72;
+    private const int Max = 100;
 
     private const int TargetPartitions = 5_000;
 
