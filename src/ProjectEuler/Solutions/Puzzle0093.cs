@@ -1,5 +1,6 @@
 using System.Numerics;
 using JetBrains.Annotations;
+using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
 
 namespace ProjectEuler.Solutions;
@@ -16,7 +17,39 @@ public class Puzzle0093 : Puzzle
         var combinations = GenerateCombinations(Digits, 4).ToList();
 
         var operators = GenerateCombinations(Operators, 3).ToList();
+
+        foreach (var combination in combinations)
+        {
+            foreach (var operatorCombination in operators)
+            {
+                GetChainLength(combination, operatorCombination);
+            }
+        }
         
+        throw new NotImplementedException();
+    }
+
+    private static void GetChainLength(int[] combination, char[] operatorCombination)
+    {
+        var permutations = combination.GetPermutations();
+
+        var results = new HashSet<int>();
+        
+        foreach (var permutation in permutations)
+        {
+            var operatorPermutations = operatorCombination.GetPermutations();
+
+            foreach (var operatorPermutation in operatorPermutations)
+            {
+                var result = Evaluate(permutation, operatorPermutation);
+            }
+        }
+        
+        throw new NotImplementedException();
+    }
+
+    private static object Evaluate(int[] permutation, char[] operatorPermutation)
+    {
         throw new NotImplementedException();
     }
 
