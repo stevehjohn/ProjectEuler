@@ -50,15 +50,15 @@ public class Puzzle0090 : Puzzle
 
         return count.ToString("N0");
     }
-
+    
     private static bool CanDisplayPrimes(int[] left, int[] right)
     {
         var found = 0;
         
-        for (var i = 0; i < Primes.Length; i += 2)
+        for (var i = 0; i < Primes.Length; i++)
         {
-            if (! (left.Contains(Primes[i].Left) && right.Contains(Primes[i + 1].Right))
-                && ! (right.Contains(Primes[i].Left) && left.Contains(Primes[i + 1].Right)))
+            if ((left.Contains(Primes[i].Left) && right.Contains(Primes[i].Right))
+                || (right.Contains(Primes[i].Left) && left.Contains(Primes[i].Right)))
             {
                 found |= Primes[i].Bit;
             }
