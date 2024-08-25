@@ -12,33 +12,31 @@ public class Puzzle0075 : Puzzle
     {
         var triplets = GetPythagoreanTriplets();
 
-        foreach (var triplet in triplets)
-        {
-            Console.WriteLine(triplet);
-        }
-
         var result = CountUniqueLengths(triplets);
         
         return result.ToString("N0");
     }
 
-    private static int CountUniqueLengths(List<(int A, int B , int C)> triplets)
+    private static int CountUniqueLengths(HashSet<(int A, int B , int C)> triplets)
     {
-        var unique = new HashSet<int>();
-        
+        var lengthCounts = new Dictionary<int, int>();
+
         foreach (var triplet in triplets)
         {
             var length = triplet.A + triplet.B + triplet.C;
 
-            unique.Add(length);
+            if (! lengthCounts.TryAdd(length, 1))
+            {
+                lengthCounts[length]++;
+            }
         }
 
-        return unique.Count;
+        return lengthCounts.Count(x => x.Value == 1);
     }
 
-    private static List<(int A, int B, int C)> GetPythagoreanTriplets()
+    private static HashSet<(int A, int B, int C)> GetPythagoreanTriplets()
     {
-        var result = new List<(int, int, int)>();
+        var result = new HashSet<(int A, int B, int C)>();
 
         var maxLength = Math.Sqrt(MaxLength);
         
@@ -54,18 +52,11 @@ public class Puzzle0075 : Puzzle
 
                 var length = a + b + c;
                 
-                if (length > MaxLength)
+                var k = 1;
+
+                while (k * length <= MaxLength)
                 {
-                    break;
-                }
-
-                result.Add((a, b, c));
-
-                var k = 2;
-
-                while (k * length < MaxLength)
-                {
-                    result.Add((a * k, b * k, c * k));
+                    result.Add((Math.Min(a * k, b * k), Math.Max(a * k, b * k), c * k));
 
                     k++;
                 }
