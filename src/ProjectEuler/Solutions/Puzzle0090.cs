@@ -28,8 +28,6 @@ public class Puzzle0090 : Puzzle
                 if (CanDisplayPrimes(left, right))
                 {
                     count++;
-                    
-                    Console.WriteLine($"{string.Join(", ", left)}  {string.Join(", ", right)}");
                 }
             }
         }
