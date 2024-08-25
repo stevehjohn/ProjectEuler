@@ -7,36 +7,105 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0090 : Puzzle
 {
-    private static readonly int[] Primes = [1, 4, 9, 16, 25, 36, 49, 64, 81];
+    private static readonly int[] Primes = [0, 1, 0, 4, 0, 9, 1, 6, 2, 5, 3, 6, 4, 9, 6, 4, 8, 1];
 
     private static readonly int[] Digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
     public override string GetAnswer()
     {
         var combinations = GenerateDigitCombinations().ToList();
-        
-        foreach (var combination in combinations)
-        {
-            Console.WriteLine(string.Join(", ", combination));
-        }
 
+        var count = 0;
+        
         for (var l = 0; l < combinations.Count; l++)
         {
             for (var r = l + 1; r < combinations.Count; r++)
             {
-                if (CanDisplayPrimes(combinations[l], combinations[r]))
+                var left = combinations[l];
+
+                var right = combinations[r];
+                
+                if (CanDisplayPrimes(left, right))
                 {
-                    Console.WriteLine($"{string.Join(", ", combinations[l])}  {string.Join(", ", combinations[r])}");
+                    count++;
+                    
+                    Console.WriteLine($"{string.Join(", ", left)}  {string.Join(", ", right)}");
+                }
+
+                int[] leftInverted = null;
+                
+                if (left.Contains(6))
+                {
+                    leftInverted = CopyReplacing(left, 6, 9);
+
+                    if (CanDisplayPrimes(leftInverted, right))
+                    {
+                        count++;
+
+                        Console.WriteLine($"  {string.Join(", ", leftInverted)}  {string.Join(", ", right)}");
+                    }
+                }
+
+                int[] rightInverted = null;
+                
+                if (right.Contains(6))
+                {
+                    rightInverted = CopyReplacing(right, 6, 9);
+
+                    if (CanDisplayPrimes(left, rightInverted))
+                    {
+                        count++;
+
+                        Console.WriteLine($"  {string.Join(", ", left)}  {string.Join(", ", rightInverted)}");
+                    }
+                }
+
+                if (leftInverted != null && rightInverted != null)
+                {
+                    if (CanDisplayPrimes(leftInverted, rightInverted))
+                    {
+                        count++;
+
+                        Console.WriteLine($"  {string.Join(", ", leftInverted)}  {string.Join(", ", rightInverted)}");
+                    }
                 }
             }
         }
 
-        return "TODO";
+        return count.ToString("N0");
+    }
+
+    private static int[] CopyReplacing(int[] source, int number, int replacement)
+    {
+        var result = new int[6];
+        
+        for (var i = 0; i < 6; i++)
+        {
+            if (source[i] == number)
+            {
+                result[i] = replacement;
+            }
+            else
+            {
+                result[i] = source[i];
+            }
+        }
+
+        return result;
     }
 
     private static bool CanDisplayPrimes(int[] left, int[] right)
     {
-        return false;
+        for (var i = 0; i < Primes.Length; i += 2)
+        {
+            if (! (left.Contains(Primes[i]) && right.Contains(Primes[i + 1]))
+                && ! (right.Contains(Primes[i]) && left.Contains(Primes[i + 1])))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static IEnumerable<int[]> GenerateDigitCombinations()
