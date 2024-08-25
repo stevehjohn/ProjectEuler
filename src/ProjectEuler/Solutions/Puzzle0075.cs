@@ -16,11 +16,27 @@ public class Puzzle0075 : Puzzle
         {
             Console.WriteLine(triplet);
         }
+
+        var result = CountUniqueLengths(triplets);
         
-        return "0";
+        return result.ToString("N0");
     }
 
-    private List<(int, int, int)> GetPythagoreanTriplets()
+    private static int CountUniqueLengths(List<(int A, int B , int C)> triplets)
+    {
+        var unique = new HashSet<int>();
+        
+        foreach (var triplet in triplets)
+        {
+            var length = triplet.A + triplet.B + triplet.C;
+
+            unique.Add(length);
+        }
+
+        return unique.Count;
+    }
+
+    private static List<(int A, int B, int C)> GetPythagoreanTriplets()
     {
         var result = new List<(int, int, int)>();
 
