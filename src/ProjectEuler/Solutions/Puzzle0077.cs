@@ -7,24 +7,43 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0077 : Puzzle
 {
-    private const int Target = 100;
+    private const int Max = 72;
+
+    private const int TargetPartitions = 5_000;
+
+    private List<long> _primes;
     
     public override string GetAnswer()
     {
-        var partitions = new long[Target + 1];
+        _primes = Maths.GetPrimes(Max);
 
-        partitions[0] = 1;
-
-        var primes = Maths.GetPrimes(Target);
-
-        for (var k = 1; k < Target; k++)
+        for (var i = 2; i <= Max; i++)
         {
-            for (var j = k ; j <= Target; j++)
+            var partitions = CountPartitions(i);
+
+            if (partitions > TargetPartitions)
             {
-                partitions[j] += partitions[j - k];
+                return i.ToString("N0");
             }
         }
 
-        return partitions[Target].ToString("N0");
+        return "Unknown";
+    }
+
+    private int CountPartitions(int target)
+    {
+        var partitions = new int[target + 1];
+
+        partitions[0] = 1;
+        
+        foreach (var prime in _primes)
+        {
+            for (var j = prime ; j <= target; j++)
+            {
+                partitions[j] += partitions[j - prime];
+            }
+        }
+
+        return partitions[target];
     }
 }
