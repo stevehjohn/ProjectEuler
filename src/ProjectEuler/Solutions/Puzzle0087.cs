@@ -34,7 +34,7 @@ public class Puzzle0087 : Puzzle
                 }
             }
         }
-
+    
         return sums.Count.ToString("N0");
     }
 
