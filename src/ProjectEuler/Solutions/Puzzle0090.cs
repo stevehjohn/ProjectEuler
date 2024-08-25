@@ -31,67 +31,10 @@ public class Puzzle0090 : Puzzle
                     
                     Console.WriteLine($"{string.Join(", ", left)}  {string.Join(", ", right)}");
                 }
-
-                int[] leftInverted = null;
-                
-                if (left.Contains(6))
-                {
-                    leftInverted = CopyReplacing(left, 6, 9);
-
-                    if (CanDisplayPrimes(leftInverted, right))
-                    {
-                        count++;
-
-                        Console.WriteLine($"  {string.Join(", ", leftInverted)}  {string.Join(", ", right)}");
-                    }
-                }
-
-                int[] rightInverted = null;
-                
-                if (right.Contains(6))
-                {
-                    rightInverted = CopyReplacing(right, 6, 9);
-
-                    if (CanDisplayPrimes(left, rightInverted))
-                    {
-                        count++;
-
-                        Console.WriteLine($"  {string.Join(", ", left)}  {string.Join(", ", rightInverted)}");
-                    }
-                }
-
-                if (leftInverted != null && rightInverted != null)
-                {
-                    if (CanDisplayPrimes(leftInverted, rightInverted))
-                    {
-                        count++;
-
-                        Console.WriteLine($"  {string.Join(", ", leftInverted)}  {string.Join(", ", rightInverted)}");
-                    }
-                }
             }
         }
 
         return count.ToString("N0");
-    }
-
-    private static int[] CopyReplacing(int[] source, int number, int replacement)
-    {
-        var result = new int[6];
-        
-        for (var i = 0; i < 6; i++)
-        {
-            if (source[i] == number)
-            {
-                result[i] = replacement;
-            }
-            else
-            {
-                result[i] = source[i];
-            }
-        }
-
-        return result;
     }
 
     private static bool CanDisplayPrimes(int[] left, int[] right)
