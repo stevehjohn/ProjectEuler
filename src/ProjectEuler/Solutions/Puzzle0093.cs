@@ -12,45 +12,94 @@ public class Puzzle0093 : Puzzle
 
     private static readonly char[] Operators = ['+', '-', '\\', '*'];
 
+    private readonly Stack<double> _stack = new();
+    
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
 
+        combinations = [[1, 2, 3, 4]];
+        
         var operators = GenerateCombinations(Operators, 3).ToList();
 
+        var results = new HashSet<int>();
+        
         foreach (var combination in combinations)
         {
             foreach (var operatorCombination in operators)
             {
-                GetChainLength(combination, operatorCombination);
+                var permutations = combination.GetPermutations();
+
+                foreach (var permutation in permutations)
+                {
+                    var operatorPermutations = operatorCombination.GetPermutations();
+
+                    foreach (var operatorPermutation in operatorPermutations)
+                    {
+                        var result = Evaluate(permutation, operatorPermutation);
+
+                        results.Add(result);
+                    }
+                }
             }
         }
         
-        throw new NotImplementedException();
+        Console.WriteLine(string.Join(' ', results.Order()));
+
+        return "WIP";
     }
 
-    private static void GetChainLength(int[] combination, char[] operatorCombination)
+    private int Evaluate(int[] permutation, char[] operatorPermutation)
     {
-        var permutations = combination.GetPermutations();
-
-        var results = new HashSet<int>();
+        _stack.Clear();
         
-        foreach (var permutation in permutations)
+        _stack.Push(permutation[0]);
+
+        for (var i = 0; i < 3; i++)
         {
-            var operatorPermutations = operatorCombination.GetPermutations();
+            _stack.Push(permutation[i + 1]);
+            
+            _stack.Push(operatorPermutation[i]);
+        }
 
-            foreach (var operatorPermutation in operatorPermutations)
+        while (_stack.Count > 1)
+        {
+            var left = _stack.Pop();
+
+            var right = _stack.Pop();
+
+            switch (_stack.Pop())
             {
-                var result = Evaluate(permutation, operatorPermutation);
+                case '+':
+                    _stack.Push(left + right);
+                    
+                    break;
+                
+                case '-':
+                    _stack.Push(left - right);
+                    
+                    break;
+                
+                case '*':
+                    _stack.Push(left * right);
+                    
+                    break;
+                
+                default:
+                    _stack.Push(left / right);
+                    
+                    break;
             }
         }
-        
-        throw new NotImplementedException();
-    }
 
-    private static object Evaluate(int[] permutation, char[] operatorPermutation)
-    {
-        throw new NotImplementedException();
+        var result = _stack.Pop();
+
+        if (result < 1 || result % 1 != 0)
+        {
+            return 0;
+        }
+
+        return (int) result;
     }
 
     private static IEnumerable<T[]> GenerateCombinations<T>(T[] source, int length)
