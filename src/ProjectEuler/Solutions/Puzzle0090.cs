@@ -57,6 +57,11 @@ public class Puzzle0090 : Puzzle
         
         for (var i = 0; i < Primes.Length; i += 2)
         {
+            if (! (left.Contains(Primes[i].Left) && right.Contains(Primes[i + 1].Right))
+                && ! (right.Contains(Primes[i].Left) && left.Contains(Primes[i + 1].Right)))
+            {
+                found |= Primes[i].Bit;
+            }
         }
 
         return found == 0b0001_1111_1111;
