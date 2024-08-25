@@ -7,7 +7,23 @@ namespace ProjectEuler.Solutions;
 [UsedImplicitly]
 public class Puzzle0090 : Puzzle
 {
-    private static readonly int[] Primes = [0, 1, 0, 4, 0, 9, 1, 6, 2, 5, 3, 6, 4, 9, 6, 4, 8, 1];
+    private static readonly (int Bit, int Left, int Right)[] Primes =
+    [
+        (0b0000_0000_0001, 0, 1),
+        (0b0000_0000_0010, 0, 4),
+        (0b0000_0000_0100, 0, 9),
+        (0b0000_0000_0100, 0, 6),
+        (0b0000_0000_1000, 1, 6),
+        (0b0000_0000_1000, 1, 9),
+        (0b0000_0001_0000, 2, 5),
+        (0b0000_0010_0000, 3, 6),
+        (0b0000_0010_0000, 3, 9),
+        (0b0000_0100_0000, 4, 9),
+        (0b0000_0100_0000, 4, 6),
+        (0b0000_1000_0000, 6, 4),
+        (0b0000_1000_0000, 9, 4),
+        (0b0001_0000_0000, 8, 1)
+    ];
 
     private static readonly int[] Digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
@@ -37,16 +53,13 @@ public class Puzzle0090 : Puzzle
 
     private static bool CanDisplayPrimes(int[] left, int[] right)
     {
+        var found = 0;
+        
         for (var i = 0; i < Primes.Length; i += 2)
         {
-            if (! (left.Contains(Primes[i]) && right.Contains(Primes[i + 1]))
-                && ! (right.Contains(Primes[i]) && left.Contains(Primes[i + 1])))
-            {
-                return false;
-            }
         }
 
-        return true;
+        return found == 0b0001_1111_1111;
     }
 
     private static IEnumerable<int[]> GenerateDigitCombinations()
