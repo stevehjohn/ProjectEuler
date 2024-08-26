@@ -19,8 +19,8 @@ public class Puzzle0093 : Puzzle
         var combinations = GenerateCombinations(Digits, 4).ToList();
 
         combinations = [[1, 2, 3, 4]];
-        
-        var operators = GenerateCombinations(Operators, 3).ToList();
+
+        var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
         var results = new HashSet<int>();
         
@@ -32,14 +32,9 @@ public class Puzzle0093 : Puzzle
 
                 foreach (var permutation in permutations)
                 {
-                    var operatorPermutations = operatorCombination.GetPermutations();
+                    var result = Evaluate(permutation, operatorCombination);
 
-                    foreach (var operatorPermutation in operatorPermutations)
-                    {
-                        var result = Evaluate(permutation, operatorPermutation);
-
-                        results.Add(result);
-                    }
+                    results.Add(result);
                 }
             }
         }
@@ -53,14 +48,14 @@ public class Puzzle0093 : Puzzle
     {
         _stack.Clear();
         
-        _stack.Push(permutation[0]);
-
         for (var i = 0; i < 3; i++)
         {
-            _stack.Push(permutation[i + 1]);
-            
             _stack.Push(operatorPermutation[i]);
+
+            _stack.Push(permutation[i]);
         }
+        
+        _stack.Push(permutation[3]);
 
         while (_stack.Count > 1)
         {
@@ -68,7 +63,9 @@ public class Puzzle0093 : Puzzle
 
             var right = _stack.Pop();
 
-            switch (_stack.Pop())
+            var operation = _stack.Pop();
+
+            switch (operation)
             {
                 case '+':
                     _stack.Push(left + right);
