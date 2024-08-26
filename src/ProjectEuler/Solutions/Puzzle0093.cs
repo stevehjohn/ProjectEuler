@@ -49,6 +49,8 @@ public class Puzzle0093 : Puzzle
                 answer = combination;
             }
         }
+        
+        Console.WriteLine(max);
 
         return string.Join(string.Empty, answer);
     }
