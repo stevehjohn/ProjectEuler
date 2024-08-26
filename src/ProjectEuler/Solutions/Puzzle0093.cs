@@ -12,15 +12,13 @@ public class Puzzle0093 : Puzzle
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
 
-    private static readonly char[][] Parentheses =
-        [
-            ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
-            ['(', 'x', 'o', 'x', ')', 'o', '(', 'x', 'o', 'x', ')']
-        ];
+    private static readonly char[][] Precedence =
+    [
+        ['x', 'x', 'o', 'x', 'o', 'x', 'o'],
+        ['x', 'x', 'o', 'x', 'x', 'o', 'o']
+    ];
 
     private readonly Stack<double> _stack = new();
-
-    private readonly Stack<double> _memory = new();
     
     public override string GetAnswer()
     {
@@ -38,15 +36,15 @@ public class Puzzle0093 : Puzzle
 
             foreach (var operatorCombination in operators)
             {
-                foreach (var parenthesis in Parentheses)
+                foreach (var precedence in Precedence)
                 {
                     var permutations = combination.GetPermutations();
 
                     foreach (var permutation in permutations)
                     {
-                        var operations = FormExpression(parenthesis, operatorCombination, permutation);
+                        var operations = FormExpression(precedence, operatorCombination, permutation);
                     
-                        var result = Evaluate(permutation, operations);
+                        var result = Evaluate(operations);
 
                         results.Add(result);
                     }
@@ -66,17 +64,17 @@ public class Puzzle0093 : Puzzle
         return string.Join(string.Empty, answer);
     }
 
-    private static char[] FormExpression(char[] parentheses, char[] operators, int[] digits)
+    private static char[] FormExpression(char[] precedence, char[] operators, int[] digits)
     {
-        var result = new char[parentheses.Length];
+        var result = new char[precedence.Length];
 
         var o = 0;
 
         var d = 0;
         
-        for (var i = 0; i < parentheses.Length; i++)
+        for (var i = 0; i < precedence.Length; i++)
         {
-            switch (parentheses[i])
+            switch (precedence[i])
             {
                 case 'o':
                     result[i] = operators[o];
@@ -87,11 +85,6 @@ public class Puzzle0093 : Puzzle
                 case 'x':
                     result[i] = (char) digits[d];
                     d++;
-                    
-                    break;
-                
-                default:
-                    result[i] = parentheses[i];
                     
                     break;
             }
@@ -112,28 +105,35 @@ public class Puzzle0093 : Puzzle
         return i;
     }
 
-    private int Evaluate(int[] permutation, char[] operations)
+    private int Evaluate(char[] operations)
     {
         _stack.Clear();
         
-        for (var i = 0; i < operations.Length; i++)
+        for (var i = operations.Length - 1; i >= 0; i--)
         {
             _stack.Push(operations[i]);
-
-            _stack.Push(permutation[i]);
         }
-        
-        _stack.Push(permutation[3]);
 
+        var operands = new List<double>();
+        
         while (_stack.Count > 1)
         {
-            var left = _stack.Pop();
+            var item = _stack.Pop();
 
-            var right = _stack.Pop();
+            if (item < 10)
+            {
+                operands.Add(item);
+                
+                continue;
+            }
 
-            var operation = _stack.Pop();
+            var left = operands[0];
 
-            switch (operation)
+            var right = operands[1];
+            
+            operands.Clear();
+
+            switch (item)
             {
                 case '+':
                     _stack.Push(left + right);
