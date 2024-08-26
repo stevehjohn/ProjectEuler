@@ -20,10 +20,14 @@ public class Puzzle0093 : Puzzle
 
         var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
-        var results = new HashSet<int>();
+        int[] answer = [];
+
+        var max = 0;
         
         foreach (var combination in combinations)
         {
+            var results = new HashSet<int>();
+
             foreach (var operatorCombination in operators)
             {
                 var permutations = combination.GetPermutations();
@@ -35,11 +39,30 @@ public class Puzzle0093 : Puzzle
                     results.Add(result);
                 }
             }
-        }
-        
-        Console.WriteLine(string.Join(' ', results.Order()));
 
-        return "WIP";
+            var length = GetRunLength(results);
+
+            if (length > max)
+            {
+                max = length;
+
+                answer = combination;
+            }
+        }
+
+        return string.Join(string.Empty, answer);
+    }
+
+    private static int GetRunLength(HashSet<int> results)
+    {
+        var i = 1;
+        
+        while (results.Contains(i))
+        {
+            i++;
+        }
+
+        return i;
     }
 
     private int Evaluate(int[] permutation, char[] operatorPermutation)
