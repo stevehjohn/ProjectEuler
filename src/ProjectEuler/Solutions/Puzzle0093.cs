@@ -49,8 +49,6 @@ public class Puzzle0093 : Puzzle
                 answer = combination;
             }
         }
-        
-        Console.WriteLine(max);
 
         return string.Join(string.Empty, answer);
     }
@@ -64,7 +62,7 @@ public class Puzzle0093 : Puzzle
             i++;
         }
 
-        return i - 1;
+        return i;
     }
 
     private int Evaluate(int[] permutation, char[] operatorPermutation)
@@ -114,7 +112,7 @@ public class Puzzle0093 : Puzzle
 
         var result = _stack.Pop();
 
-        if (result < 1 || result % 1 != 0)
+        if (result % 1 != 0)
         {
             return 0;
         }
