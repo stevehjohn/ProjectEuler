@@ -10,7 +10,7 @@ public class Puzzle0093 : Puzzle
 {
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    private static readonly char[] Operators = ['+', '-', '\\', '*'];
+    private static readonly char[] Operators = ['+', '-', '/', '*'];
 
     private readonly Stack<double> _stack = new();
     
@@ -55,14 +55,14 @@ public class Puzzle0093 : Puzzle
 
     private static int GetRunLength(HashSet<int> results)
     {
-        var i = 1;
+        var i = 0;
         
-        while (results.Contains(i))
+        while (results.Contains(i + 1))
         {
             i++;
         }
 
-        return i;
+        return i - 1;
     }
 
     private int Evaluate(int[] permutation, char[] operatorPermutation)
