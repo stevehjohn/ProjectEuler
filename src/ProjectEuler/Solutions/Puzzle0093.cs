@@ -18,8 +18,6 @@ public class Puzzle0093 : Puzzle
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
 
-        combinations = [[1, 2, 3, 4]];
-
         var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
         var results = new HashSet<int>();
