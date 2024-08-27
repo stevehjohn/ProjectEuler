@@ -204,13 +204,16 @@ public partial class Puzzle0093 : Puzzle
 
             var precedence = GetPrecedence(digit);
 
-            var top = stack.Peek();
-            
-            while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
+            if (stack.Count > 0)
             {
-                queue.Enqueue(new Operator(stack.Pop()));
+                var top = stack.Peek();
+
+                while (top != '(' && GetPrecedence(top) >= precedence)
+                {
+                    queue.Enqueue(new Operator(stack.Pop()));
+                }
             }
-            
+
             queue.Enqueue(new Operator(item[0]));
         }
         
