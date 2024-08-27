@@ -202,15 +202,29 @@ public partial class Puzzle0093 : Puzzle
                 continue;
             }
 
-            while (stack.Peek() != '(')
+            var precedence = GetPrecedence(digit);
+
+            var top = stack.Peek();
+            
+            while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
             {
-                // TODO
+                queue.Enqueue(new Operator(stack.Pop()));
             }
             
             queue.Enqueue(new Operator(item[0]));
         }
         
         return queue;
+    }
+
+    private static int GetPrecedence(char symbol)
+    {
+        return symbol switch
+        {
+            '*' => 3,
+            '/' => 3,
+            _ => 2
+        };
     }
 
     private static IEnumerable<T[]> GenerateCombinations<T>(T[] source, int length)
