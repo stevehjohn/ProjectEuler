@@ -128,10 +128,6 @@ public partial class Puzzle0093 : Puzzle
 
     private static double Evaluate(string expression)
     {
-        if (expression == "(5 / 1) + (2 * 8)")
-        {
-        }
-
         Console.Write($"{expression}    ");
         
         var queue = ParseToQueue(expression);
