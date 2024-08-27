@@ -47,8 +47,11 @@ public partial class Puzzle0093 : Puzzle
                         var expression = CreateExpression(permutation, operatorCombination, arrangement);
 
                         var result = Evaluate(expression);
-
-                        results.Add(result);
+                        
+                        if (result % 1 != 0)
+                        {
+                            results.Add((int) result);
+                        }
                     }
                 }
             }
@@ -120,7 +123,7 @@ public partial class Puzzle0093 : Puzzle
         return result.ToString();
     }
 
-    private static int Evaluate(string expression)
+    private static double Evaluate(string expression)
     {
         var queue = ParseToQueue(expression);
 
@@ -163,7 +166,9 @@ public partial class Puzzle0093 : Puzzle
             }
         }
 
-        return 0;
+        var result = ((Operand) stack.Pop()).Value;
+
+        return result;
     }
 
     private static Queue<IElement> ParseToQueue(string expression)
@@ -208,13 +213,13 @@ public partial class Puzzle0093 : Puzzle
             {
                 var top = stack.Peek();
 
-                while (top != '(' && GetPrecedence(top) >= precedence)
+                while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
                 {
                     queue.Enqueue(new Operator(stack.Pop()));
                 }
             }
 
-            queue.Enqueue(new Operator(item[0]));
+            stack.Push(digit);
         }
         
         return queue;
