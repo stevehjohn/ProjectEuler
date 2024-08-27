@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Text;
 using JetBrains.Annotations;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
@@ -12,14 +13,14 @@ public class Puzzle0093 : Puzzle
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
 
-    private static readonly char[][] Arrangements =
+    private static readonly string[][] Arrangements =
     [
-        ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
-        ['(', 'x', 'o', 'x', ')', 'o', '(', 'x', 'o', 'x', ')']
+        ["x ", "o ", "x ", "o ", "x ", "o ", "x"],
+        ["(", "x ", "o ", "x", ")", " o ", "(", "x ", "o ", "x", ")"]
     ];
-    
+
     private readonly Stack<double> _stack = new();
-    
+
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
@@ -29,7 +30,7 @@ public class Puzzle0093 : Puzzle
         int[] answer = [];
 
         var max = 0;
-        
+
         foreach (var combination in combinations)
         {
             var results = new HashSet<int>();
@@ -40,9 +41,14 @@ public class Puzzle0093 : Puzzle
 
                 foreach (var permutation in permutations)
                 {
-                    var result = Evaluate(permutation, operatorCombination);
+                    foreach (var arrangement in Arrangements)
+                    {
+                        var expression = CreateExpression(permutation, operatorCombination, arrangement);
 
-                    results.Add(result);
+                        var result = Evaluate(permutation, operatorCombination);
+
+                        results.Add(result);
+                    }
                 }
             }
 
@@ -53,11 +59,11 @@ public class Puzzle0093 : Puzzle
                 max = length;
 
                 answer = combination;
-                
+
                 Console.WriteLine($"{length} ({string.Join(string.Empty, combination)}):");
-                
+
                 Console.WriteLine(string.Join(' ', results.Order()));
-                
+
                 Console.WriteLine();
             }
         }
@@ -68,7 +74,7 @@ public class Puzzle0093 : Puzzle
     private static int GetRunLength(HashSet<int> results)
     {
         var i = 0;
-        
+
         while (results.Contains(i + 1))
         {
             i++;
@@ -77,17 +83,53 @@ public class Puzzle0093 : Puzzle
         return i - 1;
     }
 
+    private static string CreateExpression(int[] digits, char[] operators, string[] arrangement)
+    {
+        var d = 0;
+
+        var o = 0;
+
+        var result = new StringBuilder();
+
+        for (var i = 0; i < arrangement.Length; i++)
+        {
+            var pattern = arrangement[i];
+
+            switch (pattern.Trim()[0])
+            {
+                case 'x':
+                    result.Append(pattern.Replace("x", digits[d].ToString()));
+                    d++;
+
+                    break;
+
+                case 'o':
+                    result.Append(pattern.Replace("o", operators[o].ToString()));
+                    o++;
+
+                    break;
+
+                default:
+                    result.Append(pattern);
+
+                    break;
+            }
+        }
+
+        return result.ToString();
+    }
+
     private int Evaluate(int[] digits, char[] operators)
     {
         _stack.Clear();
-        
+
         for (var i = 0; i < 3; i++)
         {
             _stack.Push(operators[i]);
 
             _stack.Push(digits[i]);
         }
-        
+
         _stack.Push(digits[3]);
 
         while (_stack.Count > 1)
@@ -102,22 +144,22 @@ public class Puzzle0093 : Puzzle
             {
                 case '+':
                     _stack.Push(left + right);
-                    
+
                     break;
-                
+
                 case '-':
                     _stack.Push(left - right);
-                    
+
                     break;
-                
+
                 case '*':
                     _stack.Push(left * right);
-                    
+
                     break;
-                
+
                 default:
                     _stack.Push(left / right);
-                    
+
                     break;
             }
         }
@@ -137,11 +179,11 @@ public class Puzzle0093 : Puzzle
         var i = 1;
 
         var grayCode = 0u;
-        
+
         while ((grayCode & (1ul << source.Length)) == 0)
         {
-            grayCode = (uint) (i ^ (i >> 1)); 
-            
+            grayCode = (uint) (i ^ (i >> 1));
+
             if (BitOperations.PopCount(grayCode) == length)
             {
                 var digits = new T[length];
@@ -151,7 +193,7 @@ public class Puzzle0093 : Puzzle
                 var position = 0;
 
                 var bit = 1;
-                
+
                 while (used < length)
                 {
                     if ((grayCode & bit) > 0)
@@ -165,7 +207,7 @@ public class Puzzle0093 : Puzzle
 
                     bit <<= 1;
                 }
-                
+
                 yield return digits;
             }
 
