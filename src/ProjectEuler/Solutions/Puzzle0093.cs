@@ -19,8 +19,6 @@ public class Puzzle0093 : Puzzle
         ["(", "x ", "o ", "x", ")", " o ", "(", "x ", "o ", "x", ")"]
     ];
 
-    private readonly Stack<double> _stack = new();
-
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
@@ -45,7 +43,7 @@ public class Puzzle0093 : Puzzle
                     {
                         var expression = CreateExpression(permutation, operatorCombination, arrangement);
 
-                        var result = Evaluate(permutation, operatorCombination);
+                        var result = Evaluate(expression);
 
                         results.Add(result);
                     }
@@ -119,59 +117,57 @@ public class Puzzle0093 : Puzzle
         return result.ToString();
     }
 
-    private int Evaluate(int[] digits, char[] operators)
+    private int Evaluate(string expression)
     {
-        _stack.Clear();
+        var queue = ParseToQueue(expression);
 
-        for (var i = 0; i < 3; i++)
+        var stack = new Stack<IElement>();
+
+        foreach (var element in queue)
         {
-            _stack.Push(operators[i]);
-
-            _stack.Push(digits[i]);
-        }
-
-        _stack.Push(digits[3]);
-
-        while (_stack.Count > 1)
-        {
-            var left = _stack.Pop();
-
-            var right = _stack.Pop();
-
-            var operation = _stack.Pop();
-
-            switch (operation)
+            if (element is Operator symbol)
             {
-                case '+':
-                    _stack.Push(left + right);
+                var left = ((Operand) stack.Pop()).Value;
 
-                    break;
+                var right = ((Operand) stack.Pop()).Value;
 
-                case '-':
-                    _stack.Push(left - right);
+                switch (symbol.Value)
+                {
+                    case '+':
+                        stack.Push(new Operand(left + right));
 
-                    break;
+                        break;
 
-                case '*':
-                    _stack.Push(left * right);
+                    case '-':
+                        stack.Push(new Operand(left - right));
 
-                    break;
+                        break;
 
-                default:
-                    _stack.Push(left / right);
+                    case '*':
+                        stack.Push(new Operand(left * right));
 
-                    break;
+                        break;
+
+                    default:
+                        stack.Push(new Operand(left / right));
+
+                        break;
+                }
+            }
+            else
+            {
+                stack.Push(element);
             }
         }
 
-        var result = _stack.Pop();
+        return 0;
+    }
 
-        if (result < 1 || result % 1 != 0)
-        {
-            return 0;
-        }
+    private static Queue<IElement> ParseToQueue(string expression)
+    {
+        var queue = new Queue<IElement>();
 
-        return (int) result;
+        return queue;
     }
 
     private static IEnumerable<T[]> GenerateCombinations<T>(T[] source, int length)
@@ -212,6 +208,28 @@ public class Puzzle0093 : Puzzle
             }
 
             i++;
+        }
+    }
+
+    private interface IElement { }
+
+    private class Operator : IElement
+    {
+        public char Value { get; }
+
+        public Operator(char value)
+        {
+            Value = value;
+        }
+    }
+    
+    private class Operand : IElement
+    {
+        public double Value { get; }
+
+        public Operand(double value)
+        {
+            Value = value;
         }
     }
 }
