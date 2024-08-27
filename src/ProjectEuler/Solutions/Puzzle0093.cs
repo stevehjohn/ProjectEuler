@@ -12,6 +12,12 @@ public class Puzzle0093 : Puzzle
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
 
+    private static readonly char[][] Arrangements =
+    [
+        ['o', 'x', 'o', 'x', 'o', 'x', 'x'],
+        ['o', 'r', 'o', 'x', 'x', 'x', 'm', 'o', 'x', 'x']
+    ];
+    
     private readonly Stack<double> _stack = new();
     
     public override string GetAnswer()
