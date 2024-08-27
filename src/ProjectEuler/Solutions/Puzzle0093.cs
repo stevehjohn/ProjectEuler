@@ -50,7 +50,7 @@ public class Puzzle0093 : Puzzle
                 
                 Console.WriteLine($"{length}:");
                 
-                Console.WriteLine(string.Join(' ', results));
+                Console.WriteLine(string.Join(' ', results.Order()));
                 
                 Console.WriteLine();
             }
