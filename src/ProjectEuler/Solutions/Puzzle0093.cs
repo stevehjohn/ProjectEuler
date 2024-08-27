@@ -194,7 +194,11 @@ public partial class Puzzle0093 : Puzzle
 
             if (digit == ')')
             {
-                // TODO
+                while (stack.Count > 0 && stack.Peek() != '(')
+                {
+                    queue.Enqueue(new Operator(stack.Pop()));
+                }
+                
                 continue;
             }
 
