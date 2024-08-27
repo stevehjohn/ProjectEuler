@@ -71,18 +71,18 @@ public class Puzzle0093 : Puzzle
         return i - 1;
     }
 
-    private int Evaluate(int[] permutation, char[] operatorPermutation)
+    private int Evaluate(int[] digits, char[] operators)
     {
         _stack.Clear();
         
         for (var i = 0; i < 3; i++)
         {
-            _stack.Push(operatorPermutation[i]);
+            _stack.Push(operators[i]);
 
-            _stack.Push(permutation[i]);
+            _stack.Push(digits[i]);
         }
         
-        _stack.Push(permutation[3]);
+        _stack.Push(digits[3]);
 
         while (_stack.Count > 1)
         {
