@@ -47,6 +47,12 @@ public class Puzzle0093 : Puzzle
                 max = length;
 
                 answer = combination;
+                
+                Console.WriteLine($"{length}:");
+                
+                Console.WriteLine(string.Join(' ', results));
+                
+                Console.WriteLine();
             }
         }
 
