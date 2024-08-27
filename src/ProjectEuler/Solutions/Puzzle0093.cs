@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,6 +27,8 @@ public partial class Puzzle0093 : Puzzle
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
 
+        combinations = [[1, 2, 5, 8]];
+        
         var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
         int[] answer = [];
@@ -48,7 +51,7 @@ public partial class Puzzle0093 : Puzzle
 
                         var result = Evaluate(expression);
                         
-                        if (result % 1 != 0)
+                        if (result % 1 == 0 && result > 0)
                         {
                             results.Add((int) result);
                         }
@@ -84,7 +87,7 @@ public partial class Puzzle0093 : Puzzle
             i++;
         }
 
-        return i - 1;
+        return i;
     }
 
     private static string CreateExpression(int[] digits, char[] operators, string[] arrangement)
@@ -125,7 +128,11 @@ public partial class Puzzle0093 : Puzzle
 
     private static double Evaluate(string expression)
     {
+        Console.Write($"{expression}    ");
+        
         var queue = ParseToQueue(expression);
+        
+        Console.Write($"{string.Join(' ', queue.ToList())}    ");
 
         var stack = new Stack<IElement>();
 
@@ -167,6 +174,8 @@ public partial class Puzzle0093 : Puzzle
         }
 
         var result = ((Operand) stack.Pop()).Value;
+        
+        Console.WriteLine($"{result}\n");
 
         return result;
     }
@@ -203,7 +212,12 @@ public partial class Puzzle0093 : Puzzle
                 {
                     queue.Enqueue(new Operator(stack.Pop()));
                 }
-                
+
+                if (stack.Peek() == '(')
+                {
+                    stack.Pop();
+                }
+
                 continue;
             }
 
@@ -220,6 +234,11 @@ public partial class Puzzle0093 : Puzzle
             }
 
             stack.Push(digit);
+        }
+
+        while (stack.Count > 0)
+        {
+            queue.Enqueue(new Operator(stack.Pop()));
         }
         
         return queue;
@@ -286,6 +305,11 @@ public partial class Puzzle0093 : Puzzle
         {
             Value = value;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
     
     private class Operand : IElement
@@ -295,6 +319,11 @@ public partial class Puzzle0093 : Puzzle
         public Operand(double value)
         {
             Value = value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
         }
     }
 
