@@ -11,6 +11,12 @@ public class Puzzle0093 : Puzzle
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
+
+    private static readonly char[][] Arrangements =
+    [
+        ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
+        ['(', 'x', 'o', 'x', ')', 'o', '(', 'x', 'o', 'x', ')']
+    ];
     
     private readonly Stack<double> _stack = new();
     
