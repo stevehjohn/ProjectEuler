@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
@@ -7,7 +8,7 @@ using ProjectEuler.Infrastructure;
 namespace ProjectEuler.Solutions;
 
 [UsedImplicitly]
-public class Puzzle0093 : Puzzle
+public partial class Puzzle0093 : Puzzle
 {
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -18,6 +19,8 @@ public class Puzzle0093 : Puzzle
         ["x ", "o ", "x ", "o ", "x ", "o ", "x"],
         ["(", "x ", "o ", "x", ")", " o ", "(", "x ", "o ", "x", ")"]
     ];
+
+    private static readonly Regex Parser = ExpressionParser();
 
     public override string GetAnswer()
     {
@@ -117,7 +120,7 @@ public class Puzzle0093 : Puzzle
         return result.ToString();
     }
 
-    private int Evaluate(string expression)
+    private static int Evaluate(string expression)
     {
         var queue = ParseToQueue(expression);
 
@@ -167,6 +170,42 @@ public class Puzzle0093 : Puzzle
     {
         var queue = new Queue<IElement>();
 
+        var stack = new Stack<char>();
+
+        var parts = Parser.Matches(expression).Select(p => p.Value);
+        
+        foreach (var item in parts)
+        {
+            if (int.TryParse(item, out var number))
+            {
+                queue.Enqueue(new Operand(number));
+                
+                continue;
+            }
+
+            var digit = item[0];
+
+            if (digit == '(')
+            {
+                stack.Push(digit);
+                
+                continue;
+            }
+
+            if (digit == ')')
+            {
+                // TODO
+                continue;
+            }
+
+            while (stack.Peek() != '(')
+            {
+                // TODO
+            }
+            
+            queue.Enqueue(new Operator(item[0]));
+        }
+        
         return queue;
     }
 
@@ -211,7 +250,7 @@ public class Puzzle0093 : Puzzle
         }
     }
 
-    private interface IElement { }
+    private interface IElement;
 
     private class Operator : IElement
     {
@@ -232,4 +271,7 @@ public class Puzzle0093 : Puzzle
             Value = value;
         }
     }
+
+    [GeneratedRegex(@"\d+|[+\-*/()]", RegexOptions.Compiled)]
+    private static partial Regex ExpressionParser();
 }
