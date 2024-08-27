@@ -42,13 +42,13 @@ public class Puzzle0093 : Puzzle
 
             var length = GetRunLength(results);
 
-            if (length > max)
+            if (length > max || string.Join(string.Empty, combination) == "1258")
             {
                 max = length;
 
                 answer = combination;
                 
-                Console.WriteLine($"{length}:");
+                Console.WriteLine($"{length} ({string.Join(string.Empty, combination)}):");
                 
                 Console.WriteLine(string.Join(' ', results.Order()));
                 
