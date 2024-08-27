@@ -128,6 +128,10 @@ public partial class Puzzle0093 : Puzzle
 
     private static double Evaluate(string expression)
     {
+        if (expression == "(5 / 1) + (2 * 8)")
+        {
+        }
+
         Console.Write($"{expression}    ");
         
         var queue = ParseToQueue(expression);
@@ -140,9 +144,9 @@ public partial class Puzzle0093 : Puzzle
         {
             if (element is Operator symbol)
             {
-                var left = ((Operand) stack.Pop()).Value;
-
                 var right = ((Operand) stack.Pop()).Value;
+
+                var left = ((Operand) stack.Pop()).Value;
 
                 switch (symbol.Value)
                 {
