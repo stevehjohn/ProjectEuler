@@ -129,7 +129,7 @@ public class Puzzle0093 : Puzzle
             element.Process(stack);
         }
 
-        var result = ((Operand) stack.Pop()).Value;
+        var result = stack.Pop().Value;
 
         return result;
     }
