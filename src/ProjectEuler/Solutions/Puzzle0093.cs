@@ -185,7 +185,7 @@ public class Puzzle0093 : Puzzle
                 
                 var numberStr = expression.Substring(start, i - start);
                 
-                queue.Enqueue(new Operand(int.Parse(numberStr)));
+                queue.Enqueue(new Operand(double.Parse(numberStr)));
                 
                 continue;
             }
