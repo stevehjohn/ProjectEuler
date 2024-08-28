@@ -85,7 +85,7 @@ public class Puzzle0093 : Puzzle
 
         var o = 0;
 
-        var result = new StringBuilder();
+        var result = new char[arrangement.Length];
 
         for (var i = 0; i < arrangement.Length; i++)
         {
@@ -94,25 +94,25 @@ public class Puzzle0093 : Puzzle
             switch (pattern)
             {
                 case 'x':
-                    result.Append(digits[d]);
+                    result[i] = (char) (digits[d] + '0');
                     d++;
 
                     break;
 
                 case 'o':
-                    result.Append(operators[o]);
+                    result[i] = operators[o];
                     o++;
 
                     break;
 
                 default:
-                    result.Append(pattern);
+                    result[i] = arrangement[i];
 
                     break;
             }
         }
 
-        return result.ToString();
+        return new string(result);
     }
 
     private static double Evaluate(string expression)
