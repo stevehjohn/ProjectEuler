@@ -15,10 +15,10 @@ public partial class Puzzle0093 : Puzzle
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
 
-    private static readonly string[][] Arrangements =
+    private static readonly char[][] Arrangements =
     [
-        ["(", "x ", "o ", "x", ")", " o ", "x ", "o ", "x"],
-        ["(", "x ", "o ", "x", " o ", "x ", ")", "o ", "x"]
+        ['(', 'x', 'o', 'x', ')', 'o', 'x', 'o', 'x'],
+        ['(', 'x', 'o', 'x', 'o', 'x', ')', 'o', 'x']
     ];
 
     private static readonly Regex Parser = ExpressionParser();
@@ -82,7 +82,7 @@ public partial class Puzzle0093 : Puzzle
         return i;
     }
 
-    private static string CreateExpression(int[] digits, char[] operators, string[] arrangement)
+    private static string CreateExpression(int[] digits, char[] operators, char[] arrangement)
     {
         var d = 0;
 
@@ -94,16 +94,16 @@ public partial class Puzzle0093 : Puzzle
         {
             var pattern = arrangement[i];
 
-            switch (pattern.Trim()[0])
+            switch (pattern)
             {
                 case 'x':
-                    result.Append(pattern.Replace("x", digits[d].ToString()));
+                    result.Append(digits[d]);
                     d++;
 
                     break;
 
                 case 'o':
-                    result.Append(pattern.Replace("o", operators[o].ToString()));
+                    result.Append(operators[o]);
                     o++;
 
                     break;
