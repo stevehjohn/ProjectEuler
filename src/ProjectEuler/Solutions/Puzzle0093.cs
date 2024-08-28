@@ -178,14 +178,14 @@ public class Puzzle0093 : Puzzle
             {
                 var start = i;
                 
-                while (i < expression.Length && (char.IsDigit(expression[i]) || expression[i] == '.'))
+                while (i < expression.Length && (char.IsDigit(expression[i])))
                 {
                     i++;
                 }
                 
                 var numberStr = expression.Substring(start, i - start);
                 
-                queue.Enqueue(new Operand(double.Parse(numberStr)));
+                queue.Enqueue(new Operand(int.Parse(numberStr)));
                 
                 continue;
             }
