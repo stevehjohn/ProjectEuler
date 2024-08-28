@@ -31,8 +31,6 @@ public partial class Puzzle0093 : Puzzle
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
-
-        combinations = [[1, 2, 5, 8]];
         
         var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
