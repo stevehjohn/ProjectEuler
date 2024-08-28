@@ -11,6 +11,12 @@ public class Puzzle0093 : Puzzle
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
+
+    private static readonly char[][] Arrangements =
+    [
+        ['o', 'x', 'o', 'x', 'o', 'x', 'x'],
+        ['o', 'o', 'x', 'x', 'o', 'x', 'x']
+    ];
     
     private readonly Stack<double> _stack = new();
     
@@ -34,25 +40,22 @@ public class Puzzle0093 : Puzzle
 
                 foreach (var permutation in permutations)
                 {
-                    var result = Evaluate(permutation, operatorCombination);
+                    foreach (var arrangement in Arrangements)
+                    {
+                        var result = Evaluate(permutation, operatorCombination, arrangement);
 
-                    results.Add(result);
+                        results.Add(result);
+                    }
                 }
             }
 
             var length = GetRunLength(results);
 
-            if (length > max || string.Join(string.Empty, combination) == "1258")
+            if (length > max)
             {
                 max = length;
 
                 answer = combination;
-                
-                Console.WriteLine($"{length} ({string.Join(string.Empty, combination)}):");
-                
-                Console.WriteLine(string.Join(' ', results.Order()));
-                
-                Console.WriteLine();
             }
         }
 
@@ -71,18 +74,31 @@ public class Puzzle0093 : Puzzle
         return i - 1;
     }
 
-    private int Evaluate(int[] digits, char[] operators)
+    private int Evaluate(int[] digits, char[] operators, char[] arrangement)
     {
         _stack.Clear();
-        
-        for (var i = 0; i < 3; i++)
-        {
-            _stack.Push(operators[i]);
 
-            _stack.Push(digits[i]);
-        }
+        var d = 0;
+
+        var o = 0;
         
-        _stack.Push(digits[3]);
+        for (var i = 0; i < arrangement.Length; i++)
+        {
+            switch (arrangement[i])
+            {
+                case 'x':
+                    _stack.Push(digits[d]);
+                    d++;
+                    
+                    break;
+                
+                case 'o':
+                    _stack.Push(operators[o]);
+                    o++;
+                    
+                    break;
+            }
+        }
 
         while (_stack.Count > 1)
         {
