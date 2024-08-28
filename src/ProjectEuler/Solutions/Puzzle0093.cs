@@ -128,8 +128,6 @@ public partial class Puzzle0093 : Puzzle
 
     private static double Evaluate(string expression)
     {
-        Console.Write($"{expression}    ");
-        
         var queue = ParseToQueue(expression);
         
         Console.Write($"{string.Join(' ', queue.ToList())}    ");
@@ -175,7 +173,7 @@ public partial class Puzzle0093 : Puzzle
 
         var result = ((Operand) stack.Pop()).Value;
         
-        Console.WriteLine($"{result}\n");
+        Console.WriteLine($"{result}");
 
         return result;
     }
