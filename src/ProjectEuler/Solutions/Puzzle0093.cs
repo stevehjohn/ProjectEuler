@@ -190,37 +190,30 @@ public class Puzzle0093 : Puzzle
                 
                 continue;
             }
-            
-            // if (int.TryParse(item, out var number))
-            // {
-            //     queue.Enqueue(new Operand(number));
-            //
-            //     continue;
-            // }
 
-            //var digit = item[0];
             i++;
             
-            if (digit == '(')
+            switch (digit)
             {
-                stack.Push(digit);
+                case '(':
+                    stack.Push(digit);
 
-                continue;
-            }
-
-            if (digit == ')')
-            {
-                while (stack.Count > 0 && stack.Peek() != '(')
+                    continue;
+                
+                case ')':
                 {
-                    queue.Enqueue(new Operator(stack.Pop()));
-                }
+                    while (stack.Count > 0 && stack.Peek() != '(')
+                    {
+                        queue.Enqueue(new Operator(stack.Pop()));
+                    }
 
-                if (stack.Peek() == '(')
-                {
-                    stack.Pop();
-                }
+                    if (stack.Peek() == '(')
+                    {
+                        stack.Pop();
+                    }
 
-                continue;
+                    continue;
+                }
             }
 
             var precedence = GetPrecedence(digit);
