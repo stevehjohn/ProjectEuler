@@ -31,7 +31,7 @@ public partial class Puzzle0093 : Puzzle
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
-        
+
         var operators = Operators.GetCombinationsWithRepetition(3).ToList();
 
         int[] answer = [];
@@ -42,18 +42,18 @@ public partial class Puzzle0093 : Puzzle
         {
             var results = new HashSet<int>();
 
-            foreach (var operatorCombination in operators)
-            {
-                var permutations = combination.GetPermutations();
+            var permutations = combination.GetPermutations();
 
-                foreach (var permutation in permutations)
+            foreach (var permutation in permutations)
+            {
+                foreach (var operatorCombination in operators)
                 {
                     foreach (var arrangement in Arrangements)
                     {
                         var expression = CreateExpression(permutation, operatorCombination, arrangement);
 
                         var result = Evaluate(expression);
-                        
+
                         if (result % 1 == 0 && result > 0)
                         {
                             results.Add((int) result);
@@ -64,7 +64,7 @@ public partial class Puzzle0093 : Puzzle
 
             var length = GetRunLength(results);
 
-            if (length > max || string.Join(string.Empty, combination) == "1258")
+            if (length > max)
             {
                 max = length;
 
@@ -178,13 +178,13 @@ public partial class Puzzle0093 : Puzzle
         var stack = new Stack<char>();
 
         var parts = Parser.Matches(expression).Select(p => p.Value);
-        
+
         foreach (var item in parts)
         {
             if (int.TryParse(item, out var number))
             {
                 queue.Enqueue(new Operand(number));
-                
+
                 continue;
             }
 
@@ -193,7 +193,7 @@ public partial class Puzzle0093 : Puzzle
             if (digit == '(')
             {
                 stack.Push(digit);
-                
+
                 continue;
             }
 
@@ -236,7 +236,7 @@ public partial class Puzzle0093 : Puzzle
         {
             queue.Enqueue(new Operator(stack.Pop()));
         }
-        
+
         return queue;
     }
 
@@ -307,7 +307,7 @@ public partial class Puzzle0093 : Puzzle
             return Value.ToString();
         }
     }
-    
+
     private class Operand : IElement
     {
         public double Value { get; }
