@@ -1,4 +1,7 @@
+using System.Globalization;
 using System.Numerics;
+using System.Text;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
@@ -6,20 +9,20 @@ using ProjectEuler.Infrastructure;
 namespace ProjectEuler.Solutions;
 
 [UsedImplicitly]
-public class Puzzle0093 : Puzzle
+public partial class Puzzle0093 : Puzzle
 {
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     private static readonly char[] Operators = ['+', '-', '/', '*'];
 
-    private static readonly char[][] Arrangements =
+    private static readonly string[][] Arrangements =
     [
-        ['o', 'x', 'o', 'x', 'o', 'x', 'x'],
-        ['o', 'o', 'x', 'x', 'o', 'x', 'x']
+        ["(", "x ", "o ", "x", ")", " o ", "x ", "o ", "x"],
+        ["(", "x ", "o ", "x", " o ", "x ", ")", "o ", "x"]
     ];
-    
-    private readonly Stack<double> _stack = new();
-    
+
+    private static readonly Regex Parser = ExpressionParser();
+
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToList();
@@ -29,22 +32,27 @@ public class Puzzle0093 : Puzzle
         int[] answer = [];
 
         var max = 0;
-        
+
         foreach (var combination in combinations)
         {
             var results = new HashSet<int>();
 
-            foreach (var operatorCombination in operators)
-            {
-                var permutations = combination.GetPermutations();
+            var permutations = combination.GetPermutations();
 
-                foreach (var permutation in permutations)
+            foreach (var permutation in permutations)
+            {
+                foreach (var operatorCombination in operators)
                 {
                     foreach (var arrangement in Arrangements)
                     {
-                        var result = Evaluate(permutation, operatorCombination, arrangement);
+                        var expression = CreateExpression(permutation, operatorCombination, arrangement);
 
-                        results.Add(result);
+                        var result = Evaluate(expression);
+
+                        if (result % 1 == 0 && result > 0)
+                        {
+                            results.Add((int) result);
+                        }
                     }
                 }
             }
@@ -55,7 +63,7 @@ public class Puzzle0093 : Puzzle
             {
                 max = length;
 
-                answer = combination;
+                answer = combination.Order().ToArray();
             }
         }
 
@@ -65,81 +73,176 @@ public class Puzzle0093 : Puzzle
     private static int GetRunLength(HashSet<int> results)
     {
         var i = 0;
-        
+
         while (results.Contains(i + 1))
         {
             i++;
         }
 
-        return i - 1;
+        return i;
     }
 
-    private int Evaluate(int[] digits, char[] operators, char[] arrangement)
+    private static string CreateExpression(int[] digits, char[] operators, string[] arrangement)
     {
-        _stack.Clear();
-
         var d = 0;
 
         var o = 0;
-        
+
+        var result = new StringBuilder();
+
         for (var i = 0; i < arrangement.Length; i++)
         {
-            switch (arrangement[i])
+            var pattern = arrangement[i];
+
+            switch (pattern.Trim()[0])
             {
                 case 'x':
-                    _stack.Push(digits[d]);
+                    result.Append(pattern.Replace("x", digits[d].ToString()));
                     d++;
-                    
+
                     break;
-                
+
                 case 'o':
-                    _stack.Push(operators[o]);
+                    result.Append(pattern.Replace("o", operators[o].ToString()));
                     o++;
-                    
-                    break;
-            }
-        }
 
-        while (_stack.Count > 1)
-        {
-            var left = _stack.Pop();
-
-            var right = _stack.Pop();
-
-            var operation = _stack.Pop();
-
-            switch (operation)
-            {
-                case '+':
-                    _stack.Push(left + right);
-                    
                     break;
-                
-                case '-':
-                    _stack.Push(left - right);
-                    
-                    break;
-                
-                case '*':
-                    _stack.Push(left * right);
-                    
-                    break;
-                
+
                 default:
-                    _stack.Push(left / right);
-                    
+                    result.Append(pattern);
+
                     break;
             }
         }
 
-        var result = _stack.Pop();
+        return result.ToString();
+    }
 
-        if (result < 1 || result % 1 != 0)
+    private static double Evaluate(string expression)
+    {
+        var queue = ParseToQueue(expression);
+
+        var stack = new Stack<IElement>();
+
+        foreach (var element in queue)
         {
-            return 0;
+            if (element is Operator symbol)
+            {
+                var right = ((Operand) stack.Pop()).Value;
+
+                var left = ((Operand) stack.Pop()).Value;
+
+                switch (symbol.Value)
+                {
+                    case '+':
+                        stack.Push(new Operand(left + right));
+
+                        break;
+
+                    case '-':
+                        stack.Push(new Operand(left - right));
+
+                        break;
+
+                    case '*':
+                        stack.Push(new Operand(left * right));
+
+                        break;
+
+                    default:
+                        stack.Push(new Operand(left / right));
+
+                        break;
+                }
+            }
+            else
+            {
+                stack.Push(element);
+            }
         }
 
-        return (int) result;
+        var result = ((Operand) stack.Pop()).Value;
+
+        return result;
+    }
+
+    private static Queue<IElement> ParseToQueue(string expression)
+    {
+        var queue = new Queue<IElement>();
+
+        var stack = new Stack<char>();
+
+        var parts = Parser.Matches(expression).Select(p => p.Value);
+
+        foreach (var item in parts)
+        {
+            if (int.TryParse(item, out var number))
+            {
+                queue.Enqueue(new Operand(number));
+
+                continue;
+            }
+
+            var digit = item[0];
+
+            if (digit == '(')
+            {
+                stack.Push(digit);
+
+                continue;
+            }
+
+            if (digit == ')')
+            {
+                while (stack.Count > 0 && stack.Peek() != '(')
+                {
+                    queue.Enqueue(new Operator(stack.Pop()));
+                }
+
+                if (stack.Peek() == '(')
+                {
+                    stack.Pop();
+                }
+
+                continue;
+            }
+
+            var precedence = GetPrecedence(digit);
+
+            if (stack.Count > 0)
+            {
+                var top = stack.Peek();
+
+                while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
+                {
+                    queue.Enqueue(new Operator(stack.Pop()));
+
+                    if (stack.Count > 0)
+                    {
+                        top = stack.Peek();
+                    }
+                }
+            }
+
+            stack.Push(digit);
+        }
+
+        while (stack.Count > 0)
+        {
+            queue.Enqueue(new Operator(stack.Pop()));
+        }
+
+        return queue;
+    }
+
+    private static int GetPrecedence(char symbol)
+    {
+        return symbol switch
+        {
+            '*' => 3,
+            '/' => 3,
+            _ => 2
+        };
     }
 
     private static IEnumerable<T[]> GenerateCombinations<T>(T[] source, int length)
@@ -147,11 +250,11 @@ public class Puzzle0093 : Puzzle
         var i = 1;
 
         var grayCode = 0u;
-        
+
         while ((grayCode & (1ul << source.Length)) == 0)
         {
-            grayCode = (uint) (i ^ (i >> 1)); 
-            
+            grayCode = (uint) (i ^ (i >> 1));
+
             if (BitOperations.PopCount(grayCode) == length)
             {
                 var digits = new T[length];
@@ -161,7 +264,7 @@ public class Puzzle0093 : Puzzle
                 var position = 0;
 
                 var bit = 1;
-                
+
                 while (used < length)
                 {
                     if ((grayCode & bit) > 0)
@@ -175,11 +278,46 @@ public class Puzzle0093 : Puzzle
 
                     bit <<= 1;
                 }
-                
+
                 yield return digits;
             }
 
             i++;
         }
     }
+
+    private interface IElement;
+
+    private class Operator : IElement
+    {
+        public char Value { get; }
+
+        public Operator(char value)
+        {
+            Value = value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    private class Operand : IElement
+    {
+        public double Value { get; }
+
+        public Operand(double value)
+        {
+            Value = value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString(CultureInfo.InvariantCulture);
+        }
+    }
+
+    [GeneratedRegex(@"\d+|[+\-*/()]", RegexOptions.Compiled)]
+    private static partial Regex ExpressionParser();
 }
