@@ -316,7 +316,7 @@ public class Puzzle0093 : Puzzle
 
         public void Process(Stack<IElement> stack)
         {
-            stack.Push(new Operand(Value));
+            stack.Push(this);
         }
 
         public override string ToString()
