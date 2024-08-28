@@ -25,9 +25,9 @@ public partial class Puzzle0093 : Puzzle
 
     public override string GetAnswer()
     {
-        var combinations = GenerateCombinations(Digits, 4).ToList();
+        var combinations = GenerateCombinations(Digits, 4).ToArray();
 
-        var operators = Operators.GetCombinationsWithRepetition(3).ToList();
+        var operators = Operators.GetCombinationsWithRepetition(3).ToArray();
 
         int[] answer = [];
 
