@@ -157,7 +157,7 @@ public class Puzzle0093 : Puzzle
                 
                 var numberStr = expression.Substring(start, i - start);
                 
-                queue.Enqueue(new Operand(int.Parse(numberStr)));
+                queue.Enqueue(Element.Create(int.Parse(numberStr)));
                 
                 continue;
             }
@@ -175,7 +175,7 @@ public class Puzzle0093 : Puzzle
                 {
                     while (stack.Count > 0 && stack.Peek() != '(')
                     {
-                        queue.Enqueue(new Operator(stack.Pop()));
+                        queue.Enqueue(Element.Create(stack.Pop()));
                     }
 
                     if (stack.Peek() == '(')
@@ -195,7 +195,7 @@ public class Puzzle0093 : Puzzle
 
                 while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
                 {
-                    queue.Enqueue(new Operator(stack.Pop()));
+                    queue.Enqueue(Element.Create(stack.Pop()));
 
                     if (stack.Count > 0)
                     {
@@ -209,7 +209,7 @@ public class Puzzle0093 : Puzzle
 
         while (stack.Count > 0)
         {
-            queue.Enqueue(new Operator(stack.Pop()));
+            queue.Enqueue(Element.Create(stack.Pop()));
         }
 
         return queue;
@@ -271,6 +271,16 @@ public class Puzzle0093 : Puzzle
         public abstract void Process(Stack<Element> stack);
         
         public virtual double Value => throw new PuzzleException("Incorrect call to .Value on Operator.");
+
+        public static Element Create(char symbol)
+        {
+            return new Operator(symbol);
+        }
+
+        public static Element Create(double value)
+        {
+            return new Operand(value);
+        }
     }
 
     private class Operator : Element
