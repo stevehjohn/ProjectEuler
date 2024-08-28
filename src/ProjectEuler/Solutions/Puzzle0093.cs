@@ -29,7 +29,7 @@ public class Puzzle0093 : Puzzle
 
         var max = 0;
 
-        foreach (var combination in combinations)
+        Parallel.ForEach(combinations, combination =>
         {
             var results = new HashSet<int>();
 
@@ -57,11 +57,14 @@ public class Puzzle0093 : Puzzle
 
             if (length > max)
             {
-                max = length;
+                lock (this)
+                {
+                    max = length;
 
-                answer = combination.Order().ToArray();
+                    answer = combination.Order().ToArray();
+                }
             }
-        }
+        });
 
         return string.Join(string.Empty, answer);
     }
