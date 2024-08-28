@@ -18,7 +18,12 @@ public partial class Puzzle0093 : Puzzle
     private static readonly string[][] Arrangements =
     [
         ["x ", "o ", "x ", "o ", "x ", "o ", "x"],
-        ["x ", "o ", "x", " o ", "(", "x ", "o ", "x", ")"]
+        ["x ", "o ", "x", " o ", "(", "x ", "o ", "x", ")"],
+        ["(", "x ", "o ", "x", ")", " o ", "(", "x ", "o ", "x", ")"],
+        ["(", "x ", "o ", "x", ")", " o ", "x ", "o ", "x"],
+        ["(", "x ", "o ", "x", " o ", "x ", ")", "o ", "x"],
+        ["x ", "o ", "(", "x", " o ", "x ", ")", "o ", "x"],
+        ["x ", "o ", "(", "x", " o ", "x ", "o ", "x", ")"]
     ];
 
     private static readonly Regex Parser = ExpressionParser();
@@ -66,12 +71,6 @@ public partial class Puzzle0093 : Puzzle
                 max = length;
 
                 answer = combination;
-
-                Console.WriteLine($"{length} ({string.Join(string.Empty, combination)}):");
-
-                Console.WriteLine(string.Join(' ', results.Order()));
-
-                Console.WriteLine();
             }
         }
 
@@ -129,8 +128,6 @@ public partial class Puzzle0093 : Puzzle
     private static double Evaluate(string expression)
     {
         var queue = ParseToQueue(expression);
-        
-        Console.Write($"{string.Join(' ', queue.ToList())}    ");
 
         var stack = new Stack<IElement>();
 
@@ -172,8 +169,6 @@ public partial class Puzzle0093 : Puzzle
         }
 
         var result = ((Operand) stack.Pop()).Value;
-        
-        Console.WriteLine($"{result}");
 
         return result;
     }
