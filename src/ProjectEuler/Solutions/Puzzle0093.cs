@@ -18,7 +18,7 @@ public partial class Puzzle0093 : Puzzle
     private static readonly string[][] Arrangements =
     [
         ["x ", "o ", "x ", "o ", "x ", "o ", "x"],
-        ["(", "x ", "o ", "x", ")", " o ", "(", "x ", "o ", "x", ")"]
+        ["x ", "o ", "x", " o ", "(", "x ", "o ", "x", ")"]
     ];
 
     private static readonly Regex Parser = ExpressionParser();
@@ -228,6 +228,11 @@ public partial class Puzzle0093 : Puzzle
                 while (stack.Count > 0 && top != '(' && GetPrecedence(top) >= precedence)
                 {
                     queue.Enqueue(new Operator(stack.Pop()));
+
+                    if (stack.Count > 0)
+                    {
+                        top = stack.Peek();
+                    }
                 }
             }
 
