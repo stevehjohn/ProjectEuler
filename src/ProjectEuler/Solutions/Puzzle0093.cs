@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Numerics;
 using JetBrains.Annotations;
+using ProjectEuler.Exceptions;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
 
@@ -125,24 +126,7 @@ public class Puzzle0093 : Puzzle
 
         foreach (var element in queue)
         {
-            if (element is Operator symbol)
-            {
-                var right = ((Operand) stack.Pop()).Value;
-
-                var left = ((Operand) stack.Pop()).Value;
-
-                stack.Push(new Operand(symbol.Value switch
-                {
-                    '+' => left + right,
-                    '-' => left - right,
-                    '*' => left * right,
-                    _ => left / right
-                }));
-            }
-            else
-            {
-                stack.Push(element);
-            }
+            element.Process(stack);
         }
 
         var result = ((Operand) stack.Pop()).Value;
@@ -282,20 +266,42 @@ public class Puzzle0093 : Puzzle
         }
     }
 
-    private interface IElement;
+    private interface IElement
+    {
+        void Process(Stack<IElement> stack);
+        
+        double Value { get; }
+    }
 
     private class Operator : IElement
     {
-        public char Value { get; }
+        private readonly char _value;
+
+        public double Value => throw new PuzzleException("Incorrect call to .Value on Operator.");
 
         public Operator(char value)
         {
-            Value = value;
+            _value = value;
+        }
+
+        public void Process(Stack<IElement> stack)
+        {
+            var right = stack.Pop().Value;
+
+            var left = stack.Pop().Value;
+
+            stack.Push(new Operand(_value switch
+            {
+                '+' => left + right,
+                '-' => left - right,
+                '*' => left * right,
+                _ => left / right
+            }));
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return _value.ToString();
         }
     }
 
@@ -306,6 +312,11 @@ public class Puzzle0093 : Puzzle
         public Operand(double value)
         {
             Value = value;
+        }
+
+        public void Process(Stack<IElement> stack)
+        {
+            stack.Push(new Operand(Value));
         }
 
         public override string ToString()
