@@ -128,28 +128,13 @@ public class Puzzle0093 : Puzzle
 
                 var left = ((Operand) stack.Pop()).Value;
 
-                switch (symbol.Value)
+                stack.Push(new Operand(symbol.Value switch
                 {
-                    case '+':
-                        stack.Push(new Operand(left + right));
-
-                        break;
-
-                    case '-':
-                        stack.Push(new Operand(left - right));
-
-                        break;
-
-                    case '*':
-                        stack.Push(new Operand(left * right));
-
-                        break;
-
-                    default:
-                        stack.Push(new Operand(left / right));
-
-                        break;
-                }
+                    '+' => left + right,
+                    '-' => left - right,
+                    '*' => left * right,
+                    _ => left / right
+                }));
             }
             else
             {
