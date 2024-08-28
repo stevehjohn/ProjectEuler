@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Numerics;
 using System.Text;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
@@ -9,7 +8,7 @@ using ProjectEuler.Infrastructure;
 namespace ProjectEuler.Solutions;
 
 [UsedImplicitly]
-public partial class Puzzle0093 : Puzzle
+public class Puzzle0093 : Puzzle
 {
     private static readonly int[] Digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -20,8 +19,6 @@ public partial class Puzzle0093 : Puzzle
         ['(', 'x', 'o', 'x', ')', 'o', 'x', 'o', 'x'],
         ['(', 'x', 'o', 'x', 'o', 'x', ')', 'o', 'x']
     ];
-
-    private static readonly Regex Parser = ExpressionParser();
 
     public override string GetAnswer()
     {
@@ -172,19 +169,38 @@ public partial class Puzzle0093 : Puzzle
 
         var stack = new Stack<char>();
 
-        var parts = Parser.Matches(expression).Select(p => p.Value);
-
-        foreach (var item in parts)
+        var i = 0;
+        
+        while (i < expression.Length)
         {
-            if (int.TryParse(item, out var number))
-            {
-                queue.Enqueue(new Operand(number));
+            var digit = expression[i];
 
+            if (char.IsDigit(digit))
+            {
+                var start = i;
+                
+                while (i < expression.Length && (char.IsDigit(expression[i]) || expression[i] == '.'))
+                {
+                    i++;
+                }
+                
+                var numberStr = expression.Substring(start, i - start);
+                
+                queue.Enqueue(new Operand(int.Parse(numberStr)));
+                
                 continue;
             }
+            
+            // if (int.TryParse(item, out var number))
+            // {
+            //     queue.Enqueue(new Operand(number));
+            //
+            //     continue;
+            // }
 
-            var digit = item[0];
-
+            //var digit = item[0];
+            i++;
+            
             if (digit == '(')
             {
                 stack.Push(digit);
@@ -317,7 +333,4 @@ public partial class Puzzle0093 : Puzzle
             return Value.ToString(CultureInfo.InvariantCulture);
         }
     }
-
-    [GeneratedRegex(@"\d+|[+\-*/()]", RegexOptions.Compiled)]
-    private static partial Regex ExpressionParser();
 }
