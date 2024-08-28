@@ -122,7 +122,7 @@ public class Puzzle0093 : Puzzle
     {
         var queue = ParseToQueue(expression);
 
-        var stack = new Stack<IElement>();
+        var stack = new Stack<Element>();
 
         foreach (var element in queue)
         {
@@ -134,9 +134,9 @@ public class Puzzle0093 : Puzzle
         return result;
     }
 
-    private static Queue<IElement> ParseToQueue(string expression)
+    private static Queue<Element> ParseToQueue(string expression)
     {
-        var queue = new Queue<IElement>();
+        var queue = new Queue<Element>();
 
         var stack = new Stack<char>();
 
@@ -266,25 +266,23 @@ public class Puzzle0093 : Puzzle
         }
     }
 
-    private interface IElement
+    private abstract class Element
     {
-        void Process(Stack<IElement> stack);
+        public abstract void Process(Stack<Element> stack);
         
-        double Value { get; }
+        public virtual double Value => throw new PuzzleException("Incorrect call to .Value on Operator.");
     }
 
-    private class Operator : IElement
+    private class Operator : Element
     {
         private readonly char _value;
-
-        public double Value => throw new PuzzleException("Incorrect call to .Value on Operator.");
 
         public Operator(char value)
         {
             _value = value;
         }
 
-        public void Process(Stack<IElement> stack)
+        public override void Process(Stack<Element> stack)
         {
             var right = stack.Pop().Value;
 
@@ -305,16 +303,16 @@ public class Puzzle0093 : Puzzle
         }
     }
 
-    private class Operand : IElement
+    private class Operand : Element
     {
-        public double Value { get; }
+        public override double Value { get; }
 
         public Operand(double value)
         {
             Value = value;
         }
 
-        public void Process(Stack<IElement> stack)
+        public override void Process(Stack<Element> stack)
         {
             stack.Push(this);
         }
