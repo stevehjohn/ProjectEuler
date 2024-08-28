@@ -178,7 +178,7 @@ public class Puzzle0093 : Puzzle
             {
                 var start = i;
                 
-                while (i < expression.Length && (char.IsDigit(expression[i])))
+                while (i < expression.Length && char.IsDigit(expression[i]))
                 {
                     i++;
                 }
