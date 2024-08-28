@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Numerics;
-using System.Text;
 using JetBrains.Annotations;
 using ProjectEuler.Extensions;
 using ProjectEuler.Infrastructure;
