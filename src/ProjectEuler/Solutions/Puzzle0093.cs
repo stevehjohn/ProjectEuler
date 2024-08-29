@@ -23,7 +23,7 @@ public class Puzzle0093 : Puzzle
     public override string GetAnswer()
     {
         var combinations = GenerateCombinations(Digits, 4).ToArray();
-
+        
         var operators = Operators.GetCombinationsWithRepetition(3).ToArray();
 
         int[] answer = [];
@@ -145,6 +145,13 @@ public class Puzzle0093 : Puzzle
         while (i < expression.Length)
         {
             var digit = expression[i];
+
+            if (digit == ' ')
+            {
+                i++;
+                
+                continue;
+            }
 
             if (char.IsDigit(digit))
             {
