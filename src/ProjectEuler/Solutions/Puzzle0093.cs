@@ -285,11 +285,18 @@ public class Puzzle0093 : Puzzle
 
     private class Operator : Element
     {
-        private readonly char _value;
+        private readonly Operation _operation;
 
-        public Operator(char value)
+        public Operator(char operation)
         {
-            _value = value;
+            _operation = operation switch
+            {
+                '+' => Operation.Add,
+                '-' => Operation.Subtract,
+                '*' => Operation.Multiply,
+                '/' => Operation.Divide,
+                _ => throw new PuzzleException($"Unknown operator type '{operation}'.")
+            };
         }
 
         public override void Process(Stack<Element> stack)
@@ -298,18 +305,18 @@ public class Puzzle0093 : Puzzle
 
             var left = stack.Pop().Value;
 
-            stack.Push(new Operand(_value switch
+            stack.Push(new Operand(_operation switch
             {
-                '+' => left + right,
-                '-' => left - right,
-                '*' => left * right,
+                Operation.Add => left + right,
+                Operation.Subtract => left - right,
+                Operation.Multiply => left * right,
                 _ => left / right
             }));
         }
 
         public override string ToString()
         {
-            return _value.ToString();
+            return _operation.ToString();
         }
     }
 
@@ -331,5 +338,13 @@ public class Puzzle0093 : Puzzle
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
+    }
+
+    private enum Operation
+    {
+        Add,
+        Divide,
+        Multiply,
+        Subtract
     }
 }
