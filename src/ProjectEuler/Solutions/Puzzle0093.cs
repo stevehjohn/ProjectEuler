@@ -270,7 +270,7 @@ public class Puzzle0093 : Puzzle
     {
         public abstract void Process(Stack<Element> stack);
         
-        public virtual double Value => throw new PuzzleException("Incorrect call to .Value on an Operator.");
+        public virtual double Value => throw new PuzzleException($"Incorrect call to .Value on Element type {GetType().Name}.");
 
         public static Element Create(char symbol)
         {
