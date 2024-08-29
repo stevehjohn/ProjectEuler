@@ -299,9 +299,9 @@ public class Puzzle0093 : Puzzle
             _operation = operation switch
             {
                 '+' => Operation.Add,
-                '-' => Operation.Subtract,
-                '*' => Operation.Multiply,
                 '/' => Operation.Divide,
+                '*' => Operation.Multiply,
+                '-' => Operation.Subtract,
                 _ => throw new PuzzleException($"Unknown operator type '{operation}'.")
             };
         }
